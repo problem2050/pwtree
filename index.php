@@ -2,4 +2,6 @@
 
 echo phpinfo();
 
+echo "fuck!";
+
 ?>
