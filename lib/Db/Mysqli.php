@@ -1,5 +1,5 @@
 <?php
-class ConnectMysqli{
+class ConnMysqli{
  
   private static $instance=false;
   private $host;
@@ -15,39 +15,25 @@ class ConnectMysqli{
     $this->host = $config['host'] ? $config['host'] : 'localhost';
     $this->port = $config['port'] ? $config['port'] : '3306';
     $this->user = $config['user'] ? $config['user'] : 'root';
-    $this->pass = $config['pass'] ? $config['pass'] : '';
-    $this->db = $config['db'] ? $config['db'] : 'pwtree';
+    $this->pass = $config['password'] ? $config['password'] : '1';
+    $this->db = $config['dbname'] ? $config['dbname'] : 'pwtree';
     //$this->charset=isset($arr['charset']) ? $arr['charset'] : 'utf8';
-    
-    $this->db_connect();
-   
-    $this->db_usedb();
-   
-    //$this->db_charset();
-   }
-   //连接数据库
-   private function db_connect(){
-    $this->conn=mysqli_connect($this->host.':'.$this->port,$this->user,$this->pass);
+       
+    $this->conn=mysqli_connect($this->host,$this->user,$this->pass,$this->db);
     if(!$this->conn){
-      echo "数据库连接失败<br>";
-      echo "错误编码".mysqli_errno($this->conn)."<br>";
-      echo "错误信息".mysqli_error($this->conn)."<br>";
+      SeasLog::log(SEASLOG_ERROR,"数据库连接失败");
+      SeasLog::log(SEASLOG_ERROR,"错误编码".mysqli_errno($this->conn));
+      SeasLog::log("错误信息".mysqli_error($this->conn));
       exit;
     }
+    
    }
-   //设置字符集
-    private function db_charset(){
-     mysqli_query($this->conn,"set names {$this->charset}");
-    }
-    //选择数据库
-   private function db_usedb(){
-     mysqli_query($this->conn,"use {$this->db}");
-   }
+    
    
    //公用的静态方法
    public static function getIntance($dbname="pwtree"){
    	
-   	if (!isset(self::$instance[$dbid])){   		
+   	if (!isset(self::$instance[$dbname])){   		
    		 $confinfo = $_SERVER["DB_{$dbname}"];   	
    	 
    	   //$constr = "127.0.0.1/user/password/dbname/3306";
@@ -58,19 +44,19 @@ class ConnectMysqli{
    	                    'password'=>$conf[2],
    	                    'dbname'=>$conf[3],
    	                    'port'=>$conf[4]);
-   	 self::$instance[$dbname] = new $c($db_conf);   	      
+   	                    
+   	 self::$instance[$dbname] = new ConnMysqli($db_conf);   	      
    }
     return self::$instance[$dbname];
   }
     //执行sql语句的方法
-    public function query($sql){
-     $res=mysqli_query($this->conn,$sql);
-     if(!$res){
-      echo "sql语句执行失败<br>";
-      echo "错误编码是".mysqli_errno($this->conn)."<br>";
-      echo "错误信息是".mysqli_error($this->conn)."<br>";
-     }
-     return $res;
+  public function queryOne($sql){
+     $result=$this->conn->query($sql, MYSQLI_USE_RESULT);
+       while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+      
+      }
+     //$row = $res-> mysqli_fetch_all(MYSQLI_ASSOC); 
+     //return $row;
    }
    
    
@@ -121,15 +107,11 @@ class ConnectMysqli{
     }
     
     
-    //获取多条数据，二维数组
-    public function getAll($sql){
-     $query=$this->query($sql);
-     $list=array();
-     while ($r=$this->getFormSource($query)) {
-      $list[]=$r;
-     }
-     return $list;
+    public function setCommit($isbool)
+    {
+    	$this->conn->autocommit($isbool);
     }
+     
      
      
 }
