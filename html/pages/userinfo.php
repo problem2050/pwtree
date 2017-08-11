@@ -21,6 +21,7 @@ if($act=='del' && $fid!=''){
 
 $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
 
+
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -294,8 +295,16 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
 													 <th>
 													<i class="fa"></i>邮箱</th>
 												<th>
-													<i class="fa"></i>部门</th>		
+													<i class="fa"></i>部门</th>	
+												<th>
+													<i class="fa"></i>角色</th>				
 												 <th>
+													<i class="fa"></i>状态</th>	
+												<th>
+													<i class="fa"></i>最后登录时间</th>														 
+												 <th>
+													<i class="fa"></i>最后登录IP</th>		
+												 <th> 		
 													<i class="fa"></i>操作</th>	
                                                 </tr>
                                             </thead>
@@ -315,6 +324,10 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
                                                     <td><?=$v['f_mobile']?></td>
 													<td><?=$v['f_email']?></td>
 													<td><?=$v['f_department']?></td>
+													<td><?=$v['f_parentid']?></td>
+													<td><?=($v['f_valid']==1)?"有效":"禁用"?></td>
+													<td><?=$v['f_lastdate']?></td>
+													<td><?=$v['f_lastip']?></td>
 													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>
                                                 </tr>
                                                 

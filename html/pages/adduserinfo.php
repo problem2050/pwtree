@@ -15,7 +15,11 @@ $act=isset($_REQUEST['act'])?$_REQUEST['act']:'';
 if($act=='subbb'){
 //var_dump($merid,$username,$truename,$password,$email,$phone,$dep);
 $res = User_Userinfo::insertUserinfo($merid,$username,$truename,$password,$email,$phone,$dep);
+
 }
+
+$deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
+
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -299,17 +303,44 @@ $res = User_Userinfo::insertUserinfo($merid,$username,$truename,$password,$email
                                                     </span>
                                                     <input type="password" class="form-control" placeholder="请输入8-16位密码" name="password" value="<?=isset($result['f_userpwd'])?$result['f_userpwd']:''?>" > </div>
                                             </div>
-										 <div class="form-group">
+																				 <div class="form-group">
                                                 <label>所属部门:</label>
                                                 <select class="form-control" name="dep">
-												<option value="100">研发部</option>
-												<option value="101">财务部</option>
-												<option value="102">产品部</option>
-												<option value="103">设计部</option>
-												<option value="104">运营部</option>
-												</select>
-                                            </div>	
-										<div class="form-group">
+																								<?php
+																							
+																						if($deptrs['LIST']){
+                                                foreach($deptrs['LIST'] as $k=>$v){
+                                                	 
+                                                	echo "<option value=\"".$v['f_id']."\">".$v['f_department']."</option>";
+                                                }
+                                              }
+                                                ?>
+																									</select>
+                                         </div>	
+                             			 <div class="form-group">
+                                                <label>所属角色:</label>
+                                                <select class="form-control" name="dep">
+																								<option value="100">研发部</option>
+																								<option value="101">财务部</option>
+																								<option value="102">产品部</option>
+																								<option value="103">设计部</option>
+																								<option value="104">运营部</option>
+																									</select>
+                                         </div>	            
+                                  <div class="form-group">
+                                                <label>是否禁用</label>
+                                                <div class="mt-radio-inline">
+                                                    <label class="mt-radio">
+                                                        <input type="radio" name="isvalid" id="optionsRadios4" value="0"  checked >有效
+                                                        <span></span>
+                                                    </label>
+                                                    <label class="mt-radio">
+                                                        <input type="radio" name="isvalid" id="optionsRadios5" value="1" >禁用
+                                                        <span></span>
+                                                    </label>                                                   
+                                                </div>
+                                            </div>                       
+										              <div class="form-group">
                                                 <label>手机号码:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">

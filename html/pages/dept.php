@@ -2,27 +2,25 @@
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
-$username=isset($_REQUEST['username'])?$_REQUEST['username']:'';
-$truename=isset($_REQUEST['truename'])?$_REQUEST['truename']:'';
-$password=isset($_REQUEST['password'])?$_REQUEST['password']:'';
-$email=isset($_REQUEST['email'])?$_REQUEST['email']:'';
-$phone=isset($_REQUEST['phone'])?$_REQUEST['phone']:'';
-$dep=isset($_REQUEST['dep'])?$_REQUEST['dep']:'';
-$isvalid = isset($_REQUEST['isvalid'])?$_REQUEST['isvalid']:'';
 
-$fid=isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
-$act=isset($_REQUEST['act'])?$_REQUEST['act']:'';
+$page = 1;
+$pagesize = 10;
 
-$result = '';
 
-if($act=='editinfo'){
-  $res = User_Userinfo::updateUserinfo($fid,$merid,$username,$truename,$password,$email,$phone,$dep,$isvalid);
+$page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
+
+$act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
+$depname= isset($_REQUEST['depname'])?$_REQUEST['depname']:'';
+if($act=='del' && $fid!=''){
+	
+	$res = User_Userinfo::delUserinfo($merid,$fid);
+
 }
+//var_dump($res);
 
-$result = User_Userinfo::getUserinfoOne($fid,$merid);
+$res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 
-
-$deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
+//var_dump($res);
 
 ?>
 <!DOCTYPE html>
@@ -207,15 +205,15 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                                 <span class="arrow open"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="nav-item  active open">
-                                    <a href="#" class="nav-link ">
+                                <li class="nav-item  ">
+                                    <a href="adduserinfo.php" class="nav-link ">
                                         <i class="icon-bar-chart"></i>
                                         <span class="title">添加新用户</span>
                                     </a>
                                 </li>
 							  
-							  <li class="nav-item  ">
-                                    <a href="userinfo.php" class="nav-link ">
+							  <li class="nav-item active open ">
+                                    <a href="#" class="nav-link ">
                                         <i class="icon-bar-chart"></i>
                                         <span class="title">用户列表</span>
                                     </a>
@@ -269,118 +267,120 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					
-                    <h3 class="page-title"> 新增用户
+					           <h3 class="page-title">部门列表
                         <small></small>
-                    </h3>
+                    </h3>    
+                   
+                   <div class="portlet light bordered" style="width:60%">
+                                <div class="portlet-title">
+                                    
+                                    <div class="actions">
+                                                                            
+                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="#depaddform">添加 </a>
+                                    </div>
+                                </div>
+                                
                     <!-- END PAGE TITLE-->
                     <!-- END PAGE HEADER-->
         
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
-                             <div class="portlet light bordered" style="width:60%">
-                                
-                                <div class="portlet-body form" >
-                                    <form role="form" method="post" action="?act=editinfo&fid=<?=$fid?>">
-                                        <div class="form-body">
-										  <div class="form-group">
-                                                <label>用户名:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-user-plus"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="请输入用户名" name="username" value="<?=isset($result['f_username'])?$result['f_username']:''?>" > </div>
-                                            </div>
-										   
-										                    <div class="form-group">
-                                                <label>真实姓名:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-user"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="请输入真实户名" name="truename" value="<?=isset($result['f_truename'])?$result['f_truename']:''?>"> </div>
-                                            </div>
-										                    <div class="form-group">
-                                                <label>密码:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-user font-red"></i>
-                                                    </span>
-                                                    <input type="password" class="form-control" placeholder="请输入8-16位密码" name="password" value="<?=isset($result['f_userpwd'])?$result['f_userpwd']:''?>" > </div>
-                                            </div>
-										                      <div class="form-group">
-                                                <label>所属部门:</label>
-                                                <select class="form-control" name="dep">
-                                               <?php
-																							
-																						if($deptrs['LIST']){
-                                                foreach($deptrs['LIST'] as $k=>$v){
-                                                	
-                                                	if($result['f_department']==$v['f_id']){ 
-                                                		echo "<option value=\"".$v['f_id']."\" selected>".$v['f_department']."</option>";
-                                                	}else{
-                                                	echo "<option value=\"".$v['f_id']."\">".$v['f_department']."</option>";
-                                                	 }
-                                                }
-                                              }
-																					?>
-																								</select>
-                                            </div>	
-                                            
-                                       <div class="form-group">
-                                                <label>是否禁用</label>
-                                                <div class="mt-radio-inline">
-                                                    <label class="mt-radio">
-                                                        <input type="radio" name="isvalid" id="optionsRadios4" value="0" <?=($result['f_valid']==0)?"checked":""?> >有效
-                                                        <span></span>
-                                                    </label>
-                                                    <label class="mt-radio">
-                                                        <input type="radio" name="isvalid" id="optionsRadios5" value="1" <?=($result['f_valid']==1)?"checked":""?> >禁用
-                                                        <span></span>
-                                                    </label>                                                   
-                                                </div>
-                                            </div>
-                                                                 
-										                <div class="form-group">
-                                                <label>手机号码:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-phone"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="请输入有效的手机号码" name="phone" value="<?=isset($result['f_mobile'])?$result['f_mobile']:''?>" > </div>
-                                            </div>
-											
-                                            <div class="form-group">
-                                                <label>邮箱地址:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-envelope"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="请输入有效的EMAIL地址" name="email" value="<?=isset($result['f_email'])?$result['f_email']:''?>" > </div>
-                                            </div>
-											
-                                             
-                                           
-                                         
-                           
-                                        </div>
-                                        <div class="form-actions">
-                                            <button type="submit" class="btn blue">提交</button>
-                                            <button type="button" class="btn default">取消</button>
-                                        </div>
-                                    </form>
+                            <div class="portlet">
+                               
+                                <div class="portlet-body">
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <i class="fa "></i>ID</th>
+                                                    <th >
+                                                        <i class="fa "></i>部门名称</th>
+                                                    <th>
+                                                        <i class="fa"></i>描述</th>
+                                                     		
+												 <th> 		
+													<i class="fa"></i>操作</th>	
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+											<?php
+											//var_dump($res);
+											if($res['LIST']){
+												foreach($res['LIST'] as $k=>$v){													
+												?>
+                                                <tr>
+												    <td ><?=$v['f_id']?></td>
+                                                    <td>
+                                                     <?=$v['f_department']?>
+                                                    </td>
+                                                    <td ><?=$v['f_about']?></td>                                                  
+													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>
+                                                </tr>
+                                                
+                                                <?php
+												}
+											}
+											?>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <!-- END SAMPLE TABLE PORTLET-->
+							<ul class="pagination" style="visibility: visible;">
+							<?php
 							 
+							if($res['CNT']>0){
+							echo getPageHtml($res['CNT'],$page,$pagesize);
+							}
+							?>
+							</ul>
                         </div>
                     </div>
                 </div>
                 <!-- END CONTENT BODY -->
             </div>
-            <!-- END CONTENT -->
-            <!-- BEGIN QUICK SIDEBAR -->
+            <!-- END CONTENT -->         
            
-			
+           <!--BEGIN MODAL-DIALOG -->
+           <div id="depaddform" class="modal fade" tabindex="-1" data-width="400">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <h4 class="modal-title">添加部门</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                        <div class="form-group">
+                                                <label>部门名称:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入部门名称" id="deptname" value=""> </div>
+                                            </div>                                            
+                                           <div class="form-group">
+                                                <label>简单描述:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入部门简单描述" id="about" value=""> </div>
+                                            </div> 
+                                             <span id="addresult"></span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
+                                                    <button type="button" class="btn red" id="adddept">添加</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                             </div>
+                             
+            
+                                    
+			              <!--END MODAL-DIALOG -->
         </div>
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
@@ -414,5 +414,39 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
         <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
+        
+        
+<script type="text/javascript">
+ 
+ $("#adddept").click(function(){
+ 	deptname = $("#deptname").val();
+ 	about = $("#about").val();
+ 	   $.ajax({
+					  url: "ajax_data/insDept.php",
+					  type: 'post',
+					  data:{"deptname":deptname,"about":about},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("添加成功!");					 	  
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("添加失败!");
+					     
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+		 window.location.reload();
+		 			
+		});
+		
+</script>
+
+
     </body>
 </html>

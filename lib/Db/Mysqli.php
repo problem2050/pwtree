@@ -29,9 +29,9 @@ class Db_Mysqli {
     }
 	
 	if(!$this->conn->set_charset("utf8")){		
-		SeasLog::log("Error loading character set utf8: %s\n", $this->conn->error);
+		SeasLog::log(SEASLOG_ERROR,"Error loading character set utf8: " .$this->conn->error);
      } else {
-	     SeasLog::log("Current character set: %s\n", $this->conn->character_set_name());
+	     SeasLog::log(SEASLOG_ERROR,"Current character set:".$this->conn->character_set_name());
 	  }
     
    }
@@ -110,7 +110,7 @@ class Db_Mysqli {
 
         call_user_func_array([$stmt, 'bind_param'], $params);        
         $result = $stmt->execute() ;
-
+         
         $stmt->close();
        
        return $result;
