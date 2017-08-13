@@ -1,3 +1,20 @@
+<?php
+require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
+require_once($_SERVER["Root_Path"]."/inc/function.php");
+
+
+$page = 1;
+$pagesize = 5;
+
+$merid= 100001;
+$username = '';
+$page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
+
+$res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
+
+//var_dump($res);
+
+?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -149,7 +166,7 @@
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="icon-home"></i>
                                 <span class="title">目录树管理</span>
-                                <span class="arrow"></span>
+                                <span class="arrow open"></span>
                             </a>
                             <ul class="sub-menu">
                                 <li class="nav-item start ">
@@ -171,34 +188,36 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
-                                                            
-                <li class="nav-item start ">
+                        </li>                                                           
+                <li class="nav-item active open ">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 <i class="icon-user"></i>
                                 <span class="title">用户与角色管理</span>
-                                <span class="arrow"></span>
+								<span class="selected"></span>
+                                <span class="arrow open"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="nav-item start ">
+                                <li class="nav-item  ">
                                     <a href="#" class="nav-link ">
                                         <i class="icon-bar-chart"></i>
                                         <span class="title">添加新用户</span>
                                     </a>
                                 </li>
-								  <li class="nav-item start ">
-                                    <a href="userinfo.php" class="nav-link ">
+							  
+							  <li class="nav-item active open ">
+                                    <a href="#" class="nav-link ">
                                         <i class="icon-bar-chart"></i>
                                         <span class="title">用户列表</span>
                                     </a>
                                 </li>
-                                <li class="nav-item start ">
+								
+                                <li class="nav-item  ">
                                     <a href="#" class="nav-link ">
                                         <i class="icon-bulb"></i>
                                         <span class="title">角色管理</span>                                        
                                     </a>
                                 </li>
-                                <li class="nav-item start ">
+                                <li class="nav-item  ">
                                     <a href="#" class="nav-link ">
                                         <i class="icon-graph"></i>
                                         <span class="title">修改商户信息</span>                                        
@@ -223,14 +242,15 @@
                    
                     <!-- END THEME PANEL -->
                     <!-- BEGIN PAGE BAR -->
+					
                     <div class="page-bar">
                         <ul class="page-breadcrumb">
                             <li>
-                                <a href="index.html">Home</a>
+                                 <span>用户与角色管理 </span>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <span>Tables</span>
+                                <span>用户列表</span>
                             </li>
                         </ul>
                         <div class="page-toolbar">
@@ -239,91 +259,74 @@
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-                    <h3 class="page-title"> Basic Datatables
-                        <small>basic datatable samples</small>
+					
+                    <h3 class="page-title"> 用户列表
+                        <small></small>
                     </h3>
                     <!-- END PAGE TITLE-->
                     <!-- END PAGE HEADER-->
         
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
                             <div class="portlet">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        <i class="fa fa-shopping-cart"></i>Advance Table </div>                                   
-                                </div>
+                               
                                 <div class="portlet-body">
                                     <div class="table-scrollable">
                                         <table class="table table-striped table-bordered table-advance table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>
-                                                        <i class="fa fa-briefcase"></i> From </th>
-                                                    <th class="hidden-xs">
-                                                        <i class="fa fa-question"></i> Descrition </th>
+                                                        <i class="fa "></i>用户ID</th>
+                                                    <th >
+                                                        <i class="fa "></i>用户名</th>
                                                     <th>
-                                                        <i class="fa fa-bookmark"></i> Total </th>
-                                                    <th> </th>
+                                                        <i class="fa"></i>真实姓名</th>
+                                                    <th>
+													<i class="fa"></i>添加时间</th>
+													 <th>
+													<i class="fa"></i>手机</th>
+													 <th>
+													<i class="fa"></i>邮箱</th>
+												 <th>
+													<i class="fa"></i>操作</th>	
                                                 </tr>
                                             </thead>
                                             <tbody>
+											<?php
+											//var_dump($res);
+											if($res['LIST']){
+												foreach($res['LIST'] as $k=>$v){													
+												?>
                                                 <tr>
+												    <td ><?=$v['f_id']?></td>
                                                     <td>
-                                                        <a href="javascript:;"> Pixel Ltd </a>
+                                                     <?=$v['f_username']?>
                                                     </td>
-                                                    <td class="hidden-xs"> Server hardware purchase </td>
-                                                    <td> 52560.10$
-                                                        <span class="label label-sm label-success label-mini"> Paid </span>
-                                                    </td>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn dark btn-sm btn-outline sbold uppercase">
-                                                            <i class="fa fa-share"></i> View </a>
-                                                    </td>
+                                                    <td ><?=$v['f_truename']?></td>
+                                                    <td><?=$v['f_date']?> </td>
+                                                    <td><?=$v['f_mobile']?></td>
+													<td><?=$v['f_email']?></td>
+													<td>修改</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                        <a href="javascript:;"> Smart House </a>
-                                                    </td>
-                                                    <td class="hidden-xs"> Office furniture purchase </td>
-                                                    <td> 5760.00$
-                                                        <span class="label label-sm label-warning label-mini"> Pending </span>
-                                                    </td>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn dark btn-sm btn-outline sbold uppercase">
-                                                            <i class="fa fa-share"></i> View </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <a href="javascript:;"> FoodMaster Ltd </a>
-                                                    </td>
-                                                    <td class="hidden-xs"> Company Anual Dinner Catering </td>
-                                                    <td> 12400.00$
-                                                        <span class="label label-sm label-success label-mini"> Paid </span>
-                                                    </td>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn dark btn-sm btn-outline sbold uppercase">
-                                                            <i class="fa fa-share"></i> View </a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <a href="javascript:;"> WaterPure Ltd </a>
-                                                    </td>
-                                                    <td class="hidden-xs"> Payment for Jan 2013 </td>
-                                                    <td> 610.50$
-                                                        <span class="label label-sm label-danger label-mini"> Overdue </span>
-                                                    </td>
-                                                    <td>
-                                                        <a href="javascript:;" class="btn dark btn-sm btn-outline sbold uppercase">
-                                                            <i class="fa fa-share"></i> View </a>
-                                                    </td>
-                                                </tr>
+                                                
+                                                <?php
+												}
+											}
+											?>
+                                                
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                             <!-- END SAMPLE TABLE PORTLET-->
+							<ul class="pagination" style="visibility: visible;">
+							<?php
+							 
+							if($res['CNT']>0){
+							echo getPageHtml($res['CNT'],$page,$pagesize);
+							}
+							?>
+							</ul>
                         </div>
                     </div>
                 </div>
@@ -337,7 +340,7 @@
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
-            <div class="page-footer-inner"> 2014 &copy; Metronic by keenthemes.
+            <div class="page-footer-inner"> 2017 &copy; pwtree.
                 <a href="http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" title="Purchase Metronic just for 27$ and get lifetime updates for free" target="_blank">Purchase Metronic!</a>
             </div>
             <div class="scroll-to-top">

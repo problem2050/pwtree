@@ -27,6 +27,12 @@ class Db_Mysqli {
       SeasLog::log("´íÎóĞÅÏ¢".mysqli_error($this->conn));
       exit;
     }
+	
+	if(!$this->conn->set_charset("utf8")){		
+		SeasLog::log("Error loading character set utf8: %s\n", $this->conn->error);
+     } else {
+	     SeasLog::log("Current character set: %s\n", $this->conn->character_set_name());
+	  }
     
    }
     
@@ -75,12 +81,13 @@ class Db_Mysqli {
   public function queryfetch($sql){
   	 $datalist = [];
      $result=$this->conn->query($sql);
-       while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+     if($result){
+     while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
          $datalist[] = $row;
       }
       
       $result->close();
-       
+       }
      return $datalist;
    }
          
