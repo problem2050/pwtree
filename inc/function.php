@@ -1,5 +1,10 @@
 <?php
 
+
+$merid = 100001;
+
+GLOBAL $merid;
+
 function getPageHtml($allcnt,$page,$pagesize){
 
   $pagehtml = '';

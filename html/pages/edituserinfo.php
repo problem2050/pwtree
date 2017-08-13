@@ -2,25 +2,23 @@
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
+$username=isset($_REQUEST['username'])?$_REQUEST['username']:'';
+$truename=isset($_REQUEST['truename'])?$_REQUEST['truename']:'';
+$password=isset($_REQUEST['password'])?$_REQUEST['password']:'';
+$email=isset($_REQUEST['email'])?$_REQUEST['email']:'';
+$phone=isset($_REQUEST['phone'])?$_REQUEST['phone']:'';
+$dep=isset($_REQUEST['dep'])?$_REQUEST['dep']:'';
 
-$page = 1;
-$pagesize = 10;
+$fid=isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
+$act=isset($_REQUEST['act'])?$_REQUEST['act']:'';
 
-$merid= 100001;
-$username = '';
-$page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
+$result = '';
 
-$act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
-$fid= isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
-if($act=='del' && $fid!=''){
-	
-	$res = User_Userinfo::delUserinfo($merid,$fid);
-
+if($act=='editinfo'){
+  $res = User_Userinfo::updateUserinfo($fid,$merid,$username,$truename,$password,$email,$phone,$dep);
 }
-//var_dump($res);
 
-$res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
-
+$result = User_Userinfo::getUserinfoOne($fid,$merid);
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -204,15 +202,15 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
                                 <span class="arrow open"></span>
                             </a>
                             <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="adduserinfo.php" class="nav-link ">
+                                <li class="nav-item  active open">
+                                    <a href="#" class="nav-link ">
                                         <i class="icon-bar-chart"></i>
                                         <span class="title">添加新用户</span>
                                     </a>
                                 </li>
 							  
-							  <li class="nav-item active open ">
-                                    <a href="#" class="nav-link ">
+							  <li class="nav-item  ">
+                                    <a href="userinfo.php" class="nav-link ">
                                         <i class="icon-bar-chart"></i>
                                         <span class="title">用户列表</span>
                                     </a>
@@ -267,76 +265,85 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
 					
-                    <h3 class="page-title"> 用户列表
+                    <h3 class="page-title"> 新增用户
                         <small></small>
                     </h3>
                     <!-- END PAGE TITLE-->
                     <!-- END PAGE HEADER-->
         
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
-                            <div class="portlet">
-                               
-                                <div class="portlet-body">
-                                    <div class="table-scrollable">
-                                        <table class="table table-striped table-bordered table-advance table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        <i class="fa "></i>用户ID</th>
-                                                    <th >
-                                                        <i class="fa "></i>用户名</th>
-                                                    <th>
-                                                        <i class="fa"></i>真实姓名</th>
-                                                    <th>
-													<i class="fa"></i>添加时间</th>
-													 <th>
-													<i class="fa"></i>手机</th>
-													 <th>
-													<i class="fa"></i>邮箱</th>
-												<th>
-													<i class="fa"></i>部门</th>		
-												 <th>
-													<i class="fa"></i>操作</th>	
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-											<?php
-											//var_dump($res);
-											if($res['LIST']){
-												foreach($res['LIST'] as $k=>$v){													
-												?>
-                                                <tr>
-												    <td ><?=$v['f_id']?></td>
-                                                    <td>
-                                                     <?=$v['f_username']?>
-                                                    </td>
-                                                    <td ><?=$v['f_truename']?></td>
-                                                    <td><?=$v['f_date']?> </td>
-                                                    <td><?=$v['f_mobile']?></td>
-													<td><?=$v['f_email']?></td>
-													<td><?=$v['f_department']?></td>
-													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>
-                                                </tr>
-                                                
-                                                <?php
-												}
-											}
-											?>
-                                                
-                                            </tbody>
-                                        </table>
-                                    </div>
+                             <div class="portlet light bordered" style="width:60%">
+                                
+                                <div class="portlet-body form" >
+                                    <form role="form" method="post" action="?act=editinfo&fid=<?=$fid?>">
+                                        <div class="form-body">
+										  <div class="form-group">
+                                                <label>用户名:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user-plus"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入用户名" name="username" value="<?=isset($result['f_username'])?$result['f_username']:''?>" > </div>
+                                            </div>
+										   
+										   <div class="form-group">
+                                                <label>真实姓名:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入真实户名" name="truename" value="<?=isset($result['f_truename'])?$result['f_truename']:''?>"> </div>
+                                            </div>
+										 <div class="form-group">
+                                                <label>密码:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user font-red"></i>
+                                                    </span>
+                                                    <input type="password" class="form-control" placeholder="请输入8-16位密码" name="password" value="<?=isset($result['f_userpwd'])?$result['f_userpwd']:''?>" > </div>
+                                            </div>
+										 <div class="form-group">
+                                                <label>所属部门:</label>
+                                                <select class="form-control" name="dep">
+												<option value="100">研发部</option>
+												<option value="101">财务部</option>
+												<option value="102">产品部</option>
+												<option value="103">设计部</option>
+												<option value="104">运营部</option>
+												</select>
+                                            </div>	
+										<div class="form-group">
+                                                <label>手机号码:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-phone"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入有效的手机号码" name="phone" value="<?=isset($result['f_mobile'])?$result['f_mobile']:''?>" > </div>
+                                            </div>
+											
+                                            <div class="form-group">
+                                                <label>邮箱地址:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入有效的EMAIL地址" name="email" value="<?=isset($result['f_email'])?$result['f_email']:''?>" > </div>
+                                            </div>
+											
+                                             
+                                           
+                                         
+                           
+                                        </div>
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn blue">提交</button>
+                                            <button type="button" class="btn default">取消</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                             <!-- END SAMPLE TABLE PORTLET-->
-							<ul class="pagination" style="visibility: visible;">
-							<?php
 							 
-							if($res['CNT']>0){
-							echo getPageHtml($res['CNT'],$page,$pagesize);
-							}
-							?>
-							</ul>
                         </div>
                     </div>
                 </div>

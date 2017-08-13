@@ -92,7 +92,7 @@ class Db_Mysqli {
    }
          
 		
-		 public function execPrepared($sql, array $args)
+ public function execPrepared($sql, array $args)
     {
     	 
         $stmt   = $this->conn->prepare($sql);
