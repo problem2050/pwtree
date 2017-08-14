@@ -3,6 +3,10 @@ require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
 
+$resss = Db_Mysqli::getIntance()->queryPrepared();
+exit;
+
+
 $page = 1;
 $pagesize = 10;
 
@@ -54,6 +58,16 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
         <link href="../assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
+<script type="text/javascript">
+ function editshow(deptname,about,fid){
+     $("#deptname").val(deptname);
+ 	 $("#about").val(about);
+	 $("#fid").val(fid);
+	 $("#adddept").hide();
+	 $("#editdept").show();
+	 $("#depaddform").modal('show');
+ }		
+ </script>
     <!-- END HEAD -->
 
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
@@ -95,7 +109,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a href="page_user_profile_1.html">
+                                    <a href="adduserinfo.php">
                                         <i class="icon-user"></i> My Profile </a>
                                 </li>
                                 <li>
@@ -276,7 +290,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                                     
                                     <div class="actions">
                                                                             
-                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="#depaddform">添加 </a>
+                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
                                     </div>
                                 </div>
                                 
@@ -314,7 +328,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                                                      <?=$v['f_department']?>
                                                     </td>
                                                     <td ><?=$v['f_about']?></td>                                                  
-													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>
+													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['f_department']?>','<?=$v['f_about']?>','<?=$v['f_id']?>')">修改</button>&nbsp;&nbsp;</td>
                                                 </tr>
                                                 
                                                 <?php
@@ -371,8 +385,10 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                                              <span id="addresult"></span>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
+                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
                                                     <button type="button" class="btn red" id="adddept">添加</button>
+													<button type="button" class="btn red" id="editdept">修改</button>
+													<input type="hidden" id="fid" value="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -421,10 +437,10 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
  $("#adddept").click(function(){
  	deptname = $("#deptname").val();
  	about = $("#about").val();
- 	   $.ajax({
+ 	 $.ajax({
 					  url: "ajax_data/insDept.php",
 					  type: 'post',
-					  data:{"deptname":deptname,"about":about},
+					  data:{"deptname":deptname,"about":about,"act":"ad"},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   
@@ -441,12 +457,50 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 					    console.log(err)
 					  }
 					})
-		 window.location.reload();
+					
+		    window.location.reload();
 		 			
 		});
 		
+		$("#addlink").click(function(){
+			 //$("#adddept").hide();
+			 $("#editdept").hide();
+			 $("#depaddform").modal('show');
+		});
+
+
+ 
+ $("#editdept").click(function(){
+	deptname = $("#deptname").val();
+ 	about = $("#about").val();
+	fid = $("#fid").val();
+ 	$.ajax({
+					  url: "ajax_data/insDept.php",
+					  type: 'post',
+					  data:{"deptname":deptname,"about":about,"fid":fid,"act":"ed"},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("添加成功!");					 	  
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("添加失败!");
+					     
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+					
+		    window.location.reload();
+		 			
+		});		
 </script>
 
 
     </body>
 </html>
+

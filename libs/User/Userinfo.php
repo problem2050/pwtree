@@ -7,9 +7,9 @@ public static function getUserinfo($merid,$username,$page,$pagesize){
 
   $retArr=array('CNT'=>0,'LIST'=>'');
   
-  $sqlcount = "select count(*) as cnt from pw_userinfo where f_merid=".$merid;
+  $sqlcount = "select count(*) as cnt from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id where uinfo.f_merid=".$merid;
   
-  $sql = "select *from pw_userinfo where f_merid = ".$merid." ORDER BY f_id  LIMIT ".($page-1)*$pagesize.",".$pagesize;
+  $sql = "select uinfo.*,dept.f_department from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id where uinfo.f_merid = ".$merid." ORDER BY uinfo.f_id  LIMIT ".($page-1)*$pagesize.",".$pagesize;
   
   $rcnt = Db_Mysqli::getIntance()->queryOne($sqlcount);
   

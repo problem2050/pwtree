@@ -325,7 +325,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
 													<td><?=$v['f_email']?></td>
 													<td><?=$v['f_department']?></td>
 													<td><?=$v['f_parentid']?></td>
-													<td><?=($v['f_valid']==1)?"有效":"禁用"?></td>
+													<td><?=($v['f_valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
 													<td><?=$v['f_lastdate']?></td>
 													<td><?=$v['f_lastip']?></td>
 													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>

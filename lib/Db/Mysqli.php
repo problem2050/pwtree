@@ -59,10 +59,11 @@ class Db_Mysqli {
 
   public function queryOne($sql){
   	
-     $result =$this->conn->query($sql);    
-     $row = $result->fetch_array(MYSQLI_ASSOC);   
-     $result->close();
-       
+     $result=$this->conn->query($sql); 
+     if($result){
+		 $row = $result->fetch_array(MYSQLI_ASSOC);  
+         $result->close();  		 
+	 }      
      return $row;
    }
    
@@ -115,8 +116,22 @@ class Db_Mysqli {
        
        return $result;
     
-		}
-		
+ }
+
+public function queryPrepared()
+    {
+    	$sql = "select f_id,f_department from pw_dept where f_id>=?";
+        $stmt= $this->conn->prepare($sql);
+	    $fid = 2;
+        $stmt->bind_param('i', $fid);
+              
+        $result = $stmt->execute() ;
+	     $rs = $stmt->fetch();
+		var_dump($rs);exit;
+        //$stmt->close();
+                 
+ }
+ 
    
    /**
     * 获得最后一条记录id
@@ -137,7 +152,6 @@ class Db_Mysqli {
       return mysqli_free_result($query);
     }
         
-    
     public function setCommit($isbool)
     {
     	$this->conn->autocommit($isbool);
