@@ -266,15 +266,14 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					           <h3 class="page-title">目录树管理
+					  <h3 class="page-title">目录树管理
                         <small></small>
-                    </h3>    
-                   
+                    </h3>             
+                   <br>
                    <div class="portlet light bordered" style="width:60%">
-                                <div class="portlet-title">
-                                    
-                                    <div class="actions">
-                                                                            
+                                <div class="portlet-title">                                    
+                                    <div class="actions">									
+                                          <input type="hidden" value="<?=$parentid?>" id="hiparentid" />                                  
                                          <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
                                     </div>
                                 </div>
@@ -295,7 +294,7 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                                     <th >
                                                         <i class="fa "></i>节点名称</th>
                                                     <th >
-                                                        <i class="fa "></i>是否树枝</th>    	
+                                                        <i class="fa "></i>节点属性</th>    	
                                                     <th>
                                                         <i class="fa"></i>排列顺序</th>
                                                      		
@@ -317,7 +316,10 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                                      <?=($v['path']!='')?"叶子":"树枝"?>
                                                     </td>  
                                                     <td ><?=$v['orderno']?></td>                                                  
-													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['sitename']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;</td>
+													<td>
+													<button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['sitename']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;
+													
+													</td>
                                                 </tr>
                                                 
                                                 <?php
@@ -349,28 +351,28 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                                 </div>
                                                 <div class="modal-body">
                                         <div class="form-group">
-                                                <label>站点名称:</label>
+                                                <label>节点名称:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入站点名称" id="sitename" value=""> </div>
+                                                    <input type="text" class="form-control" placeholder="请输入节点名称" id="nodename" value=""> </div>
                                             </div>                                            
                                            <div class="form-group">
-                                                <label>站点域名:</label>
+                                                <label>URL地址:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入站点域名" id="domain" value=""> </div>
+                                                    <input type="text" class="form-control" placeholder="URL地址,相对或绝对URL" id="urlpath" value=""> </div>
                                             </div> 
                                        <div class="form-group">
-                                                <label>站点描述:</label>
+                                                <label>排序ID:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请简单输入站点描述" id="about" value=""> </div>
+                                                    <input type="text" class="form-control" placeholder="排序ID，按升序排列" id="sortid" value=""> </div>
                                             </div> 
                                              <span id="addresult"></span>
                                                 </div>
@@ -425,13 +427,14 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
 <script type="text/javascript">
  
  $("#addsite").click(function(){
- 	sitename = $("#sitename").val();
- 	sitedomain = $("#domain").val();
- 	about = $("#about").val();
- 	 $.ajax({
+ 	nodename = $("#nodename").val();
+ 	urlpath = $("#urlpath").val();
+ 	sortid = $("#sortid").val();
+	hiparentid = $("#hiparentid").val();	
+ 	$.ajax({
 					  url: "ajax_data/sites.php",
 					  type: 'post',
-					  data:{"sitename":sitename,"sitedomain":sitedomain,"about":about,"act":"ad"},
+					  data:{"nodename":nodename,"urlpath":urlpath,"hiparentid":hiparentid,"sortid":sortid,"act":"ad"},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   
