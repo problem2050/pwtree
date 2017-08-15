@@ -127,7 +127,7 @@ public function queryPrepared()
               
         $result = $stmt->execute() ;
 	     $rs = $stmt->fetch();
-		var_dump($rs);exit;
+	 
         //$stmt->close();
                  
  }
@@ -157,6 +157,10 @@ public function queryPrepared()
     	$this->conn->autocommit($isbool);
     }
      
+    public function getConnection(){    
+    	return $this->conn;	
+    }
+    
     function __destruct(){
         $this->conn->close();
     }

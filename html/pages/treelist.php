@@ -4,24 +4,13 @@ require_once($_SERVER["Root_Path"]."/inc/function.php");
 
 
 
-$page = 1;
-$pagesize = 10;
+$parentid= isset($_REQUEST['parentid'])?$_REQUEST['parentid']:0;
 
 
-$page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
-
-$act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
-$depname= isset($_REQUEST['depname'])?$_REQUEST['depname']:'';
-if($act=='del' && $fid!=''){
-	
-	$res = User_Userinfo::delUserinfo($merid,$fid);
-
-}
 //var_dump($res);
+$res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
 
-$res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
-
-
+//var_dump($res);
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -55,13 +44,13 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
 <script type="text/javascript">
- function editshow(deptname,about,fid){
-     $("#deptname").val(deptname);
+ function editshow(sitename,about,fid){
+   $("#sitename").val(sitename);
  	 $("#about").val(about);
 	 $("#fid").val(fid);
-	 $("#adddept").hide();
-	 $("#editdept").show();
-	 $("#depaddform").modal('show');
+	 $("#addsite").hide();
+	 $("#editsite").show();
+	 $("#siteaddform").modal('show');
  }		
  </script>
     <!-- END HEAD -->
@@ -302,29 +291,33 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                                             <thead>
                                                 <tr>
                                                     <th>
-                                                        <i class="fa "></i>ID</th>
+                                                        <i class="fa "></i>选择</th>
                                                     <th >
-                                                        <i class="fa "></i>部门名称</th>
+                                                        <i class="fa "></i>节点名称</th>
+                                                    <th >
+                                                        <i class="fa "></i>是否树枝</th>    	
                                                     <th>
-                                                        <i class="fa"></i>描述</th>
+                                                        <i class="fa"></i>排列顺序</th>
                                                      		
 												 <th> 		
 													<i class="fa"></i>操作</th>	
                                                 </tr>
                                             </thead>
                                             <tbody>
-											<?php
-											//var_dump($res);
+											<?php											
 											if($res['LIST']){
 												foreach($res['LIST'] as $k=>$v){													
 												?>
                                                 <tr>
-												    <td ><?=$v['f_id']?></td>
+												    <td ><input type="checkbox" name="treeid[]" value="<?=$v['id']?>" /></td>
                                                     <td>
-                                                     <?=$v['f_department']?>
+                                                     <a href="treelist.php?parentid=<?=$v['id']?>"><?=$v['name']?></a>
                                                     </td>
-                                                    <td ><?=$v['f_about']?></td>                                                  
-													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['f_department']?>','<?=$v['f_about']?>','<?=$v['f_id']?>')">修改</button>&nbsp;&nbsp;</td>
+                                                   <td>
+                                                     <?=($v['path']!='')?"叶子":"树枝"?>
+                                                    </td>  
+                                                    <td ><?=$v['orderno']?></td>                                                  
+													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['sitename']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;</td>
                                                 </tr>
                                                 
                                                 <?php
@@ -338,14 +331,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                                 </div>
                             </div>
                             <!-- END SAMPLE TABLE PORTLET-->
-							<ul class="pagination" style="visibility: visible;">
-							<?php
 							 
-							if($res['CNT']>0){
-							echo getPageHtml($res['CNT'],$page,$pagesize);
-							}
-							?>
-							</ul>
                         </div>
                     </div>
                 </div>
@@ -354,36 +340,44 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
             <!-- END CONTENT -->         
            
            <!--BEGIN MODAL-DIALOG -->
-           <div id="depaddform" class="modal fade" tabindex="-1" data-width="400">
+           <div id="siteaddform" class="modal fade" tabindex="-1" data-width="400">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                    <h4 class="modal-title">添加部门</h4>
+                                                    <h4 class="modal-title">添加新站点</h4>
                                                 </div>
                                                 <div class="modal-body">
                                         <div class="form-group">
-                                                <label>部门名称:</label>
+                                                <label>站点名称:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入部门名称" id="deptname" value=""> </div>
+                                                    <input type="text" class="form-control" placeholder="请输入站点名称" id="sitename" value=""> </div>
                                             </div>                                            
                                            <div class="form-group">
-                                                <label>简单描述:</label>
+                                                <label>站点域名:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入部门简单描述" id="about" value=""> </div>
+                                                    <input type="text" class="form-control" placeholder="请输入站点域名" id="domain" value=""> </div>
+                                            </div> 
+                                       <div class="form-group">
+                                                <label>站点描述:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请简单输入站点描述" id="about" value=""> </div>
                                             </div> 
                                              <span id="addresult"></span>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
-                                                    <button type="button" class="btn red" id="adddept">添加</button>
-													<button type="button" class="btn red" id="editdept">修改</button>
+                                                    <button type="button" class="btn red" id="addsite">添加</button>
+													<button type="button" class="btn red" id="editsite">修改</button>
 													<input type="hidden" id="fid" value="" />
                                                 </div>
                                             </div>
@@ -430,13 +424,14 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
         
 <script type="text/javascript">
  
- $("#adddept").click(function(){
- 	deptname = $("#deptname").val();
+ $("#addsite").click(function(){
+ 	sitename = $("#sitename").val();
+ 	sitedomain = $("#domain").val();
  	about = $("#about").val();
  	 $.ajax({
-					  url: "ajax_data/insDept.php",
+					  url: "ajax_data/sites.php",
 					  type: 'post',
-					  data:{"deptname":deptname,"about":about,"act":"ad"},
+					  data:{"sitename":sitename,"sitedomain":sitedomain,"about":about,"act":"ad"},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   
@@ -454,26 +449,28 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 					  }
 					})
 					
-		    window.location.reload();
+		   // window.location.reload();
 		 			
 		});
 		
 		$("#addlink").click(function(){
 			 //$("#adddept").hide();
-			 $("#editdept").hide();
-			 $("#depaddform").modal('show');
+			 $("#editsite").hide();
+			 $("#siteaddform").modal('show');
 		});
 
 
  
- $("#editdept").click(function(){
-	deptname = $("#deptname").val();
+ $("#editsite").click(function(){
+	deptname = $("#sitename").val();
  	about = $("#about").val();
+ 	 
 	fid = $("#fid").val();
+	
  	$.ajax({
-					  url: "ajax_data/insDept.php",
+					  url: "ajax_data/sites.php",
 					  type: 'post',
-					  data:{"deptname":deptname,"about":about,"fid":fid,"act":"ed"},
+					  data:{"sitename":deptname,"about":about,"fid":fid,"act":"ed"},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   
@@ -491,7 +488,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 					  }
 					})
 					
-		    window.location.reload();
+		  //  window.location.reload();
 		 			
 		});		
 </script>

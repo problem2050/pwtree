@@ -1,64 +1,8 @@
--- MySQL dump 10.14  Distrib 5.5.52-MariaDB, for Linux (x86_64)
---
--- Host: localhost    Database: pwtree
--- ------------------------------------------------------
--- Server version	5.5.52-MariaDB
+CREATE TABLE `pw_site` (
+  `aw_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `aw_sitename` varchar(30) NOT NULL,
+  `aw_staticpath` varchar(200) DEFAULT NULL,
+  `aw_siteurl` varchar(30) NOT NULL,
+  PRIMARY KEY (`aw_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `pw_userinfo`
---
-
-DROP TABLE IF EXISTS `pw_userinfo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pw_userinfo` (
-  `f_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `f_username` varchar(50) NOT NULL COMMENT '用户名',
-  `f_truename` varchar(50) DEFAULT NULL COMMENT '真实姓名',
-  `f_userpwd` varchar(50) NOT NULL DEFAULT 'c33367701511b4f6020ec61ded352059' COMMENT '123456',
-  `f_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '添加时间',
-  `f_lastdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最后登录时间',
-  `f_parentid` bigint(20) NOT NULL COMMENT '上级用户',
-  `f_valid` int(11) NOT NULL COMMENT '是否有效',
-  `f_lastip` varchar(30) DEFAULT NULL COMMENT '最后登录IP',
-  `f_pwdtime` timestamp NULL DEFAULT NULL COMMENT '密码修改时间',
-  `f_department` int(11) DEFAULT NULL COMMENT '部门id',
-  `f_merid` varchar(50) DEFAULT NULL COMMENT '商户id',
-  `f_mobile` varchar(50) DEFAULT NULL COMMENT '手机号',
-  `f_email` varchar(50) DEFAULT NULL COMMENT 'EMAIL',
-  PRIMARY KEY (`f_id`),
-  UNIQUE KEY `idx_username` (`f_username`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='用户表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pw_userinfo`
---
-
-LOCK TABLES `pw_userinfo` WRITE;
-/*!40000 ALTER TABLE `pw_userinfo` DISABLE KEYS */;
-INSERT INTO `pw_userinfo` VALUES (1,'test001','许文强','123456','2017-08-13 17:03:36','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','ww@qq.com'),(2,'test002','刘备','123456','2017-08-13 17:05:46','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','liub@qq.com'),(4,'test003','张飞','123456','2017-08-13 17:06:11','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','zahngf@qq.com'),(5,'test004','赵云','123456','2017-08-13 17:06:35','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','zhaoyun@qq.com'),(7,'test005','关羽','123456','2017-08-13 17:07:01','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','guanyu@qq.com'),(8,'test006','魏延','123456','2017-08-13 17:34:08','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','weiyan@qq.com'),(9,'test007','吕布','123456','2017-08-13 17:34:31','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','lvb@qq.com'),(10,'test008','李典','123456','2017-08-13 17:34:49','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','lid@qq.com'),(11,'test009','曹操','123456','2017-08-13 17:35:17','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','caoc@qq.com'),(12,'test010','夏候渊','123456','2017-08-13 17:35:53','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','xiah@qq.com'),(13,'test011','姜维','123456','2017-08-13 17:36:11','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(14,'test012','诸葛亮','123456','2017-08-13 17:37:01','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(16,'test013','郭嘉','123456','2017-08-13 17:37:25','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(18,'test014','许攸','123456','2017-08-13 17:37:49','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(19,'test015','孙权','123456','2017-08-13 17:38:27','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(20,'test016','孙策','123456','2017-08-13 17:38:37','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(21,'test017','颜良','123456','2017-08-13 17:38:58','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(23,'test018','文丑','123456','2017-08-13 17:39:12','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(25,'test019','马超','123456','2017-08-13 17:39:26','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(26,'test021','黄盖','123456','2017-08-13 17:39:46','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(28,'test022','陆逊','123456','2017-08-13 17:40:09','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com'),(29,'test023','庞统','123456','2017-08-13 17:40:58','0000-00-00 00:00:00',0,0,NULL,NULL,100,'100001','18927484228','jianw@qq.com');
-/*!40000 ALTER TABLE `pw_userinfo` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2017-08-14  2:33:51
