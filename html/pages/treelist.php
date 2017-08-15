@@ -266,7 +266,7 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					           <h3 class="page-title">部门列表
+					           <h3 class="page-title">目录树管理
                         <small></small>
                     </h3>    
                    

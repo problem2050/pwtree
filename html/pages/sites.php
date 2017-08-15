@@ -318,7 +318,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                      <?=$v['sitename']?>
                                                     </td>
                                                    <td>
-                                                     <?=$v['sitdomain']?>
+                                                     <?=$v['sitedomain']?>
                                                     </td>  
                                                     <td ><?=$v['about']?></td>                                                  
 													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['sitename']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;</td>

@@ -119,10 +119,11 @@ public static function getSiteslist($merid,$page,$pagesize){
   
   $sqlcount = "select count(*) as cnt from pw_sites where f_merid= ?";
   
-  $sql = "select f_id,f_sitename,f_sitdomain,f_merid,f_about from pw_sites where f_merid=? ORDER BY f_id  LIMIT ?,?";
+  $sql = "select f_id,f_sitename,f_sitedomain,f_merid,f_about from pw_sites where f_merid=? ORDER BY f_id  LIMIT ?,?";
   
   $conn =  Db_Mysqli::getIntance()->getConnection();
   $stmt= $conn->prepare($sqlcount);
+ 
   $stmt->bind_param('i', $merid);  
   $result = $stmt->execute() ;
   
@@ -150,7 +151,7 @@ public static function getSiteslist($merid,$page,$pagesize){
   $listArr = array();
  
   while ($stmt->fetch()) {
-	     	$listArr[] = array("id"=>$fid,"sitename"=>$sitename,"sitdomain"=>$sitedomain,"about"=>$about);
+	     	$listArr[] = array("id"=>$fid,"sitename"=>$sitename,"sitedomain"=>$sitedomain,"about"=>$about);
    }
    
    $retArr['LIST'] =  $listArr;
@@ -184,7 +185,7 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
    	$maxfid = intval($maxfid) + 1;
    }
    
-	$sql = "insert into pw_sites(f_id,f_sitename,f_sitdomain,f_about,f_merid)values(?,?,?,?,?)";
+	$sql = "insert into pw_sites(f_id,f_sitename,f_sitedomain,f_about,f_merid)values(?,?,?,?,?)";
 	$stmt= $conn->prepare($sql);
 	$stmt->bind_param('isssi',$maxfid,$sitename,$sitdomain,$about,$merid);
 	$res = $stmt->execute() ;

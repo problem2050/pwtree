@@ -41,27 +41,26 @@ public static function getTreeNavList($merid,$parentid,$findstr=''){
    $stmt->close();
    
   	return $retArr;  
-	}
+}
 	
 	
-public static insertTreeNav($parentid ,$sitename,$fpath,$rootid,$divno,$orderno,$classpath,$merid){
-
+public static function insertTreeNav($parentid,$sitename,$fpath,$rootid,$divno,$orderno,$classpath,$merid)
+{
+ 
   $conn =  Db_Mysqli::getIntance()->getConnection();
   $treesql = "insert into pw_treenav(f_parentid,f_name,f_displayorderno,f_path,f_rootid,f_divno,f_orderno,f_classpath,f_merid)values(?,?,?,?,?,?,?,?,?)";
   $parentid = $displayno = $rootid = $divno = $orderno = 0;
   $fpath = $classpath = '';
   $stmt2 = $conn->prepare($treesql); 
-	$stmt2->bind_param('isisiiisi',$parentid ,$sitename,$displayno,$fpath,$rootid,$divno,$orderno,$classpath,$merid);		
-	$res2 = $stmt2->execute() ;		
+  $stmt2->bind_param('isisiiisi',$parentid ,$sitename,$displayno,$fpath,$rootid,$divno,$orderno,$classpath,$merid);		
+  $res2 = $stmt2->execute() ;		
 	if($res2==false)
 	{
 	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
 	}    
-	//$conn->commit();
-	 
-	$stmt->close();
+	//$conn->commit();	 
 	$stmt2->close();
-		
+	 
 }
 	
 public static function getTreeNavigation($ids = array())
@@ -72,9 +71,9 @@ public static function getTreeNavigation($ids = array())
 		$conn =  Db_Mysqli::getIntance()->getConnection();
 						
 		$arg = array('ids'=>implode(",",$ids));	
-		$listid = join(',', $ids)
+		$listid = join(',', $ids);
 						
-		$sql = 'select f_id ,f_name  from pw_treenav where f_id in (?) order by f_divno asc';
+	  $sql = 'select f_id ,f_name  from pw_treenav where f_id in (?) order by f_divno asc';
 	  $stmt = $conn->prepare($treesql); 
 	 	   
 	  $stmt->bind_param('s',$listid);
