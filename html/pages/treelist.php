@@ -3,13 +3,27 @@ require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
 
-
 $parentid= isset($_REQUEST['parentid'])?$_REQUEST['parentid']:0;
 
 
 //var_dump($res);
 $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
 
+
+
+$treelistlink = isset($_REQUEST['treelistlink'])?$_REQUEST['treelistlink'].",".$parentid:$parentid;
+
+$nes = Pwtree_Nodes::getTreeNavigation( $parentid,$merid);
+
+
+$linkstr = '';
+if($nes){
+	$linkstr ="<a href='treelist.php?parentid=0'>Root</a>";
+	foreach($nes as $k=>$nv)
+	{
+	  $linkstr .="-><a href='treelist.php?parentid=".$nv['id']."' >".$nv['name']."</a>";
+	}
+}
 //var_dump($res);
 ?>
 <!DOCTYPE html>
@@ -44,13 +58,17 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
 <script type="text/javascript">
- function editshow(sitename,about,fid){
-   $("#sitename").val(sitename);
- 	 $("#about").val(about);
+ function editshow(fid,nodename,fpath,sortid){
+   $("#nodename").val(nodename);
+ 	 $("#urlpath").val(fpath);
+ 	 $("#sortid").val(sortid); 	 
 	 $("#fid").val(fid);
+	 
 	 $("#addsite").hide();
 	 $("#editsite").show();
+	 
 	 $("#siteaddform").modal('show');
+	 
  }		
  </script>
     <!-- END HEAD -->
@@ -253,11 +271,11 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                     <div class="page-bar">
                         <ul class="page-breadcrumb">
                             <li>
-                                 <span>用户与角色管理 </span>
+                                 <span>目录树管理 </span>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <span>用户列表</span>
+                                <span><?=$linkstr?></span>
                             </li>
                         </ul>
                         <div class="page-toolbar">
@@ -266,11 +284,9 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					  <h3 class="page-title">目录树管理
-                        <small></small>
-                    </h3>             
+					        
                    <br>
-                   <div class="portlet light bordered" style="width:60%">
+                   <div class="portlet light bordered"  >
                                 <div class="portlet-title">                                    
                                     <div class="actions">									
                                           <input type="hidden" value="<?=$parentid?>" id="hiparentid" />                                  
@@ -289,12 +305,14 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                         <table class="table table-striped table-bordered table-advance table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>
+                                                    <th width="5%">
                                                         <i class="fa "></i>选择</th>
                                                     <th >
                                                         <i class="fa "></i>节点名称</th>
                                                     <th >
-                                                        <i class="fa "></i>节点属性</th>    	
+                                                        <i class="fa "></i>节点属性</th>
+                                                    <th >
+                                                        <i class="fa "></i>URL地址</th>      	 	
                                                     <th>
                                                         <i class="fa"></i>排列顺序</th>
                                                      		
@@ -310,14 +328,23 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                                 <tr>
 												    <td ><input type="checkbox" name="treeid[]" value="<?=$v['id']?>" /></td>
                                                     <td>
-                                                     <a href="treelist.php?parentid=<?=$v['id']?>"><?=$v['name']?></a>
-                                                    </td>
+                                                    	<?php                                                   	
+                                                    if($v['path']==''){
+                                                    		echo  "<a href=\"treelist.php?parentid=".$v['id']."\">".$v['name']."</a>";
+                                                    	}else{
+                                                    	  echo $v['name'];	
+                                                    	}                                                    		
+                                                    ?>
+                                                    </td>                                                     
                                                    <td>
                                                      <?=($v['path']!='')?"叶子":"树枝"?>
                                                     </td>  
+                                                 <td>
+                                                     <?=($v['path']!='')?$v['path']:""?>
+                                                    </td>    
                                                     <td ><?=$v['orderno']?></td>                                                  
 													<td>
-													<button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['sitename']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;
+													<button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['id']?>','<?=$v['name']?>','<?=$v['path']?>','<?=$v['orderno']?>')">修改</button>&nbsp;&nbsp;
 													
 													</td>
                                                 </tr>
@@ -354,7 +381,7 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                                 <label>节点名称:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
-                                                        <i class="fa fa-user"></i>
+                                                        <i class="fa icon-docs"></i>
                                                     </span>
                                                     <input type="text" class="form-control" placeholder="请输入节点名称" id="nodename" value=""> </div>
                                             </div>                                            
@@ -362,7 +389,7 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                                 <label>URL地址:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
-                                                        <i class="fa fa-user"></i>
+                                                        <i class="fa icon-link"></i>
                                                     </span>
                                                     <input type="text" class="form-control" placeholder="URL地址,相对或绝对URL" id="urlpath" value=""> </div>
                                             </div> 
@@ -370,7 +397,7 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
                                                 <label>排序ID:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
-                                                        <i class="fa fa-user"></i>
+                                                        <i class="fa icon-arrow-up"></i>
                                                     </span>
                                                     <input type="text" class="form-control" placeholder="排序ID，按升序排列" id="sortid" value=""> </div>
                                             </div> 
@@ -432,7 +459,7 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
  	sortid = $("#sortid").val();
 	hiparentid = $("#hiparentid").val();	
  	$.ajax({
-					  url: "ajax_data/sites.php",
+					  url: "ajax_data/treelist.php",
 					  type: 'post',
 					  data:{"nodename":nodename,"urlpath":urlpath,"hiparentid":hiparentid,"sortid":sortid,"act":"ad"},
 					  dataType: 'json',
@@ -465,15 +492,16 @@ $res = Pwtree_Nodes::getTreeNavList($merid,$parentid);
 
  
  $("#editsite").click(function(){
-	deptname = $("#sitename").val();
- 	about = $("#about").val();
+ 	nodename = $("#nodename").val();
+ 	urlpath = $("#urlpath").val();
+ 	sortid = $("#sortid").val();
  	 
 	fid = $("#fid").val();
 	
  	$.ajax({
-					  url: "ajax_data/sites.php",
-					  type: 'post',
-					  data:{"sitename":deptname,"about":about,"fid":fid,"act":"ed"},
+					  url: "ajax_data/treelist.php",
+					  type: 'post',					  
+					  data:{"fid":fid,"nodename":nodename,"urlpath":urlpath,"sortid":sortid,"act":"ed"},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   

@@ -165,40 +165,45 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
 	
 	$sqlcount = "select max(f_id) as fid from pw_sites where f_merid= ?";    
   
-  $maxfid = '';
+  $siteid = '';
   $conn =  Db_Mysqli::getIntance()->getConnection();
   //$conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-  
+    
   $stmt= $conn->prepare($sqlcount);
   $stmt->bind_param('i', $merid);  
   $result = $stmt->execute() ;
+  if($result==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	}
+	
   $stmt->bind_result($mid);
   
   while ($stmt->fetch()) {
-	   $maxfid = $mid;        
+	   $siteid = $mid;        
    }
-  
-  if($maxfid=='')
+ 
+  if($siteid=='')
    {
-   	$maxfid = $merid."2000";
+   	$siteid = $merid."2000";
    }else{
-   	$maxfid = intval($maxfid) + 1;
+   	$siteid = intval($siteid) + 1;
    }
    
 	$sql = "insert into pw_sites(f_id,f_sitename,f_sitedomain,f_about,f_merid)values(?,?,?,?,?)";
 	$stmt= $conn->prepare($sql);
-	$stmt->bind_param('isssi',$maxfid,$sitename,$sitdomain,$about,$merid);
+	$stmt->bind_param('isssi',$siteid,$sitename,$sitdomain,$about,$merid);
 	$res = $stmt->execute() ;
 	if($res==false)
 	{
 	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
 	}
 		 	 
-	$treesql = "insert into pw_treenav(f_parentid,f_name,f_displayorderno,f_path,f_rootid,f_divno,f_orderno,f_classpath,f_merid)values(?,?,?,?,?,?,?,?,?)";
+	$treesql = "insert into pw_treenav(f_id,f_parentid,f_name,f_displayorderno,f_path,f_rootid,f_divno,f_orderno,f_classpath,f_merid)values(?,?,?,?,?,?,?,?,?,?)";
   $parentid = $displayno = $rootid = $divno = $orderno = 0;
   $fpath = $classpath = '';
   $stmt2 = $conn->prepare($treesql); 
-	$stmt2->bind_param('isisiiisi',$parentid ,$sitename,$displayno,$fpath,$rootid,$divno,$orderno,$classpath,$merid);		
+	$stmt2->bind_param('iisisiiisi',$siteid,$parentid ,$sitename,$displayno,$fpath,$rootid,$divno,$orderno,$classpath,$merid);		
 	$res2 = $stmt2->execute() ;		
 	if($res2==false)
 	{

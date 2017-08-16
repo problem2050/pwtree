@@ -10,11 +10,11 @@ public static function getTreeNavList($merid,$parentid,$findstr=''){
   
   if($findstr!=''){
   	
-  	$sql .=" and f_name = ?  order by f_id,f_orderno";
+  	$sql .=" and f_name = ?  order by f_orderno";
   	$stmt= $conn->prepare($sql);
-    $stmt->bind_param('iis', $merid,$parentid,$findstr);  	  	
+    $stmt->bind_param('iis', $merid,$parentid,$findstr);
   }else{  	
-  	$sql .="  order by f_id,f_orderno";
+  	$sql .="  order by f_orderno";
   	$stmt= $conn->prepare($sql);
     $stmt->bind_param('ii', $merid,$parentid);  	  	    
   }
@@ -65,21 +65,15 @@ public static function insertTreeNav($parentid,$nodename,$fpath,$rootid,$divno,$
 	 return $res2;
 }
 	
-public static function getTreeNavigation($ids = array())
+public static function getTreeNavigation($parentid,$merid)
 	{
-				
-		if(!is_array($ids))return false;
-		
-		$conn =  Db_Mysqli::getIntance()->getConnection();
-						
-		$arg = array('ids'=>implode(",",$ids));	
-		$listid = join(',', $ids);
-						
-	  $sql = 'select f_id ,f_name  from pw_treenav where f_id in (?) order by f_divno asc';
-	  $stmt = $conn->prepare($treesql); 
-	 	   
-	  $stmt->bind_param('s',$listid);
-	  $result = $stmt->execute() ;	   
+								
+		$conn =  Db_Mysqli::getIntance()->getConnection();							 
+
+	  $treesql = 'select f_id as id,f_name as name from pw_treenav where FIND_IN_SET (f_id, queryChildrenForUp(?)) and f_merid=? order by f_id ';
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('ii',$parentid,$merid);
+	  $result = $stmt->execute();
           
 	  if($result==false)
 		{
@@ -97,7 +91,26 @@ public static function getTreeNavigation($ids = array())
 		
 	}
 	
-
+public static function updateTreeNav($fid,$nodename,$fpath,$orderno,$merid)
+{
+ 
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $treesql = "update pw_treenav set f_name=?,f_path=?,f_orderno=? where f_id = ? and f_merid = ?";
+  //$parentid = $displayno = $rootid = $divno = $orderno = 0;
+  //$fpath = $classpath = '';
+  $stmt2 = $conn->prepare($treesql); 
+  
+  $stmt2->bind_param('ssiii',$nodename ,$fpath,$orderno,$fid,$merid);		
+  $res2 = $stmt2->execute() ;	
+ 
+  if($res2==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	}    
+	//$conn->commit();	 
+	$stmt2->close();
+	 return $res2;
+}
 	
 
 }
