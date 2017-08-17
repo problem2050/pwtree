@@ -111,7 +111,82 @@ public static function updateTreeNav($fid,$nodename,$fpath,$orderno,$merid)
 	$stmt2->close();
 	 return $res2;
 }
+
+public static function getPermissionByNavid($siteid,$treenavid='')
+	{
+								
+		$conn =  Db_Mysqli::getIntance()->getConnection();							 
+
+	  $treesql = "SELECT f_id AS id,f_name AS name,f_about AS about,f_date AS createdate,f_siteid AS siteid, f_cateid AS cateid,f_treenavid AS treenavid FROM pw_permission where (f_siteid = ? or ?='') and (f_treenavid=? or ?='')";
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('iiii',$siteid,$siteid,$treenavid,$treenavid);
+	  $result = $stmt->execute();
+         
+	  if($result==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		}
 	
+	  $stmt->bind_result($fid,$name,$about,$datestr,$siteid,$cateid,$treeid);
+	 
+	  $listArr = array();
+ 
+	  while ($stmt->fetch()) {
+		     	$listArr[] = array("id"=>$fid,"name"=>$name,"about"=>$about,"datestr"=>$datestr,"cateid"=>$cateid,"siteid"=>$siteid,"treeid"=>$treeid);
+	   }
+	      
+    return $listArr;   		
+		
+	}
+	
+ 
+ public static function getMenuTreeXml($siteid,$ids='')
+	{
+								
+		$conn =  Db_Mysqli::getIntance()->getConnection();							 
+
+    $listArr = array();
+    
+  if ($ids==''){    	
+	  $treesql = "SELECT f_id AS id,   f_name AS showname, ifnull(f_path, '') AS url,  f_name AS trrename,
+                       f_divno AS level2,f_parentid AS fatherid,'' AS tip, f_displayorderno AS orderno
+                       FROM pw_treenav WHERE  FIND_IN_SET(f_id, queryChildrenForDown(?))";
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('i',$siteid);
+	  $result = $stmt->execute();
+	  $stmt->bind_result($fid,$showname,$url,$trname,$level,$fatherid,$tip,$orderno); 
+	  while ($stmt->fetch()) {
+		     	$listArr[] = array("id"=>$fid,"showname"=>$showname,"url"=>$url,
+		     	                   "trname"=>$trname,"level"=>$level,"fatherid"=>$fatherid,
+		     	                   "tip"=>$tip,"orderno"=>$orderno,);
+	   }
+	   $stmt->close();
+    }else{
+    	$idlist = explode(',',$ids);
+    	foreach($idlist as $k=>$v){
+    		if (intval($v)<=0) {
+    		 	return false;
+    		}
+    }    	
+	    $treesql = "SELECT f_id AS id, f_name AS showname, ifnull(f_path, '') AS url, f_name AS trname,f_divno AS level2,f_parentid AS fatherid,'' AS tip,f_displayorderno AS dorder  FROM pw_treenav WHERE f_id IN (".$ids.")";
+	    $stmt = $conn->prepare($treesql);       
+	    $result = $stmt->execute();    
+      $stmt->bind_result($fid,$showname,$url,$trname,$level,$fatherid,$tip,$orderno); 
+	    while ($stmt->fetch()) {
+		     	$listArr[] = array("id"=>$fid,"showname"=>$showname,"url"=>$url,
+		     	                   "trname"=>$trname,"level"=>$level,"fatherid"=>$fatherid,
+		     	                   "tip"=>$tip,"orderno"=>$orderno,);
+	   }
+	   
+	   $stmt->close();
+	   
+    }
+	  
+	  
+	       
+    return $listArr;  	
+		
+	}
 
 }
 
