@@ -52,7 +52,7 @@ function getBuildTree($siteid,$nids ='', $pids = array()){
 	$xml = ' <div class="portlet-body"><div id="tree_1" class="tree-demo"><ul>';
 	
 	function buildXml($source,$fatherid, $navPer){		
-			$xml = "\n";
+			$xml = "";
 			foreach($source as $row)
 			{	
 				if ($row['fatherid'] == $fatherid)
@@ -61,18 +61,19 @@ function getBuildTree($siteid,$nids ='', $pids = array()){
 						if(!empty($navPer)&&in_array($row['id'],array_keys($navPer))){
 							$navPerId = $navPer[$row['id']];
 							//var_dump($navPerId);
-							$xml .= '<li at_id="'.$row['id'].'" at_showname="'.$row['showname'].'" at_fatherid="'.$row['fatherid'].'" at_show="1" p_type="isNid" nodetype="node" ck_show="navshow"></li>';
+							$xml .= '<ul><li>'.$row['showname'].'</li>';
 							for($i=0;$i<count($navPerId);$i++){	
-								$xml .= '<li at_id="'.$navPerId[$i]['id'].'" at_showname="'.$navPerId[$i]['name'].'['.$navPerId[$i]['id'].']" at_fatherid="'.$row['id'].'" at_show="1" deltype="1" p_type="isPid" nodetype="page"></li>';
+								$xml .= '<ul><li>'.$navPerId[$i]['name'].'</li></ul>';
 							}
+						$xml .= '</ul>';	
 						}else{
-							$xml .= '<li at_id="'.$row['id'].'" at_showname="'.$row['showname'].'" at_fatherid="'.$row['fatherid'].'" at_show="1" p_type="isNid" nodetype="page" ck_show="navshow"></li>';
+							$xml .= '<ul> '.$row['showname'].'</ul>';
 						}
 					}else{
-						$xml .= '<li at_id="'.$row['id'].'" at_showname="'.$row['showname'].'" at_fatherid="'.$row['fatherid'].'" at_show="1"  p_type="isNid" nodetype="node"></li>';
+						$xml .= '<li>'.$row['showname']."</li>";
 						$xml .= buildXml($source, $row['id'],$navPer);
 					}
-					$xml .= '</ul>';
+					//$xml .= '</ul>';
 				}
 			}
 			return $xml;

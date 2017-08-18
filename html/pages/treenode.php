@@ -37,6 +37,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <link href="../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="../assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
         <!-- END GLOBAL MANDATORY STYLES -->
+         <link href="../assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" type="text/css" />
         <!-- BEGIN THEME GLOBAL STYLES -->
         <link href="../assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
         <link href="../assets/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
@@ -287,62 +288,40 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                     <!-- END PAGE HEADER-->
         
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
-                            <div class="portlet">
-                               
-                                <div class="portlet-body">
-                                    <div class="table-scrollable">
-                                        <table class="table table-striped table-bordered table-advance table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        <i class="fa "></i>ID</th>
-                                                    <th >
-                                                        <i class="fa "></i>站点名称</th>
-                                                    <th >
-                                                        <i class="fa "></i>站点域名</th>    	
-                                                    <th>
-                                                        <i class="fa"></i>描述</th>
-                                                     		
-												 <th> 		
-													<i class="fa"></i>操作</th>	
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-											<?php											
-											if($res['LIST']){
-												foreach($res['LIST'] as $k=>$v){													
-												?>
-                                                <tr>
-												    <td ><?=$v['id']?></td>
-                                                    <td>
-                                                     <?=$v['sitename']?>
-                                                    </td>
-                                                   <td>
-                                                     <?=$v['sitedomain']?>
-                                                    </td>  
-                                                    <td ><?=$v['about']?></td>                                                  
-													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['sitename']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;</td>
-                                                </tr>
-                                                
-                                                <?php
-												}
-											}
-											?>
-                                                
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php
+
+										$res = getBuildTree('1000012000');
+										echo $res;
+										exit;
+										?>
+
+
+                           <div class="portlet-body">
+                                            <div id="tree_1" class="tree-demo">
+                                                <ul>
+                                                    <li> Root node 1
+                                                        <ul>
+                                                            <li data-jstree='{ "selected" : true }'>
+                                                                <a href="javascript:;"> Initially selected </a>
+                                                            </li>
+                                                            <li data-jstree='{ "icon" : "fa fa-briefcase icon-state-success " }'> custom icon URL </li>
+                                                            <li data-jstree='{ "opened" : true }'> initially open
+                                                                <ul>
+                                                                    <li data-jstree='{ "disabled" : true }'> Disabled Node </li>
+                                                                    <li data-jstree='{ "type" : "file" }'> Another node </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li data-jstree='{ "icon" : "fa fa-warning icon-state-danger" }'> Custom icon class (bootstrap) </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li data-jstree='{ "type" : "file" }'>
+                                                        <a href="http://www.jstree.com"> Clickanle link node </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                             <!-- END SAMPLE TABLE PORTLET-->
-							<ul class="pagination" style="visibility: visible;">
-							<?php
-							 
-							if($res['CNT']>0){
-							echo getPageHtml($res['CNT'],$page,$pagesize);
-							}
-							?>
-							</ul>
+						 
                         </div>
                     </div>
                 </div>
@@ -424,13 +403,12 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
+        <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
-        <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
-          <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
         <script src="../assets/pages/scripts/ui-tree.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
         
@@ -507,12 +485,9 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 </script>
 
 
-<?php
 
-$res = getBuildTree('1000012000');
-echo $res;
-exit;
-?>
+
+                                    
     </body>
 </html>
 
