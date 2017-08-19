@@ -49,14 +49,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
 <script type="text/javascript">
- function editshow(sitename,about,fid){
-   $("#sitename").val(sitename);
- 	 $("#about").val(about);
-	 $("#fid").val(fid);
-	 $("#addsite").hide();
-	 $("#editsite").show();
-	 $("#siteaddform").modal('show');
- }		
+ 	
  </script>
     <!-- END HEAD -->
 
@@ -271,18 +264,17 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					  
-                   
-                   <div class="portlet light bordered" style="width:60%">
-                                <div class="portlet-title">
- 								 
+					      <br>
+              <div class="col-md-6">
+              <div class="portlet light bordered" style="width:100%">
+                <div class="portlet-title"> 								 
 								<div class="caption">								
-                                    <select class="form-control" name="site_list">
+               <select class="form-control" id="site_list" onchange="droplistChange()">
 									<?php
 									$site_rs = Pwtree_Nodes::getSites($merid);
-									var_dump($site_rs);
+									 
 									 if($site_rs){
-                                      foreach($site_rs as $k=>$v){                                                	 
+                             foreach($site_rs as $k=>$v){                                                	 
                                                 echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
                                           }
                                         }
@@ -292,7 +284,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 								</div>	
                                     <div class="actions">
                                                                            
-                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
+                                         <button type="button" class="btn red" id="addlink">添加 </a>
                                     </div>
                                 </div>
                                 
@@ -315,6 +307,12 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                             <!-- END SAMPLE TABLE PORTLET-->
 						 
                         </div>
+                      
+                      </div>
+                       <!-- END SAMPLE  COL-->
+                       <div class="col-md-6">
+                       	<div id="right_pemiddetail"></div>
+                      </div>
                     </div>
                 </div>
                 <!-- END CONTENT BODY -->
@@ -322,45 +320,50 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
             <!-- END CONTENT -->         
            
            <!--BEGIN MODAL-DIALOG -->
-           <div id="siteaddform" class="modal fade" tabindex="-1" data-width="400">
+           <div id="pemaddform" class="modal fade" tabindex="-1" data-width="400">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                    <h4 class="modal-title">添加新站点</h4>
+                                                    <h4 class="modal-title">添加新的权限ID</h4>
                                                 </div>
                                                 <div class="modal-body">
                                         <div class="form-group">
-                                                <label>站点名称:</label>
-                                                <div class="input-group">
+                                                <label>权限ID:</label>
+                                                <div class="input-group ">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入站点名称" id="sitename" value=""> </div>
-                                            </div>                                            
+                                                    <input type="text" class="form-control" placeholder="手工输入全数字的权限ID" id="pemid" value=""> </div>
+                                                    
+                                            </div>    
                                            <div class="form-group">
-                                                <label>站点域名:</label>
+                                                <label>权限ID名称:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入站点域名" id="domain" value=""> </div>
+                                                    <input type="text" class="form-control" placeholder="权限名称" id="pemname" value=""> </div>
+                                            </div>                                                                                     
+                                           <div class="form-group">
+                                                <label>权限ID描述:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="简单描述权限ID" id="pemabout" value=""> </div>
                                             </div> 
                                        <div class="form-group">
-                                                <label>站点描述:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-user"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="请简单输入站点描述" id="about" value=""> </div>
-                                            </div> 
-                                             <span id="addresult"></span>
+                                               <label>权限类别:</label>
+                                        <select class="form-control" id="categorytype">
+																					
+																					</select><br>																					
+				                                   <span id="addresult"></span>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
-                                                    <button type="button" class="btn red" id="addsite">添加</button>
-													<button type="button" class="btn red" id="editsite">修改</button>
-													<input type="hidden" id="fid" value="" />
+                                                    <button type="button" class="btn red" id="addpemid">添加</button>													
+													<input type="hidden" id="treenavid" value="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -407,20 +410,40 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         
 <script type="text/javascript">
  
- $("#addsite").click(function(){
- 	sitename = $("#sitename").val();
- 	sitedomain = $("#domain").val();
- 	about = $("#about").val();
+ $("#addpemid").click(function(){
+     
+ 	pemid = $("#pemid").val();
+ 	siteid = $("#site_list").val();
+ 	pemname = $("#pemname").val();
+ 	categorytype = $("#categorytype").val();
+ 	pemabout = $("#pemabout").val();
+ 	
+  inst =$("#tree_1111").jstree(true);  
+  console.log(inst._data);
+  
+  if(inst._data.core.selected=='')
+	{
+			  $("#addresult").html("未选择节点!");
+			  return;
+	}
+	if(inst._data.core.last_clicked.original.nodetype!='page')
+	{
+			  $("#addresult").html("选择节点不对!");
+			  return;
+	}
+ 	treenavid = parseInt(inst._data.core.last_clicked.original.id);
+ 	
  	 $.ajax({
-					  url: "ajax_data/sites.php",
+					  url: "ajax_data/pemid_data.php",
 					  type: 'post',
-					  data:{"sitename":sitename,"sitedomain":sitedomain,"about":about,"act":"ad"},
+					  data:{"pemid":pemid,"siteid":siteid,"treenavid":treenavid,"pemname":pemname,"categorytype":categorytype,"about":pemabout,"rnd":Math.random(),"act":"adpemid"},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   
 					 if (data.STATE==true) {
 					 	  $("#addresult").css("color","blue");
-					 	  $("#addresult").html("添加成功!");					 	  
+					 	  $("#addresult").html("添加成功!");	
+					 	  createId(data.MSG,pemname); 		 	  
 					   }else{					   	 
 					   	 $("#addresult").css("color","red");
 					     $("#addresult").html("添加失败!");
@@ -433,56 +456,45 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 					})
 					
 		   // window.location.reload();
+		 	
+		 		
 		 			
 		});
 		
-		$("#addlink").click(function(){
+	$("#addlink").click(function(){
 			 //$("#adddept").hide();
-			 $("#editsite").hide();
-			 $("#siteaddform").modal('show');
-		});
-
-
- 
- $("#editsite").click(function(){
-	deptname = $("#sitename").val();
- 	about = $("#about").val();
- 	 
-	fid = $("#fid").val();
-	
- 	$.ajax({
-					  url: "ajax_data/sites.php",
+			 			  
+			 $("#pemaddform").modal('show');			 
+  
+			 siteid = $("#site_list").val();
+			 $.ajax({
+					  url: "ajax_data/pemid_data.php",
 					  type: 'post',
-					  data:{"sitename":deptname,"about":about,"fid":fid,"act":"ed"},
+					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   
-					 if (data.STATE==true) {
-					 	  $("#addresult").css("color","blue");
-					 	  $("#addresult").html("添加成功!");					 	  
-					   }else{					   	 
-					   	 $("#addresult").css("color","red");
-					     $("#addresult").html("添加失败!");
+					  $.each(data, function (index, item) {
 					     
-					   }
+					    $("#categorytype").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
+					   });
 					  },
 					  fail: function (err, status) {
 					    console.log(err)
 					  }
 					})
-					
-		  //  window.location.reload();
-		 			
-		});	
+			
+		});
+   
 
 $(function() {
-	siteid = $("#site_list").val();  ;
+	//Siteid = $("#site_list").val();
 	$('#tree_1111').jstree({
 	'core' : {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+siteid,
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+ "&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
@@ -496,43 +508,132 @@ $(function() {
 							});
 					}
 				},
-				"plugins" : [ "sort" ]
-			}).bind("select_node.jstree", function(event, data) {
-				var inst = data.instance;
+			//	"plugins" : [ "sort" ]
+			}).on("changed.jstree", function(event, data) {
+			
+				var inst = data.instance;							
+			
 				var selectedNode = inst.get_node(data.selected);
-				console.info(selectedNode.original.id);
+				
+			if(selectedNode){				
+				$("#treenavid").val(selectedNode.original.id);
+			 
+				console.info(selectedNode.original);
 				//var level = $("#"+selectedNode.id).attr("text");
-				//if(parseInt(level) <= 3){
-				//	loadConfig(inst, selectedNode);
-				//}
+				if(selectedNode.original.nodetype=='page'){
+					//addTreePemid(inst, selectedNode);				 					
+					$("#addlink").removeAttr("disabled");
+				}else {
+				  $("#addlink").attr("disabled",true);
+				}
+			}
+			
 			});
 		});
 
-function loadConfig(inst, selectedNode){
+
+function droplistChange(){
+	var tree1111 = jQuery.jstree.reference("#tree_1111");
+   tree1111.refresh();
+}		
+
+$("#addlink").click(function(){
+			 //$("#adddept").hide();
+			 			  
+			 $("#pemaddform").modal('show');			 
+  
+			 siteid = $("#site_list").val();
+			 $.ajax({
+					  url: "ajax_data/pemid_data.php",
+					  type: 'post',
+					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					  $.each(data, function (index, item) {
+					     
+					    $("#categorytype").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
+					   });
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
 			
-			var temp = selectedNode.text;
-			//inst.open_node(selectedNode);
-			//alert(temp);
-			$.ajax({
-				url : "ajax_data/tree_data.php?siteid="+siteid,
-				dataType : "json",
-				type : "POST",
-				success : function(data) {
-					if(data) {
-					   selectedNode.children = [];
-					   $.each(data, function (i, item) {
-						   		var obj = {text:item};
-						   		//$('#jstree_div').jstree('create_node', selectedNode, obj, 'last');
-								inst.create_node(selectedNode,item,"last");
-				       });
-					   inst.open_node(selectedNode);
-					}else{
-						$("#tree_1111").html("暂无数据！");
-					}
-				}
-			});
-		}
+		});
+		
+function delpemid (pemid){
+	
+	 siteid = $("#site_list").val();	
+	 $.ajax({
+					  url: "ajax_data/pemid_data.php",
+					  type: 'post',
+					  data:{"siteid":siteid,"pemid":pemid,"act":"killpemid","rnd": Math.random()},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status){					   
+              if(data.STATE==1){
+              	
+              	deleteId();
+              	
+              }else{
+              	
+              }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+					
+}
+
+$("#pemid").change(function(){
+	 pemid=$("#pemid").val();
+	 siteid = $("#site_list").val();
 	 
+	 $.ajax({
+					  url: "ajax_data/pemid_data.php",
+					  type: 'post',
+					  data:{"siteid":siteid,"pemid":pemid,"act":"querypemid","rnd": Math.random()},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status){					   
+              if(data.STATE==1){
+              	$("#addresult").css("color","green");
+              	$("#addresult").html("ID可用");
+              }else{
+              	$("#addresult").css("color","red");
+              	$("#addresult").html("权限ID已经存在!");
+              }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})					
+	});
+
+	
+function createId(pemid,pemname) {
+	
+			var ref = $('#tree_1111').jstree(true);
+			sel = ref.get_selected();
+			if(!sel.length) { return false; }
+			sel = sel[0];
+			sel = ref.create_node(sel, {"id":pemid,"text":"["+pemid+"]"+pemname+"[<a href=\"#\" onclick=\"delpemid('"+pemid+"')\">删除</a>]","icon":"fa fa-cube icon-state-danger"});
+			if(sel) {
+				ref.edit(sel);
+			}
+}
+	
+function deleteId() {
+		var ref = $('#tree_1111').jstree(true);
+		console.info(ref);
+		
+		sel = ref.get_selected();
+			if(!sel.length) { return false; }
+					ref.delete_node(sel);	
+	};
+						
 </script>
                         
     </body>

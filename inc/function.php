@@ -15,8 +15,7 @@ function getPageHtml($allcnt,$page,$pagesize){
 
   for($i=1;$i<= $maxpage;$i++)
   {
-
-    if ($page==$i)
+   if ($page==$i)
     {
       $pagehtml .="<li class=\"active\" ><a href=\"?page=".$i."&pagesize=".$pagesize."\">".$i."</a></li>";
     }else{
@@ -127,17 +126,17 @@ function getBuildTree2($siteid,$nids ='', $pids = array()){
 							//$xml .= '<row at_id="'.$row['id'].'" at_showname="'.$row['showname'].'" at_fatherid="'.$row['fatherid'].'" at_show="1" p_type="isNid" nodetype="node" ck_show="navshow">';
 							for($i=0;$i<count($navPerId);$i++){	
 								//$xml .= '<row at_id="'.$navPerId[$i]['id'].'" at_showname="'.$navPerId[$i]['name'].'['.$navPerId[$i]['id'].']" at_fatherid="'.$row['id'].'" at_show="1" deltype="1" p_type="isPid" nodetype="page"></row>';
-								 array_push($child_arr,array('id'=>$navPerId[$i]['id'],'text'=>$navPerId[$i]['name'],'nodetype'=>'child'));
-							}
-							array_push($tree_arr ,array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'nodes','children'=>$child_arr) );
+								 array_push($child_arr,array('id'=>$navPerId[$i]['id'],'text'=>'['.$navPerId[$i]['id'].']'.$navPerId[$i]['name'].'[<a href="#" onclick="delpemid(\''.trim($navPerId[$i]['id']).'\')">删除</a>]','nodetype'=>'pemid',"icon"=>"fa fa-cube icon-state-danger"));
+								 }
+							array_push($tree_arr ,array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page',"icon"=>"fa fa-file icon-state-success",'children'=>$child_arr) );
 						}else{
 							//$xml .= '<row at_id="'.$row['id'].'" at_showname="'.$row['showname'].'" at_fatherid="'.$row['fatherid'].'" at_show="1" p_type="isNid" nodetype="page" ck_show="navshow">';
 							//var_dump($tree_arr);
-							array_push($tree_arr,array('id'=>$row['id'],'text'=>$row['showname'],'nodetype'=>'child'));
+							array_push($tree_arr,array('id'=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page',"icon"=>"fa fa-file icon-state-success"));
 						}
 					}else{
 						//$xml .= '<row at_id="'.$row['id'].'" at_showname="'.$row['showname'].'" at_fatherid="'.$row['fatherid'].'" at_show="1"  p_type="isNid" nodetype="node">';
-						$node_arr =  array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'nodes','children'=>buildXml($source, $row['id'],$navPer)) ;
+						$node_arr =  array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'nodes',"icon"=>"fa fa-folder icon-state-success",'children'=>buildXml($source, $row['id'],$navPer)) ;
 						
 						//$node_arr['children']=array(buildXml($source, $row['id'],$navPer))
 						 array_push($tree_arr ,$node_arr );			 

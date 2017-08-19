@@ -215,6 +215,100 @@ public static function getPermissionByNavid($siteid,$treenavid='')
 		return $listArr;   		
 		
 	}
+	
+	public static function getCategory($merid,$siteid)
+	{
+								
+		$conn =  Db_Mysqli::getIntance()->getConnection();							 
+
+	  $treesql = "SELECT f_id AS id,f_category AS category,f_about AS about  FROM pw_category where f_merid = ?  and f_siteid=?";
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('ii',$merid,$siteid);
+	  $result = $stmt->execute();
+         
+	  if($result==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		}
+	
+	  $stmt->bind_result($fid,$category,$about);
+	 
+	  $listArr = array();
+ 
+	  while ($stmt->fetch()) {
+		     	$listArr[] = array("id"=>$fid,"category"=>$category,"about"=>$about);
+	   }
+	      
+		return $listArr;   		
+		
+	}
+	
+
+public static function insertPemid($pemid,$pemname,$pemabout,$siteid,$category,$treenavid,$merid)
+{
+ 
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $treesql = "insert into pw_permission (f_id,f_name,f_about,f_siteid,f_cateid,f_treenavid,f_merid)values(?,?,?,?,?,?,?)";
+  //$parentid = $displayno = $rootid = $divno = $orderno = 0;
+  //$fpath = $classpath = '';
+  $stmt2 = $conn->prepare($treesql); 
+  
+  $stmt2->bind_param('issiiii',$pemid ,$pemname,$pemabout,$siteid,$category,$treenavid,$merid);		
+  $res2 = $stmt2->execute() ;	
+ 
+  if($res2==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	}    
+	//$conn->commit();	 
+	$stmt2->close();
+	 return $res2;
+}
+
+
+public static function queryPemidexistent($merid,$siteid,$pemid)
+	{
+								
+		$conn =  Db_Mysqli::getIntance()->getConnection();							 
+	  $treesql = "SELECT f_id AS id  FROM pw_permission where f_merid = ?  and f_siteid=? and f_id = ?";
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('iii',$merid,$siteid,$pemid);
+	  $result = $stmt->execute();
+         
+	  if($result==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		}	
+	  $stmt->bind_result($fid);	 
+	  $listArr = array(); 
+	  while ($stmt->fetch()) {
+		     	$listArr[] = array("id"=>$fid);
+	   }
+	   
+		 return $listArr;   		
+		
+	}
+	
+public static function delPemid($merid,$pemid,$siteid)
+{
+ 
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $treesql = "delete from pw_permission  where f_id = ? and f_siteid = ? and f_merid = ?";
+  //$parentid = $displayno = $rootid = $divno = $orderno = 0;
+  //$fpath = $classpath = '';
+  $stmt2 = $conn->prepare($treesql); 
+  
+  $stmt2->bind_param('iii',$pemid ,$siteid,$merid);		
+  $res2 = $stmt2->execute() ;	
+ 
+  if($res2==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	}    
+	//$conn->commit();	 
+	$stmt2->close();
+	 return $res2;
+}
 
 }
 
