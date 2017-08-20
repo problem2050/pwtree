@@ -271,15 +271,27 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					           <h3 class="page-title">部门列表
-                        <small></small>
-                    </h3>    
+					  
                    
                    <div class="portlet light bordered" style="width:60%">
                                 <div class="portlet-title">
-                                    
+ 								 
+								<div class="caption">								
+                                    <select class="form-control" name="site_list">
+									<?php
+									$site_rs = Pwtree_Nodes::getSites($merid);
+									var_dump($site_rs);
+									 if($site_rs){
+                                      foreach($site_rs as $k=>$v){                                                	 
+                                                echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+                                          }
+                                        }
+                                                ?>
+									</select>  
+									
+								</div>	
                                     <div class="actions">
-                                                                            
+                                                                           
                                          <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
                                     </div>
                                 </div>
@@ -290,36 +302,16 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
                             <?php
 
-										$res = getBuildTree('1000012000');
-										echo $res;
-										exit;
+										//$res = getBuildTree2('1000012000');
+										//echo $res;
+										//exit;
 										?>
 
 
                            <div class="portlet-body">
-                                            <div id="tree_1" class="tree-demo">
-                                                <ul>
-                                                    <li> Root node 1
-                                                        <ul>
-                                                            <li data-jstree='{ "selected" : true }'>
-                                                                <a href="javascript:;"> Initially selected </a>
-                                                            </li>
-                                                            <li data-jstree='{ "icon" : "fa fa-briefcase icon-state-success " }'> custom icon URL </li>
-                                                            <li data-jstree='{ "opened" : true }'> initially open
-                                                                <ul>
-                                                                    <li data-jstree='{ "disabled" : true }'> Disabled Node </li>
-                                                                    <li data-jstree='{ "type" : "file" }'> Another node </li>
-                                                                </ul>
-                                                            </li>
-                                                            <li data-jstree='{ "icon" : "fa fa-warning icon-state-danger" }'> Custom icon class (bootstrap) </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li data-jstree='{ "type" : "file" }'>
-                                                        <a href="http://www.jstree.com"> Clickanle link node </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                             <div id="tree_1111" class="tree-demo">
+                           </div>
+                             </div>
                             <!-- END SAMPLE TABLE PORTLET-->
 						 
                         </div>
@@ -481,13 +473,68 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 					
 		  //  window.location.reload();
 		 			
-		});		
+		});	
+
+$(function() {
+	siteid = $("#site_list").val();  ;
+	$('#tree_1111').jstree({
+	'core' : {
+			'check_callback': true,
+			"data" : function (obj, callback){
+							$.ajax({
+								url : "ajax_data/tree_data.php?siteid="+siteid,
+								dataType : "json",
+								type : "POST",
+								success : function(data) {
+									console.info(data);
+									if(data) {
+										callback.call(this, data);
+									}else{
+										$("#tree_1111").html("暂无数据！");
+									}
+								}
+							});
+					}
+				},
+				"plugins" : [ "sort" ]
+			}).bind("select_node.jstree", function(event, data) {
+				var inst = data.instance;
+				var selectedNode = inst.get_node(data.selected);
+				console.info(selectedNode.original.id);
+				//var level = $("#"+selectedNode.id).attr("text");
+				//if(parseInt(level) <= 3){
+				//	loadConfig(inst, selectedNode);
+				//}
+			});
+		});
+
+function loadConfig(inst, selectedNode){
+			
+			var temp = selectedNode.text;
+			//inst.open_node(selectedNode);
+			//alert(temp);
+			$.ajax({
+				url : "ajax_data/tree_data.php?siteid="+siteid,
+				dataType : "json",
+				type : "POST",
+				success : function(data) {
+					if(data) {
+					   selectedNode.children = [];
+					   $.each(data, function (i, item) {
+						   		var obj = {text:item};
+						   		//$('#jstree_div').jstree('create_node', selectedNode, obj, 'last');
+								inst.create_node(selectedNode,item,"last");
+				       });
+					   inst.open_node(selectedNode);
+					}else{
+						$("#tree_1111").html("暂无数据！");
+					}
+				}
+			});
+		}
+	 
 </script>
-
-
-
-
-                                    
+                        
     </body>
 </html>
 

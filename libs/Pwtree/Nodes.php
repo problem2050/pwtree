@@ -187,6 +187,34 @@ public static function getPermissionByNavid($siteid,$treenavid='')
     return $listArr;  	
 		
 	}
+	
+	
+	public static function getSites($merid)
+	{
+								
+		$conn =  Db_Mysqli::getIntance()->getConnection();							 
+
+	  $treesql = "SELECT f_id AS id,f_sitename AS sitename,f_sitedomain AS sitedomain,f_about AS about  FROM pw_sites where f_merid = ? ";
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('i',$merid);
+	  $result = $stmt->execute();
+         
+	  if($result==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		}
+	
+	  $stmt->bind_result($fid,$sitename,$sitedomain,$about);
+	 
+	  $listArr = array();
+ 
+	  while ($stmt->fetch()) {
+		     	$listArr[] = array("id"=>$fid,"sitename"=>$sitename,"sitedomain"=>$sitedomain,"about"=>$about);
+	   }
+	      
+		return $listArr;   		
+		
+	}
 
 }
 
