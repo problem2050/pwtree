@@ -33,8 +33,8 @@ if($act =='adpemid'){
    exit;  	
   }
   
- if(strlen($pemid)>5){
-   echo json_encode(array("STATE"=>"-1","MSG"=>"权限ID超出5位","DATA"=>array()));
+ if(strlen($pemid)>4){
+   echo json_encode(array("STATE"=>"-1","MSG"=>"权限ID超出4位","DATA"=>array()));
    exit;  	
   }
   

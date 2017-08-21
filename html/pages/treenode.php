@@ -311,7 +311,54 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                       </div>
                        <!-- END SAMPLE  COL-->
                        <div class="col-md-6">
-                       	<div id="right_pemiddetail"></div>
+                       
+						<div class="portlet light bordered" >                                
+                                <div class="form-horizontal" >
+                                    <div class="form-body">
+										<div class="form-group">
+                                                        <label class="control-label col-md-3">权限ID                                                        
+                                                        </label>
+                                                        <div class="col-md-8">
+                                                           <input type="text" disabled id="show_pemid" data-required="1" class="form-control" /> 
+			                                </div>
+									   </div>
+  										<div class="form-group">
+                                                        <label class="control-label col-md-3">权限名称：                                                        
+                                                        </label>
+                                                        <div class="col-md-8">
+                                                 <input type="text" id="show_pemname" data-required="1" class="form-control" /> 
+			                                </div>
+						              </div>
+						                    <div class="form-group">
+                                                        <label class="control-label col-md-3">权限描述：                                                        
+                                                        </label>
+                                                        <div class="col-md-8">
+                                                 <input type="text" id="show_about" data-required="1" class="form-control" /> 
+			                                      </div>
+											</div>
+							        <div class="form-group">
+                                                        <label class="control-label col-md-3">分类：
+                                                      
+                                                        </label>
+                                                        <div class="col-md-8">
+                                                            <select class="form-control select2me" name="options2">
+                                                                <option value="">Select...</option>
+                                                                <option value="Option 1">Option 1</option>
+                                                                <option value="Option 2">Option 2</option>
+                                                                <option value="Option 3">Option 3</option>
+                                                                <option value="Option 4">Option 4</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                             			                                      
+                                   
+                                        <div class="form-actions">
+                                            <button type="submit" class="btn blue">保存</button>
+                                            <button type="button" class="btn default">取消</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                       </div>
                     </div>
                 </div>
@@ -357,7 +404,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                <label>权限类别:</label>
                                         <select class="form-control" id="categorytype">
 																					
-																					</select><br>																					
+										  </select>																					
 				                                   <span id="addresult"></span>
                                                 </div>
                                                 <div class="modal-footer">
@@ -436,7 +483,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
  	 $.ajax({
 					  url: "ajax_data/pemid_data.php",
 					  type: 'post',
-					  data:{"pemid":pemid,"siteid":siteid,"treenavid":treenavid,"pemname":pemname,"categorytype":categorytype,"about":pemabout,"rnd":Math.random(),"act":"adpemid"},
+					  data:{"pemid":pemid,"siteid":siteid,"treenavid":treenavid,"pemname":pemname,"pemabout":pemabout,"categorytype":categorytype,"about":pemabout,"rnd":Math.random(),"act":"adpemid"},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status) {					   
@@ -447,7 +494,6 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 					   }else{					   	 
 					   	 $("#addresult").css("color","red");
 					     $("#addresult").html("添加失败!");
-					     
 					   }
 					  },
 					  fail: function (err, status) {
@@ -510,7 +556,7 @@ $(function() {
 				},
 			//	"plugins" : [ "sort" ]
 			}).on("changed.jstree", function(event, data) {
-			
+			 
 				var inst = data.instance;							
 			
 				var selectedNode = inst.get_node(data.selected);
@@ -523,10 +569,15 @@ $(function() {
 				if(selectedNode.original.nodetype=='page'){
 					//addTreePemid(inst, selectedNode);				 					
 					$("#addlink").removeAttr("disabled");
-				}else {
+				}else if(selectedNode.original.nodetype=='nodes'){
 				  $("#addlink").attr("disabled",true);
+				}else if(selectedNode.original.nodetype=='pemid'){
+					$("#show_pemid").val(selectedNode.original.id);
+					$("#show_pemname").val(selectedNode.original.showname);
+					$("#show_about").val(selectedNode.original.about);
+					//$("#show_about").val(selectedNode.original.about);
 				}
-			}
+			} 
 			
 			});
 		});
@@ -549,7 +600,8 @@ $("#addlink").click(function(){
 					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
 					  dataType: 'json',
 					  timeout: 1000,
-					  success: function (data, status) {					   
+					  success: function (data, status) {
+                         $("#categorytype").empty();						  
 					  $.each(data, function (index, item) {
 					     
 					    $("#categorytype").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
@@ -627,8 +679,7 @@ function createId(pemid,pemname) {
 	
 function deleteId() {
 		var ref = $('#tree_1111').jstree(true);
-		console.info(ref);
-		
+		console.info(ref);		
 		sel = ref.get_selected();
 			if(!sel.length) { return false; }
 					ref.delete_node(sel);	
