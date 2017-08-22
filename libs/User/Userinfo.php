@@ -3,22 +3,46 @@
 class User_Userinfo{
 
 
-public static function getUserinfo($merid,$username,$page,$pagesize,$depid=''){
-
-  $retArr=array('CNT'=>0,'LIST'=>'');
+public static function getUserinfo($merid,$username='',$page,$pagesize,$depid=''){
+     
+   $retArr=array('CNT'=>0,'LIST'=>'');
   
-  $sqlcount = "select count(*) as cnt from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id where uinfo.f_merid=".$merid;
+  $sqlcount = "select count(*) as cnt from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id ";
+  $sqlcount .= " where uinfo.f_merid=? and (dept.f_id=? or ?='') and (uinfo.f_username=? or ?='') ";
   
-  $sql = "select uinfo.*,dept.f_department from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id where uinfo.f_merid = ".$merid." ORDER BY uinfo.f_id  LIMIT ".($page-1)*$pagesize.",".$pagesize;
+  $sql  = "select uinfo.f_id,f_username,f_truename,f_userpwd,f_date,f_lastdate,f_valid,f_lastip,f_pwdtime,uinfo.f_department,uinfo.f_merid,f_mobile,f_email,dept.f_department ";
+  $sql .=" from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id";
+  $sql .=" where uinfo.f_merid =? and (dept.f_id=? or ?='') and (uinfo.f_username=? or ?='')  ORDER BY f_id LIMIT ?,?";
   
-  $rcnt = Db_Mysqli::getIntance()->queryOne($sqlcount);
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sqlcount);
+  $stmt->bind_param('iiiss', $merid,$depid,$depid,$username,$username);  
+  $result = $stmt->execute() ;
+  $stmt->bind_result($cnt);
+  while ($stmt->fetch()) {
+	     	$retArr['CNT'] = $cnt;        
+   }
   
-  $res = Db_Mysqli::getIntance()->queryfetch($sql);
+  // echo "$merid,$depid,$depid,$username,$username";
+  $stmt= $conn->prepare($sql);
+  $limit_page = ($page-1)*$pagesize;
+  $stmt->bind_param('iiissii', $merid,$depid,$depid,$username,$username,$limit_page,$pagesize);  
+  $result = $stmt->execute() ;
+  $stmt->bind_result($fid,$username,$truename,$userpwd,$date,$lastdate,$valid,$lastip,$pwdtime,$departmentid,$merid,$mobile,$email,$department);
+  $listArr = array();
+  while ($stmt->fetch()) {
+	     	$listArr[] = array("f_id"=>$fid,"f_username"=>$username,"f_truename"=>$truename,
+			                   "f_userpwd"=>$userpwd,"f_date"=>$date,"f_lastdate"=>$lastdate,
+							   "f_valid"=>$valid,"f_lastip"=>$lastip,"f_pwdtime"=>$pwdtime,
+							   "f_departmentid"=>$departmentid,"f_merid"=>$merid,"f_mobile"=>$mobile,
+							   "f_email"=>$email,"f_department"=>$department,);
+   }
    
-  $retArr['CNT'] = isset($rcnt)?$rcnt['cnt']:0;
-  $retArr['LIST'] = $res;
-  return $retArr;
-  
+   $retArr['LIST'] =  $listArr;
+   
+   $stmt->close();
+   
+  return $retArr;  
 }
 
 public static function  insertUserinfo($merid,$username,$truename,$password,$email,$phone,$dep){
