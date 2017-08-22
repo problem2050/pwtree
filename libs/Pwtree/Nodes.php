@@ -48,7 +48,7 @@ public static function insertTreeNav($parentid,$nodename,$fpath,$rootid,$divno,$
 {
  
   $conn =  Db_Mysqli::getIntance()->getConnection();
-  $treesql = "insert into pw_treenav(f_parentid,f_name,f_displayorderno,f_path,f_rootid,f_divno,f_orderno,f_classpath,f_merid)values(?,?,?,?,?,?,?,?,?)";
+  $treesql = "insert into pw_treenav(f_id,f_parentid,f_name,f_displayorderno,f_path,f_rootid,f_divno,f_orderno,f_classpath,f_merid)values(seqval('pw_treenav'),?,?,?,?,?,?,?,?,?)";
   //$parentid = $displayno = $rootid = $divno = $orderno = 0;
   //$fpath = $classpath = '';
   $stmt2 = $conn->prepare($treesql); 
@@ -244,16 +244,16 @@ public static function getPermissionByNavid($siteid,$treenavid='')
 	}
 	
 
-public static function insertPemid($pemid,$pemname,$pemabout,$siteid,$category,$treenavid,$merid)
+public static function insertPemid($pemname,$pemabout,$siteid,$category,$treenavid,$merid)
 {
  
   $conn =  Db_Mysqli::getIntance()->getConnection();
-  $treesql = "insert into pw_permission (f_id,f_name,f_about,f_siteid,f_cateid,f_treenavid,f_merid)values(?,?,?,?,?,?,?)";
+  $treesql = "insert into pw_permission (f_id,f_name,f_about,f_siteid,f_cateid,f_treenavid,f_merid)values(seqval('pw_permission'),?,?,?,?,?,?)";
   //$parentid = $displayno = $rootid = $divno = $orderno = 0;
   //$fpath = $classpath = '';
   $stmt2 = $conn->prepare($treesql); 
   
-  $stmt2->bind_param('issiiii',$pemid ,$pemname,$pemabout,$siteid,$category,$treenavid,$merid);		
+  $stmt2->bind_param('ssiiii' ,$pemname,$pemabout,$siteid,$category,$treenavid,$merid);		
   $res2 = $stmt2->execute() ;	
  
   if($res2==false)
@@ -270,9 +270,9 @@ public static function queryPemidexistent($merid,$siteid,$pemid)
 	{
 								
 		$conn =  Db_Mysqli::getIntance()->getConnection();							 
-	  $treesql = "SELECT f_id AS id  FROM pw_permission where f_merid = ?  and f_siteid=? and f_id = ?";
+	  $treesql = "SELECT f_id AS id  FROM pw_permission where f_merid = ?  and  f_id = ?";
 	  $stmt = $conn->prepare($treesql);	 	 
-	  $stmt->bind_param('iii',$merid,$siteid,$pemid);
+	  $stmt->bind_param('ii',$merid,$pemid);
 	  $result = $stmt->execute();
          
 	  if($result==false)
@@ -309,6 +309,29 @@ public static function delPemid($merid,$pemid,$siteid)
 	$stmt2->close();
 	 return $res2;
 }
+
+
+
+	public static function updatePermission($pemid,$pemname,$pemabout,$pemcateid,$merid)
+	{
+	 
+	  $conn =  Db_Mysqli::getIntance()->getConnection();
+	  $treesql = "update pw_permission set f_name=?,f_about=?,f_cateid=? where f_id = ? and f_merid = ?";
+	  //$parentid = $displayno = $rootid = $divno = $orderno = 0;
+	  //$fpath = $classpath = '';
+	  $stmt2 = $conn->prepare($treesql); 
+	  
+	  $stmt2->bind_param('ssiii',$pemname ,$pemabout,$pemcateid,$pemid,$merid);		
+	  $res2 = $stmt2->execute() ;	
+	 
+	  if($res2==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		}    
+		//$conn->commit();	 
+		$stmt2->close();
+		return $res2;
+	}
 
 }
 

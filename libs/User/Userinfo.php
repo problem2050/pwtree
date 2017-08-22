@@ -3,7 +3,7 @@
 class User_Userinfo{
 
 
-public static function getUserinfo($merid,$username,$page,$pagesize){
+public static function getUserinfo($merid,$username,$page,$pagesize,$depid=''){
 
   $retArr=array('CNT'=>0,'LIST'=>'');
   
@@ -163,14 +163,16 @@ public static function getSiteslist($merid,$page,$pagesize){
 
 public static function  insertSites($merid,$sitename,$sitdomain,$about){
 	
-	$sqlcount = "select max(f_id) as fid from pw_sites where f_merid= ?";    
+	$sqlcount = "select max(f_id) as fid from pw_sites ";    
   
   $siteid = '';
   $conn =  Db_Mysqli::getIntance()->getConnection();
+  $conn->autocommit(false);
+  
   //$conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
     
   $stmt= $conn->prepare($sqlcount);
-  $stmt->bind_param('i', $merid);  
+  
   $result = $stmt->execute() ;
   if($result==false)
 	{
@@ -185,9 +187,9 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
  
   if($siteid=='')
    {
-   	$siteid = $merid."2000";
+   	$siteid = "10000";
    }else{
-   	$siteid = intval($siteid) + 1;
+   	$siteid = intval($siteid) + rand(2,10);
    }
    
 	$sql = "insert into pw_sites(f_id,f_sitename,f_sitedomain,f_about,f_merid)values(?,?,?,?,?)";
@@ -197,6 +199,8 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
 	if($res==false)
 	{
 	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  $conn->rollback();
+	  return false;
 	}
 		 	 
 	$treesql = "insert into pw_treenav(f_id,f_parentid,f_name,f_displayorderno,f_path,f_rootid,f_divno,f_orderno,f_classpath,f_merid)values(?,?,?,?,?,?,?,?,?,?)";
@@ -208,9 +212,12 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
 	if($res2==false)
 	{
 	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  $conn->rollback();
+	  return false;
 	}    
-	//$conn->commit();
-	 
+	
+	$conn->commit();
+	$conn->autocommit(true); 
 	$stmt->close();
 	$stmt2->close();
 	

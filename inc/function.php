@@ -109,24 +109,23 @@ function getBuildTree2($siteid,$nids ='', $pids = array()){
 		}
 	 //var_dump($siteid,$pIdTreeArr);
 	//$xml = ' <div class="portlet-body"><div id="tree_1" class="tree-demo"><ul>';
-	// var_dump('qqqq',$navPer);exit;
+	//var_dump('qqqq',$navPer);exit;
 	//$tree_arr=array();
 	//$tree_arr=array();
 	// global $tree_arr;
 	function buildXml($source,$fatherid, $navPer){		
 			$tree_arr=array();		
-            $child_arr=array();
+      $child_arr=array();
 			foreach($source as $row)
 			{	
 				if ($row['fatherid'] == $fatherid)
 				{			
 					if(!empty($row['url'])){	
 						if(!empty($navPer)&&in_array($row['id'],array_keys($navPer))){
-							$navPerId = $navPer[$row['id']];
-							//$xml .= '<row at_id="'.$row['id'].'" at_showname="'.$row['showname'].'" at_fatherid="'.$row['fatherid'].'" at_show="1" p_type="isNid" nodetype="node" ck_show="navshow">';
-							for($i=0;$i<count($navPerId);$i++){	
-								//$xml .= '<row at_id="'.$navPerId[$i]['id'].'" at_showname="'.$navPerId[$i]['name'].'['.$navPerId[$i]['id'].']" at_fatherid="'.$row['id'].'" at_show="1" deltype="1" p_type="isPid" nodetype="page"></row>';
-								 array_push($child_arr,array('id'=>$navPerId[$i]['id'],'showname'=>$navPerId[$i]['name'],'about'=>$navPerId[$i]['about'],'text'=>'['.$navPerId[$i]['id'].']'.$navPerId[$i]['name'].'[<a href="#" onclick="delpemid(\''.trim($navPerId[$i]['id']).'\')">删除</a>]','nodetype'=>'pemid',"icon"=>"fa fa-cube icon-state-danger"));
+							$child_arr=array();
+							$navPerId = $navPer[$row['id']];							 
+							for($i=0;$i<count($navPerId);$i++){								
+								 array_push($child_arr,array('id'=>$navPerId[$i]['id'],'showname'=>$navPerId[$i]['name'],'cateid'=>$navPerId[$i]['cateid'],'about'=>$navPerId[$i]['about'],'text'=>'['.$navPerId[$i]['id'].']'.$navPerId[$i]['name'].'[<a href="#" onclick="delpemid(\''.trim($navPerId[$i]['id']).'\')">删除</a>]','nodetype'=>'pemid',"icon"=>"fa fa-cube icon-state-danger"));
 								 }
 							array_push($tree_arr ,array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page',"icon"=>"fa fa-file icon-state-warning",'children'=>$child_arr) );
 						}else{
