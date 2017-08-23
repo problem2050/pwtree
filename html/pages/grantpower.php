@@ -6,6 +6,8 @@ require_once($_SERVER["Root_Path"]."/inc/function.php");
 $page = 1;
 $pagesize = 10;
 
+$rtt = Pwtree_Grant::insertPermissionTreeNav($userid='4,5,7',$siteid='10000',$merid,$groupid='',$pemidList='1000017,1000018,1000019,1000020');
+
 
 $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
@@ -392,9 +394,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         
 <script type="text/javascript">
  
-  
-		
-	$("#savepemid").click(function(){
+  $("#savepemid").click(function(){
  
         var str = "";  
         $("input[name='userid']").each(function(){  
@@ -403,9 +403,10 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                 str += "——" + $(this).val();  
             }  
         });  
-        alert(str);  return;
-               	  			 
-			 siteid = $("#site_list").val();
+         inst =$("#tree_1111").jstree().get_checked(); 
+		 console.info(inst);return;
+		 
+	     siteid = $("#site_list").val();
 			 $.ajax({
 					  url: "ajax_data/pemid_data.php",
 					  type: 'post',

@@ -6,12 +6,14 @@ require_once($_SERVER["Root_Path"]."/inc/function.php");
 $page = 1;
 $pagesize = 10;
 
-$merid= 100001;
+
 $username = '';
 $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
 $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
 $fid= isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
+$username= isset($_REQUEST['username'])?$_REQUEST['username']:'';
+$depid= isset($_REQUEST['depid'])?$_REQUEST['depid']:'';
 if($act=='del' && $fid!=''){
 	
 	$res = User_Userinfo::delUserinfo($merid,$fid);
@@ -19,7 +21,7 @@ if($act=='del' && $fid!=''){
 }
 //var_dump($res);
 
-$res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
+$res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
 
 
 ?>
@@ -324,7 +326,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize);
                                                     <td><?=$v['f_mobile']?></td>
 													<td><?=$v['f_email']?></td>
 													<td><?=$v['f_department']?></td>
-													<td><?=$v['f_parentid']?></td>
+													<td>--</td>
 													<td><?=($v['f_valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
 													<td><?=$v['f_lastdate']?></td>
 													<td><?=$v['f_lastip']?></td>
