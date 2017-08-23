@@ -333,6 +333,65 @@ public static function delPemid($merid,$pemid,$siteid)
 		return $res2;
 	}
 
+	
+	public static function getPermissionTreenavList($siteid,$merid,$userid)
+	{
+								
+	  $conn =  Db_Mysqli::getIntance()->getConnection();							 
+
+	  $treesql = 'select f_permissionid,f_treenavid from pw_permission_treenav where f_siteid = ? and f_merid = ? and f_userid = ? ';
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('iii',$siteid,$merid,$userid);
+	  $result = $stmt->execute();
+          
+	  if($result==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		  return false;
+		}
+	
+	  $stmt->bind_result($pemid,$treenavid);
+	  $nodelistArr = array();
+      $pemidArr = array();
+	  
+	  while ($stmt->fetch()) {
+		     if(!in_array($treenavid,$nodelistArr)){
+					array_push($nodelistArr,$treenavid);
+				}
+		     	
+		     if(!in_array($pemid,$pemidArr)){
+					 array_push($pemidArr,$pemid);
+				} 
+	   }	     
+       $stmt->close();
+	   
+	   $tradeNodeArr=array();
+	  
+	   if($nodelistArr){
+		    foreach($nodelistArr as $k=>$v){
+		    $treesql =  "SELECT f_id AS tid FROM pw_treenav WHERE  FIND_IN_SET(f_id, queryChildrenForUp(?))";
+		    $stmt = $conn->prepare($treesql);	 	 
+			$stmt->bind_param('i',$v);
+			$result = $stmt->execute();
+		    if($result==false)
+		    {
+		      SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		      return false;
+			}
+	         $stmt->bind_result($tid);
+	         while ($stmt->fetch()) {
+                if(!in_array($tid,$tradeNodeArr)){	 
+					array_push($tradeNodeArr,$tid);
+				}
+			 }
+		  }	
+         $stmt->close();		  
+	   }
+	   
+	   
+	   //var_dump($tradeNodeArr	,$pemidArr);exit;
+	   return array("pemid"=>$pemidArr,"treenodeid"=>$tradeNodeArr);
+	}
 }
 
 ?>

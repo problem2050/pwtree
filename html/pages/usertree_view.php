@@ -6,10 +6,15 @@ require_once($_SERVER["Root_Path"]."/inc/function.php");
 $page = 1;
 $pagesize = 10;
 
+//echo getBuildTree3($siteid='10000',$merid,$userid='4');
+//exit;
+//$rtt = Pwtree_Nodes::getPermissionTreenavList($siteid='10000',$merid,$userid='4');
+//var_dump($rtt);exit;
 
 $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
 $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
+$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
 
 //var_dump($res);
 $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
@@ -241,7 +246,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
-                <div class="page-content">
+                <div class="page-content" >
                     <!-- BEGIN PAGE HEADER-->
                     <!-- BEGIN THEME PANEL -->
                    
@@ -265,41 +270,36 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
 					      <br>
-					     <div class="page-content-inner">
-					    	<div class="row"> 
+					    <div class="page-content-inner">
+					    	<div class="row">
+					    
               <div class="col-md-8">
-              <div class="portlet light bordered" style="width:100%">
+              <div class="portlet light bordered" >
                 <div class="portlet-title"> 								 
 								<div class="caption">								
                <select class="form-control" id="site_list" onchange="droplistChange()">
 									<?php
-									$site_rs = Pwtree_Nodes::getSites($merid);
-									 
+									$site_rs = Pwtree_Nodes::getSites($merid);									 
 									 if($site_rs){
                              foreach($site_rs as $k=>$v){                                                	 
                                                 echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
-                                          }
-                                        }
+                                         }
+                                      }
                                                 ?>
 									</select>  
 									
 								</div>	
+								
                                     <div class="actions">
-                                                                           
-                                         <button type="button" class="btn red" id="addlink">添加 </a>
+                                         <input type="hidden" id="groupid" value="" />                                  
+                                         <button type="button" class="btn red" id="savepemid">保存 </a>
                                     </div>
                                 </div>
                                 
                     <!-- END PAGE TITLE-->
                     <!-- END PAGE HEADER-->
         
-                            <!-- BEGIN SAMPLE TABLE PORTLET-->
-                            <?php
-
-										//$res = getBuildTree2('1000012000');
-										//echo $res;
-										//exit;
-										?>
+                            <!-- BEGIN SAMPLE TABLE PORTLET-->                   
 
 
                            <div class="portlet-body">
@@ -314,49 +314,38 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                        <!-- END SAMPLE  COL-->
                        <div class="col-md-4">
                        
-						<div class="portlet light bordered" >                                
+													<div class="portlet light bordered" >                                
                                 <div class="form-horizontal" >
-                                    <div class="form-body">
-										<div class="form-group">
-                                                        <label class="control-label col-md-3">权限ID                                                        
-                                                        </label>
-                                                        <div class="col-md-8">
-                                                           <input type="text" disabled id="show_pemid" data-required="1" class="form-control" /> 
-			                                </div>
-									   </div>
-  										<div class="form-group">
-                                                        <label class="control-label col-md-3">名称：                                                        
-                                                        </label>
-                                                        <div class="col-md-8">
-                                                 <input type="text" id="show_pemname" data-required="1" class="form-control" /> 
-			                                </div>
-						              </div>
-						                    <div class="form-group">
-                                                        <label class="control-label col-md-3">描述：                                                        
-                                                        </label>
-                                                        <div class="col-md-8">
-                                                 <input type="text" id="show_about" data-required="1" class="form-control" /> 
-			                                      </div>
-											</div>
-							        <div class="form-group">
-                                                        <label class="control-label col-md-3">分类：
-                                                      
-                                                        </label>
-                                                        <div class="col-md-8">
-                                                            <select class="form-control select2me" id="show_cateid">
-                                                                
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                             			                                      
-                                   
-                                        <div class="form-actions">
-                                            <button type="submit" class="btn blue" id="saveapembout">保存</button>
-                                            <label id="saveresult"></label>
-                                        </div>
+                                    <div class="form-body">									                     
+                                         <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th> # </th>
+                                                            <th> User Name </th>
+                                                            <th> True Name </th>                                                           
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                         <?php
+                                                         $res = User_Userinfo::getUserinfo($merid,$username='',$page=1,$pagesize=1000);
+                                                         //var_dump($res);
+                                                         if($res['LIST']){
+                                                         		foreach($res['LIST'] as $k=>$v){
+                                                         			echo "<tr>";
+                                                         			echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['f_id']."'/></td>";
+                                                         			echo "<td>".$v['f_username']."</td>";
+                                                         			echo "<td>".$v['f_truename']."</td>";
+                                                         			echo "</tr>";
+                                                         		}
+                                                          }
+                                                         ?>
+                                                    </tbody>
+                                                </table>
+                                            
                                     </div>
                                 </div>
                             </div>
+                       </div>
                       </div>
                     </div>
                       
@@ -367,52 +356,10 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
             </div>
             <!-- END CONTENT -->         
            
-           <!--BEGIN MODAL-DIALOG -->
-           <div id="pemaddform" class="modal fade" tabindex="-1" data-width="400">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                    <h4 class="modal-title">添加新的权限ID</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                       
-                                           <div class="form-group">
-                                                <label>权限ID名称:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-file"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="权限名称" id="pemname" value=""> </div>
-                                            </div>                                                                                     
-                                           <div class="form-group">
-                                                <label>权限ID描述:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-file"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="简单描述权限ID" id="pemabout" value=""> </div>
-                                            </div> 
-                                       <div class="form-group">
-                                               <label>权限类别:</label>
-                                        <select class="form-control" id="categorytype">
-																					
-										  </select>																					
-				                                   <span id="addresult"></span>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
-                                                    <button type="button" class="btn red" id="addpemid">添加</button>													
-													<input type="hidden" id="treenavid" value="" />
-                                                </div>
-                                            </div>
-                                        </div>
-                             </div>
-                             
-            
-                                    
-			              <!--END MODAL-DIALOG -->
-        </div>
+           <!--BEGIN MODAL-DIALOG -->           
+           
+		 <!--END MODAL-DIALOG -->
+        
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
@@ -439,124 +386,58 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
+		<script src="../assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <script src="../assets/pages/scripts/ui-tree.min.js" type="text/javascript"></script>
+		 <script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
 <script type="text/javascript">
  
- $("#addpemid").click(function(){
-     
- 	//pemid = $("#pemid").val();
- 	siteid = $("#site_list").val();
- 	pemname = $("#pemname").val();
- 	categorytype = $("#categorytype").val();
- 	pemabout = $("#pemabout").val();
- 	
-  inst =$("#tree_1111").jstree(true);  
-   console.log(inst);
-  //console.log(inst._model.data[inst._data.core.selected].original.nodetype);
-  if(inst._data.core.selected=='')
-	{
-			  $("#addresult").html("未选择节点!");
-			   return;
-	}
-	 
-	if(inst._model.data[inst._data.core.selected].original.nodetype!='page')
-	{
-			  $("#addresult").html("选择节点不对!");
-			  return;
-	} 
- 	treenavid = parseInt(inst._data.core.selected);
- 	
- 	 $.ajax({
-					  url: "ajax_data/pemid_data.php",
+  $("#savepemid").click(function(){
+ 
+        
+        var useridlist = "";  
+        $("input[name='userid']").each(function(){  
+            if($(this).is(":checked"))  
+            {  
+                useridlist += "," + $(this).val();  
+            }  
+        });  
+         pemidlist =$("#tree_1111").jstree().get_checked(); 
+		 console.info(pemidlist.toString());
+		 
+	     siteid = $("#site_list").val();
+		 groupid = $("#groupid").val();
+		 
+		 $.ajax({
+					  url: "ajax_data/grant_data.php",
 					  type: 'post',
-					  data:{"siteid":siteid,"treenavid":treenavid,"pemname":pemname,"pemabout":pemabout,"categorytype":categorytype,"about":pemabout,"rnd":Math.random(),"act":"adpemid"},
+					  data:{"siteid":siteid,"useridlist":useridlist,"act":"grantpemid","pemidlist":pemidlist.toString(),"groupid":groupid,"rnd": Math.random()},
 					  dataType: 'json',
 					  timeout: 1000,
-					  success: function (data, status) {					   
-					 if (data.STATE==true) {
-					 	  $("#addresult").css("color","blue");
-					 	  $("#addresult").html("添加成功!");	
-					 	  //createId(data.MSG,pemname); 
-					 	   	 droplistChange(treenavid); 	  
-					   }else{					   	 
-					   	 $("#addresult").css("color","red");
-					     $("#addresult").html("添加失败!");
-					   }
+					  success: function (data, status) {
+                        if(data.STATE==1){						  
+							bootbox.alert({message: "保存成功!",
+											size: 'small'});
+						}else{
+							bootbox.alert({message: data.MSG,
+											size: 'small'});
+						}
 					  },
 					  fail: function (err, status) {
-					    console.log(err)
-					  }
-					})
-					
-		   // window.location.reload();
-		 	
-		 		
-		 			
-		});
-		
-	$("#addlink").click(function(){
-			 //$("#adddept").hide();
-			 			  
-			 $("#pemaddform").modal('show');			 
-  
-			 siteid = $("#site_list").val();
-			 $.ajax({
-					  url: "ajax_data/pemid_data.php",
-					  type: 'post',
-					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
-					  dataType: 'json',
-					  timeout: 1000,
-					  success: function (data, status) {	
-					   $("#categorytype").empty();
-					  $.each(data, function (index, item) {					     
-					    $("#categorytype").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
-					   });
-					  },
-					  fail: function (err, status) {
+					    bootbox.alert({message: "保存失败!",
+									   size: 'small'});
 					    console.log(err)
 					  }
 					})
 			
 		});
-   
-$("#saveapembout").click(function(){
-   
- 	pemname = $("#show_pemname").val();
- 	pemcateid = $("#show_cateid").val();
- 	pemabout = $("#show_about").val();
- 	pemid = $("#show_pemid").val();
- 	
-  $.ajax({
-					  url: "ajax_data/pemid_data.php",
-					  type: 'post',
-					  data:{ "pemid":pemid,"pemname":pemname,"pemabout":pemabout,"pemcateid":pemcateid,"pemabout":pemabout,"rnd":Math.random(),"act":"uppemabout"},
-					  dataType: 'json',
-					  timeout: 1000,
-					  success: function (data, status) {					   
-							 if (data.STATE==true) {
-							 	  $("#saveresult").css("color","blue");
-							 	  $("#saveresult").html("保存成功!");	
-							 	   	 	  
-							   }else{					   	 
-							   	 $("#saveresult").css("color","red");
-							     $("#saveresult").html("保存失败!");
-							   }
-							   droplistChange();
-					  },
-					  fail: function (err, status) {
-					    console.log(err)
-					  }
-					})  
-	});
-
 
 $(function() {
 	//Siteid = $("#site_list").val();
@@ -565,7 +446,7 @@ $(function() {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+ "&rnd=" + Math.random(),
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&userid=<?=$userid?>"+ "&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
@@ -579,135 +460,35 @@ $(function() {
 							});
 					}
 				},
-			//	"plugins" : [ "sort" ]
+				//"plugins" : [ "checkbox" ]
 			}).on("changed.jstree", function(event, data) {
 			 
-				var inst = data.instance;							
-			
-				var selectedNode = inst.get_node(data.selected);
-				
-			if(selectedNode){				
-				$("#treenavid").val(selectedNode.original.id);
+			var inst = data.instance;		
+												 			  
+			var selectedNode = inst.get_node(data.selected);
+			console.log(data.selected);
 			 
-				console.info(inst);
-			
-				if(selectedNode.original.nodetype=='page'){									
-					$("#addlink").removeAttr("disabled");
-				}else if(selectedNode.original.nodetype=='nodes'){
-				  $("#addlink").attr("disabled",true);
-				}else if(selectedNode.original.nodetype=='pemid'){
-					$("#show_pemid").val(selectedNode.original.id);
-					$("#show_pemname").val(selectedNode.original.showname);
-					$("#show_about").val(selectedNode.original.about);
-					cateid = selectedNode.original.cateid;
-					siteid = $("#site_list").val();
-			    $.ajax({
-					  url: "ajax_data/pemid_data.php",
-					  type: 'post',
-					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
-					  dataType: 'json',
-					  timeout: 1000,
-					  success: function (data, status) {
-						  $("#show_cateid").empty();					   
-						  $.each(data, function (index, item) {
-						    if (item.id==cateid){
-						    	$("#show_cateid").append("<option value=\'"+item.id+"\' selected>"+item.category+"</option>"); 
-						    }else{
-						    		$("#show_cateid").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
-						    }
-					      
-					   });
-					  },
-					  fail: function (err, status) {
-					    console.log(err)
-					  }
-					});
-					
-				}
-			} 
 			
 			});
 		});
 
+
+$(":checkbox").change(function () {
+	
+    if($(this).is(':checked')){
+    	   console.info( $(this).val());
+    	  $(this).parent().parent().addClass("warning");
+    }else{
+        $(this).parent().parent().removeClass("warning");
+    }
+});	
 
 function droplistChange(selectid=''){
 	var tree1111 = $.jstree.reference("#tree_1111");
    tree1111.refresh();
   
   // tree1111.select_node(selectid);
-}		
-
-$("#addlink").click(function(){
-			 //$("#adddept").hide();
-			 			  
-			 $("#pemaddform").modal('show');			 
-  
-			 siteid = $("#site_list").val();
-			 $.ajax({
-					  url: "ajax_data/pemid_data.php",
-					  type: 'post',
-					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
-					  dataType: 'json',
-					  timeout: 1000,
-					  success: function (data, status) {
-                $("#categorytype").empty();						  
-					  $.each(data, function (index, item) {					     
-					    $("#categorytype").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
-					   });
-					  },
-					  fail: function (err, status) {
-					    console.log(err)
-					  }
-					})
-			
-		});
-		
-function delpemid (pemid){
-	
-	 siteid = $("#site_list").val();	
-	 $.ajax({
-					  url: "ajax_data/pemid_data.php",
-					  type: 'post',
-					  data:{"siteid":siteid,"pemid":pemid,"act":"killpemid","rnd": Math.random()},
-					  dataType: 'json',
-					  timeout: 1000,
-					  success: function (data, status){					   
-              if(data.STATE==1){
-              	
-              	deleteId();
-              	
-              }else{
-              	
-              }
-					  },
-					  fail: function (err, status) {
-					    console.log(err)
-					  }
-					})
-					
-}
-
-
-	
-function createId(pemid,pemname) {
-	
-			var ref = $('#tree_1111').jstree(true);
-			sel = ref.get_selected();
-			if(!sel.length) { return false; }
-			sel = sel[0];
-			sel = ref.create_node(sel, {"id":pemid,"text":"["+pemid+"]"+pemname+"[<a href=\"#\" onclick=\"delpemid('"+pemid+"')\">删除</a>]","icon":"fa fa-cube icon-state-danger"});
-			if(sel) {
-				ref.edit(sel);
-			}
-}
-	
-function deleteId() {
-		var ref = $('#tree_1111').jstree(true);
-		console.info(ref);		
-		sel = ref.get_selected();
-			if(!sel.length) { return false; }
-					ref.delete_node(sel);	
-	};
+}	
 						
 </script>
                         

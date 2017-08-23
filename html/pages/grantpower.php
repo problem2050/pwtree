@@ -6,12 +6,15 @@ require_once($_SERVER["Root_Path"]."/inc/function.php");
 $page = 1;
 $pagesize = 10;
 
-$rtt = Pwtree_Grant::insertPermissionTreeNav($userid='4,5,7',$siteid='10000',$merid,$groupid='',$pemidList='1000017,1000018,1000019,1000020');
-
+//echo getBuildTree3($siteid='10000',$merid,$userid='4');
+//exit;
+//$rtt = Pwtree_Nodes::getPermissionTreenavList($siteid='10000',$merid,$userid='4');
+//var_dump($rtt);exit;
 
 $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
 $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
+$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
 
 //var_dump($res);
 $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
@@ -286,8 +289,9 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 									</select>  
 									
 								</div>	
+								
                                     <div class="actions">
-                                                                           
+                                         <input type="hidden" id="groupid" value="" />                                  
                                          <button type="button" class="btn red" id="savepemid">保存 </a>
                                     </div>
                                 </div>
@@ -352,10 +356,9 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
             </div>
             <!-- END CONTENT -->         
            
-           <!--BEGIN MODAL-DIALOG -->
+           <!--BEGIN MODAL-DIALOG -->           
            
-                                    
-			    <!--END MODAL-DIALOG -->
+		 <!--END MODAL-DIALOG -->
         
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
@@ -383,12 +386,14 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
+		<script src="../assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <script src="../assets/pages/scripts/ui-tree.min.js" type="text/javascript"></script>
+		 <script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
@@ -396,30 +401,38 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
  
   $("#savepemid").click(function(){
  
-        var str = "";  
+        
+        var useridlist = "";  
         $("input[name='userid']").each(function(){  
             if($(this).is(":checked"))  
             {  
-                str += "——" + $(this).val();  
+                useridlist += "," + $(this).val();  
             }  
         });  
-         inst =$("#tree_1111").jstree().get_checked(); 
-		 console.info(inst);return;
+         pemidlist =$("#tree_1111").jstree().get_checked(); 
+		 console.info(pemidlist.toString());
 		 
 	     siteid = $("#site_list").val();
-			 $.ajax({
-					  url: "ajax_data/pemid_data.php",
+		 groupid = $("#groupid").val();
+		 
+		 $.ajax({
+					  url: "ajax_data/grant_data.php",
 					  type: 'post',
-					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
+					  data:{"siteid":siteid,"useridlist":useridlist,"act":"grantpemid","pemidlist":pemidlist.toString(),"groupid":groupid,"rnd": Math.random()},
 					  dataType: 'json',
 					  timeout: 1000,
-					  success: function (data, status) {	
-					   $("#categorytype").empty();
-					  $.each(data, function (index, item) {					     
-					    $("#categorytype").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
-					   });
+					  success: function (data, status) {
+                        if(data.STATE==1){						  
+							bootbox.alert({message: "保存成功!",
+											size: 'small'});
+						}else{
+							bootbox.alert({message: data.MSG,
+											size: 'small'});
+						}
 					  },
 					  fail: function (err, status) {
+					    bootbox.alert({message: "保存失败!",
+									   size: 'small'});
 					    console.log(err)
 					  }
 					})
@@ -433,7 +446,7 @@ $(function() {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+ "&rnd=" + Math.random(),
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=tree3&userid=<?=$userid?>"+ "&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
