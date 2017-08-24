@@ -291,8 +291,8 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 								</div>	
 								
                                     <div class="actions">
-                                         <input type="hidden" id="groupid" value="" />                                  
-                                         <button type="button" class="btn red" id="savepemid">保存 </a>
+                                         <input type="hidden" id="treeuserid" value="<?=$userid?>" />                                  
+                                        
                                     </div>
                                 </div>
                                 
@@ -332,7 +332,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                          if($res['LIST']){
                                                          		foreach($res['LIST'] as $k=>$v){
                                                          			echo "<tr>";
-                                                         			echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['f_id']."'/></td>";
+                                                         			echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['f_id']."'/></td>";
                                                          			echo "<td>".$v['f_username']."</td>";
                                                          			echo "<td>".$v['f_truename']."</td>";
                                                          			echo "</tr>";
@@ -398,55 +398,15 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         
         
 <script type="text/javascript">
- 
-  $("#savepemid").click(function(){
- 
-        
-        var useridlist = "";  
-        $("input[name='userid']").each(function(){  
-            if($(this).is(":checked"))  
-            {  
-                useridlist += "," + $(this).val();  
-            }  
-        });  
-         pemidlist =$("#tree_1111").jstree().get_checked(); 
-		 console.info(pemidlist.toString());
-		 
-	     siteid = $("#site_list").val();
-		 groupid = $("#groupid").val();
-		 
-		 $.ajax({
-					  url: "ajax_data/grant_data.php",
-					  type: 'post',
-					  data:{"siteid":siteid,"useridlist":useridlist,"act":"grantpemid","pemidlist":pemidlist.toString(),"groupid":groupid,"rnd": Math.random()},
-					  dataType: 'json',
-					  timeout: 1000,
-					  success: function (data, status) {
-                        if(data.STATE==1){						  
-							bootbox.alert({message: "保存成功!",
-											size: 'small'});
-						}else{
-							bootbox.alert({message: data.MSG,
-											size: 'small'});
-						}
-					  },
-					  fail: function (err, status) {
-					    bootbox.alert({message: "保存失败!",
-									   size: 'small'});
-					    console.log(err)
-					  }
-					})
-			
-		});
 
 $(function() {
-	//Siteid = $("#site_list").val();
+	userid = $("#treeuserid").val();
 	$('#tree_1111').jstree({
 	'core' : {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&userid=<?=$userid?>"+ "&rnd=" + Math.random(),
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&userid="+$("#treeuserid").val()+ "&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
@@ -473,14 +433,18 @@ $(function() {
 		});
 
 
-$(":checkbox").change(function () {
+$(":radio").change(function () {
 	
     if($(this).is(':checked')){
-    	   console.info( $(this).val());
-    	  $(this).parent().parent().addClass("warning");
+    	 console.info( $(this).val());
+		 $("#treeuserid").val($(this).val());
+    	 //$(this).parent().parent().addClass("warning");
     }else{
-        $(this).parent().parent().removeClass("warning");
+        //$(this).parent().parent().removeClass("warning");
     }
+	
+	droplistChange();
+	
 });	
 
 function droplistChange(selectid=''){

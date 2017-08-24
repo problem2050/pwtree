@@ -291,7 +291,9 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 								</div>	
 								
                                     <div class="actions">
-                                         <input type="hidden" id="groupid" value="" />                                  
+                                         <input type="hidden" id="groupid" value="" />  
+										 <input type="hidden" id="siteid" value="" /> 
+                                         <input type="hidden" id="seluserid" value="<?=$userid?>" /> 										 
                                          <button type="button" class="btn red" id="savepemid">保存 </a>
                                     </div>
                                 </div>
@@ -322,7 +324,8 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                         <tr>
                                                             <th> # </th>
                                                             <th> User Name </th>
-                                                            <th> True Name </th>                                                           
+                                                            <th> True Name </th>  
+                                                            <th> View </th> 															
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -335,6 +338,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                          			echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['f_id']."'/></td>";
                                                          			echo "<td>".$v['f_username']."</td>";
                                                          			echo "<td>".$v['f_truename']."</td>";
+																	echo "<td><a href='usertree_view.php?userid=".$v['f_id']."&siteid=' >View</a></td>";
                                                          			echo "</tr>";
                                                          		}
                                                           }
@@ -446,7 +450,7 @@ $(function() {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=tree3&userid=<?=$userid?>"+ "&rnd=" + Math.random(),
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=tree3&userid="+$("#seluserid").val()+ "&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
@@ -489,7 +493,7 @@ function droplistChange(selectid=''){
   
   // tree1111.select_node(selectid);
 }	
-						
+ 
 </script>
                         
     </body>

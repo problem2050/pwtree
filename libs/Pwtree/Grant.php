@@ -42,6 +42,7 @@ class Pwtree_Grant{
 	  $stmt->close();
 	  
 	  $stmt2='';
+	  $res2 ='';
 	  //var_dump($listArr);exit;
 	  if($listArr ){
 		$conn->autocommit(false);  
@@ -92,8 +93,8 @@ class Pwtree_Grant{
 		   }
 		 }		
 	   }
-		$conn->commit();	 
-		$stmt2->close();
+		$conn->commit();
+        if($stmt2){		$stmt2->close();}
 		return $res2;
 	}
 	
