@@ -334,15 +334,26 @@ public static function delPemid($merid,$pemid,$siteid)
 	}
 
 	
-	public static function getPermissionTreenavList($siteid,$merid,$userid)
+	public static function getPermissionTreenavList($siteid,$merid,$userid,$groupid='')
 	{
 								
 	  $conn =  Db_Mysqli::getIntance()->getConnection();							 
-
-	  $treesql = 'select f_permissionid,f_treenavid from pw_permission_treenav where f_siteid = ? and f_merid = ? and f_userid = ? ';
-	  $stmt = $conn->prepare($treesql);	 	 
-	  $stmt->bind_param('iii',$siteid,$merid,$userid);
-	  $result = $stmt->execute();
+    
+    $stmt = '';
+    $result = false;
+    
+    if($groupid!='')
+    {
+		  $treesql = 'select f_permissionid,f_treenavid from pw_permission_treenav where f_siteid = ? and f_merid = ? and f_groupid = ? ';
+		  $stmt = $conn->prepare($treesql);	 	 
+		  $stmt->bind_param('iii',$siteid,$merid,$groupid);
+		  $result = $stmt->execute();
+		 }else{
+			 	$treesql = 'select f_permissionid,f_treenavid from pw_permission_treenav where f_siteid = ? and f_merid = ? and f_userid = ? ';
+			  $stmt = $conn->prepare($treesql);	 	 
+			  $stmt->bind_param('iii',$siteid,$merid,$userid);
+			  $result = $stmt->execute();
+		 }
           
 	  if($result==false)
 		{

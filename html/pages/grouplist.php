@@ -2,24 +2,14 @@
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
-
+$rolename= isset($_REQUEST['rolename'])?$_REQUEST['rolename']:'';
+$siteid = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:10000;
 $page = 1;
-$pagesize = 10;
+$pagesize =10;
 
-//echo getBuildTree3($siteid='10000',$merid,$userid='4');
-//exit;
-//$rtt = Pwtree_Nodes::getPermissionTreenavList($siteid='10000',$merid,$userid='4');
-//var_dump($rtt);exit;
+$grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
+//var_dump($grs,$merid,$siteid,$groupname='',$page,$pagesize);
 
-$page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
-
-$act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
-$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
-$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
-//var_dump($res);
-$res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
-
-//var_dump($res);
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -42,7 +32,6 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <link href="../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="../assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
         <!-- END GLOBAL MANDATORY STYLES -->
-         <link href="../assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" type="text/css" />
         <!-- BEGIN THEME GLOBAL STYLES -->
         <link href="../assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
         <link href="../assets/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
@@ -54,7 +43,17 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
 <script type="text/javascript">
- 	
+ function editshow(fid,groupname,groupabout){
+   $("#groupname").val(groupname);
+ 	 $("#groupabout").val(groupabout);
+	 $("#fid").val(fid);
+	 
+	 $("#addgroup").hide();
+	 $("#editgroup").show();
+	 
+	 $("#groupaddform").modal('show');
+	 
+ }		
  </script>
     <!-- END HEAD -->
 
@@ -246,7 +245,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
-                <div class="page-content" >
+                <div class="page-content">
                     <!-- BEGIN PAGE HEADER-->
                     <!-- BEGIN THEME PANEL -->
                    
@@ -256,11 +255,11 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                     <div class="page-bar">
                         <ul class="page-breadcrumb">
                             <li>
-                                 <span>用户与角色管理 </span>
+                                 <span>目录树管理 </span>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <span>用户列表</span>
+                                <span>角色管理</span>
                             </li>
                         </ul>
                         <div class="page-toolbar">
@@ -269,101 +268,135 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					      <br>
-					    <div class="page-content-inner">
-					    	<div class="row">
-					    
-              <div class="col-md-8">
-              <div class="portlet light bordered" >
-                <div class="portlet-title"> 								 
-								<div class="caption">								
-               <select class="form-control" id="site_list" onchange="droplistChange()">
-									<?php
-									$site_rs = Pwtree_Nodes::getSites($merid);									 
-									 if($site_rs){
-                             foreach($site_rs as $k=>$v){                                                	 
-                                                echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
-                                         }
-                                      }
-                                                ?>
-									</select>  
+					        
+                   <br>
+                   <div class="portlet light bordered" style="width:60%" >
+                                <div class="portlet-title">                                    
+                                   	<div class="caption">								
+							               <select class="form-control" id="site_list" onchange="droplistChange()">
+																<?php
+																$site_rs = Pwtree_Nodes::getSites($merid);
+																 
+																 if($site_rs){
+							                             foreach($site_rs as $k=>$v){                                                	 
+							                                                echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+							                                          }
+							                                        }
+							                                                ?>
+																</select>  
 									
-								</div>	
-								
-                                    <div class="actions">
-                                         <input type="hidden" id="groupid" value="<?=$groupid?>" />  
-										 <input type="hidden" id="siteid" value="" /> 
-                                         <input type="hidden" id="seluserid" value="<?=$userid?>" /> 										 
-                                         <button type="button" class="btn red" id="savepemid">保存 </a>
+													</div>	
+									
+                                   
+                                    <div class="actions">									
+                                          <input type="hidden" value="<?=$parentid?>" id="hiparentid" />                                  
+                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
                                     </div>
                                 </div>
                                 
                     <!-- END PAGE TITLE-->
                     <!-- END PAGE HEADER-->
         
-                            <!-- BEGIN SAMPLE TABLE PORTLET-->                   
-
-
-                           <div class="portlet-body">
-                             <div id="tree_1111" class="tree-demo">
-                           </div>
-                             </div>
-                            <!-- END SAMPLE TABLE PORTLET-->
-						 
-                        </div>
-                      
-                      </div>
-                       <!-- END SAMPLE  COL-->
-                       <div class="col-md-4">
-                       
-													<div class="portlet light bordered" >                                
-                                <div class="form-horizontal" >
-                                    <div class="form-body">									                     
-                                         <table class="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th> # </th>
-                                                            <th> User Name </th>
-                                                            <th> True Name </th>  
-                                                            <th> View </th> 															
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                         <?php
-                                                         $res = User_Userinfo::getUserinfo($merid,$username='',$page=1,$pagesize=1000);
-                                                         //var_dump($res);
-                                                         if($res['LIST']){
-                                                         		foreach($res['LIST'] as $k=>$v){
-                                                         			echo "<tr>";
-                                                         			echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['f_id']."'/></td>";
-                                                         			echo "<td>".$v['f_username']."</td>";
-                                                         			echo "<td>".$v['f_truename']."</td>";
-																	echo "<td><a href='usertree_view.php?userid=".$v['f_id']."&siteid=' >View</a></td>";
-                                                         			echo "</tr>";
-                                                         		}
-                                                          }
-                                                         ?>
-                                                    </tbody>
-                                                </table>
-                                            
+                            <!-- BEGIN SAMPLE TABLE PORTLET-->
+                            <div class="portlet">
+                               
+                                <div class="portlet-body">
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th width="5%">
+                                                        <i class="fa "></i>选择</th>
+                                                    <th >
+                                                        <i class="fa "></i>角色名称</th>
+                                                    <th >
+                                                        <i class="fa "></i>角色描述</th>
+                                                    <th >
+                                                        <i class="fa "></i>操作</th>
+													           
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+											<?php											
+											if($grs['LIST']){
+												foreach($grs['LIST'] as $k=>$v){													
+												?>
+                                                <tr>
+												    <td ><input type="checkbox" name="treeid[]" value="<?=$v['gid']?>" /></td>
+                                                    <td>
+                                                    	 <?=$v['groupname']?>
+                                                    </td>                                                     
+                                                   <td>
+                                                     <?=$v['about']?>
+                                                    </td>                                                                                             
+																												<td>
+																													[<a href="grantpower.php?groupid=<?=$v['gid']?>">角色授权</a>]&nbsp;&nbsp;&nbsp;
+                                                    [<a href="usertree_view.php?groupid=<?=$v['gid']?>"> 查看角色权限</a>] &nbsp;&nbsp;&nbsp;
+                                                    [<a href="#" onclick="editshow('<?=$v['gid']?>','<?=$v['groupname']?>','<?=$v['about']?>');">修改</a>]
+                                                    </td>  
+                                                </tr>
+                                                
+                                                <?php
+												}
+											}
+											?>
+                                                
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                       </div>
-                      </div>
-                    </div>
-                      
-                      
+                            <!-- END SAMPLE TABLE PORTLET-->
+							 
+                        </div>
                     </div>
                 </div>
                 <!-- END CONTENT BODY -->
             </div>
             <!-- END CONTENT -->         
            
-           <!--BEGIN MODAL-DIALOG -->           
-           
-		 <!--END MODAL-DIALOG -->
-        
+           <!--BEGIN MODAL-DIALOG -->
+           <div id="groupaddform" class="modal fade" tabindex="-1" data-width="400">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <h4 class="modal-title">添加新角色</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                        <div class="form-group">
+                                                <label>角色名称:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa icon-docs"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入角色名称" id="groupname" value=""> </div>
+                                            </div>                                            
+                                           <div class="form-group">
+                                                <label>角色描述:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa icon-link"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="角色描述" id="groupabout" value=""> </div>
+                                            </div> 
+                                       
+                                             <span id="addresult"></span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
+                                                    <button type="button" class="btn red" id="addgroup">添加</button>
+													<button type="button" class="btn red" id="editgroup">修改</button>
+													<input type="hidden" id="fid" value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                             </div>
+                             
+            
+                                    
+			              <!--END MODAL-DIALOG -->
+        </div>
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
@@ -389,113 +422,88 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
-        <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
-		<script src="../assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
+        <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
-        <script src="../assets/pages/scripts/ui-tree.min.js" type="text/javascript"></script>
-		 <script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
 <script type="text/javascript">
  
-  $("#savepemid").click(function(){
- 
-        
-        var useridlist = "";  
-        $("input[name='userid']").each(function(){  
-            if($(this).is(":checked"))  
-            {  
-                useridlist += "," + $(this).val();  
-            }  
-        });  
-         pemidlist =$("#tree_1111").jstree().get_checked(); 
-		 console.info(pemidlist.toString());
-		 
-	     siteid = $("#site_list").val();
-		 groupid = $("#groupid").val();
-		 
-		 $.ajax({
-					  url: "ajax_data/grant_data.php",
+ $("#addgroup").click(function(){
+ 	groupname = $("#groupname").val();
+ 	siteid = $("#site_list").val();
+ 	groupabout = $("#groupabout").val();
+ 	$.ajax({
+					  url: "ajax_data/group_data.php",
 					  type: 'post',
-					  data:{"siteid":siteid,"useridlist":useridlist,"act":"grantpemid","pemidlist":pemidlist.toString(),"groupid":groupid,"rnd": Math.random()},
+					  data:{"groupname":groupname,"groupabout":groupabout,"siteid":siteid,"act":"addgroup"},
 					  dataType: 'json',
 					  timeout: 1000,
-					  success: function (data, status) {
-                        if(data.STATE==1){						  
-							bootbox.alert({message: "保存成功!",
-											size: 'small'});
-						}else{
-							bootbox.alert({message: "保存失败",
-											size: 'small'});
-						}
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("添加成功!");					 	  
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("添加失败!");
+					     
+					   }
 					  },
 					  fail: function (err, status) {
-					    bootbox.alert({message: "保存失败!",
-									   size: 'small'});
 					    console.log(err)
 					  }
 					})
-			
+					
+		   // window.location.reload();
+		 			
 		});
-
-$(function() {
-	//Siteid = $("#site_list").val();
-	$('#tree_1111').jstree({
-	'core' : {
-			'check_callback': true,
-			"data" : function (obj, callback){
-							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=tree3&userid="+$("#seluserid").val()+"&groupid="+$("#groupid").val()+"&rnd=" + Math.random(),
-								dataType : "json",
-								type : "POST",
-								success : function(data) {
-									//Console.info(data);
-									if(data) {
-										callback.call(this, data);
-									}else{
-										$("#tree_1111").html("暂无数据！");
-									}
-								}
-							});
-					}
-				},
-				"plugins" : [ "checkbox" ]
-			}).on("changed.jstree", function(event, data) {
-			 
-			var inst = data.instance;		
-												 			  
-			var selectedNode = inst.get_node(data.selected);
-			console.log(data.selected);
-			 
-			
-			});
+		
+	$("#addlink").click(function(){
+			 //$("#adddept").hide();
+			 $("#editgroup").hide();
+			 $("#groupaddform").modal('show');
 		});
 
 
-$(":checkbox").change(function () {
-	
-    if($(this).is(':checked')){
-    	   console.info( $(this).val());
-    	  $(this).parent().parent().addClass("warning");
-    }else{
-        $(this).parent().parent().removeClass("warning");
-    }
-});	
-
-function droplistChange(selectid=''){
-	var tree1111 = $.jstree.reference("#tree_1111");
-   tree1111.refresh();
-  
-  // tree1111.select_node(selectid);
-}	
  
+ $("#editgroup").click(function(){
+ 	groupname = $("#groupname").val();
+ 	siteid = $("#site_list").val();
+ 	groupabout = $("#groupabout").val();
+ 	 
+	fid = $("#fid").val();
+	
+ 	$.ajax({
+					  url: "ajax_data/group_data.php",
+					  type: 'post',					  
+					  data:{"fid":fid,"groupname":groupname,"siteid":siteid,"groupabout":groupabout,"act":"editgroup"},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("修改成功!");					 	  
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("修改失败!");
+					     
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+					
+		  //  window.location.reload();
+		 			
+		});		
 </script>
-                        
+
+
     </body>
 </html>
 

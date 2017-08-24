@@ -7,18 +7,19 @@ $treetype= isset($_REQUEST['treetype'])?$_REQUEST['treetype']:'';
 
 if($treetype=='tree3'){
 	$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+	$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
 
 	if($siteid!='' && intval($siteid)>0){
-		echo  getBuildTree3($siteid,$merid,$userid);
+		echo  getBuildTree3($siteid,$merid,$userid,$groupid);
 	}else{
 		
 		echo json_encode(array());
 	}
 }else if($treetype=='usertree'){
-	$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
-
+	 $userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+   $groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
 	if($siteid!='' && intval($siteid)>0){
-		echo  getUserBuildTree($siteid,$merid,$userid);
+		echo  getUserBuildTree($siteid,$merid,$userid,$groupid);
 	}else{
 		
 		echo json_encode(array());

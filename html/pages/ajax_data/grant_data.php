@@ -12,10 +12,12 @@ if($act =='grantpemid'){
 	$pemidList = isset($_REQUEST['pemidlist'])?$_REQUEST['pemidlist']:'';
 
 
- if($pemidList=='' or $useridList==''){
-   echo json_encode(array("STATE"=>"-1","MSG"=>"未选择用户或者节点","DATA"=>array()));
-   exit;  	
-  }
+ if ($groupid==''){
+	 if($pemidList=='' or $useridList==''){
+	   echo json_encode(array("STATE"=>"-1","MSG"=>"未选择用户或者节点","DATA"=>array()));
+	   exit;  	
+	  }
+	}
 
   if($siteid=='' or $siteid<=0){
    echo json_encode(array("STATE"=>"-1","MSG"=>"站点ID错误","DATA"=>array()));

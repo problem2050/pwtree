@@ -15,6 +15,7 @@ $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
 $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
 $userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
 
 //var_dump($res);
 $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
@@ -292,7 +293,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 								
                                     <div class="actions">
                                          <input type="hidden" id="treeuserid" value="<?=$userid?>" />                                  
-                                        
+                                         <input type="hidden" id="groupid" value="<?=$groupid?>" /> 
                                     </div>
                                 </div>
                                 
@@ -406,7 +407,7 @@ $(function() {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&userid="+$("#treeuserid").val()+ "&rnd=" + Math.random(),
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&userid="+$("#treeuserid").val()+ "&groupid="+$("#groupid").val()+"&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
