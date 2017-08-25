@@ -11,7 +11,7 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
 //var_dump($grs,$merid,$siteid,$groupname='',$page,$pagesize);
 
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
@@ -43,17 +43,18 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
 <script type="text/javascript">
- function editshow(fid,groupname,groupabout){
-   $("#groupname").val(groupname);
- 	 $("#groupabout").val(groupabout);
-	 $("#fid").val(fid);
-	 
+
+function editgroup(obj){
+	 var thisObj=$(obj);
+	 var gid = thisObj.attr("edgroupId");
+   $("#groupname").val($("#groupname_"+gid).html());
+ 	 $("#groupabout").val($("#groupabout_"+gid).html());
+	 $("#fid").val(gid);	 
 	 $("#addgroup").hide();
-	 $("#editgroup").show();
-	 
-	 $("#groupaddform").modal('show');
-	 
- }		
+	 $("#editgroup").show();	 
+	 $("#groupaddform").modal('show');	
+}
+ 
  </script>
     <!-- END HEAD -->
 
@@ -147,101 +148,7 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
         <!-- END HEADER & CONTENT DIVIDER -->
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
-            <!-- BEGIN SIDEBAR -->
-            <div class="page-sidebar-wrapper">
-                <!-- BEGIN SIDEBAR -->
-                <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-                <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                <div class="page-sidebar navbar-collapse collapse">
-                    <!-- BEGIN SIDEBAR MENU -->
-                    <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
-                    <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
-                    <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
-                    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-                    <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
-                    <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                    <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
-                        <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
-                        <li class="sidebar-toggler-wrapper hide">
-                            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-                            <div class="sidebar-toggler">
-                                <span></span>
-                            </div>
-                            <!-- END SIDEBAR TOGGLER BUTTON -->
-                        </li>
-                        <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
-                     
-                        <li class="nav-item start ">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="icon-home"></i>
-                                <span class="title">目录树管理</span>
-                                <span class="arrow open"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item start ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">添加新站点</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bulb"></i>
-                                        <span class="title">添加目录树</span>                                        
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="permission.html" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">添加权限ID</span>                                        
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>                                                           
-                <li class="nav-item active open ">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="icon-user"></i>
-                                <span class="title">用户与角色管理</span>
-								<span class="selected"></span>
-                                <span class="arrow open"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="adduserinfo.php" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">添加新用户</span>
-                                    </a>
-                                </li>
-							  
-							  <li class="nav-item active open ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">用户列表</span>
-                                    </a>
-                                </li>
-								
-                                <li class="nav-item  ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bulb"></i>
-                                        <span class="title">角色管理</span>                                        
-                                    </a>
-                                </li>
-                                <li class="nav-item  ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">修改商户信息</span>                                        
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-						
-                    </ul>
-                    
-                    <!-- END SIDEBAR MENU -->
-                </div>
-                <!-- END SIDEBAR -->
-            </div>
-            <!-- END SIDEBAR -->
+            <?=include 'sidebar_left.php' ?>
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
@@ -324,15 +231,15 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
                                                 <tr>
 												    <td ><input type="checkbox" name="treeid[]" value="<?=$v['gid']?>" /></td>
                                                     <td>
-                                                    	 <?=$v['groupname']?>
+                                                    	<span id="groupname_<?=$v['gid']?>"><?=$v['groupname']?></span>
                                                     </td>                                                     
                                                    <td>
-                                                     <?=$v['about']?>
+                                                     <span id="groupabout_<?=$v['gid']?>"><?=$v['about']?></span>
                                                     </td>                                                                                             
 																												<td>
-																													[<a href="grantpower.php?groupid=<?=$v['gid']?>">角色授权</a>]&nbsp;&nbsp;&nbsp;
-                                                    [<a href="usertree_view.php?groupid=<?=$v['gid']?>"> 查看角色权限</a>] &nbsp;&nbsp;&nbsp;
-                                                    [<a href="#" onclick="editshow('<?=$v['gid']?>','<?=$v['groupname']?>','<?=$v['about']?>');">修改</a>]
+																													[<a href="grantpower_group.php?groupid=<?=$v['gid']?>">角色授权</a>]&nbsp;&nbsp;&nbsp;
+                                                    [<a href="treepreview_group.php?groupid=<?=$v['gid']?>"> 查看角色权限</a>] &nbsp;&nbsp;&nbsp;
+                                                    [<a href="javascript:void(0);" onclick="editgroup(this)" edgroupId="<?=$v['gid']?>" >修改</a>]
                                                     </td>  
                                                 </tr>
                                                 
@@ -486,7 +393,9 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
 					  success: function (data, status) {					   
 					 if (data.STATE==true) {
 					 	  $("#addresult").css("color","blue");
-					 	  $("#addresult").html("修改成功!");					 	  
+					 	  $("#addresult").html("修改成功!");
+					 	  $("#groupname_"+fid).html(groupname);
+					 	  $("#groupabout_"+fid).html(groupabout);
 					   }else{					   	 
 					   	 $("#addresult").css("color","red");
 					     $("#addresult").html("修改失败!");
@@ -500,7 +409,9 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
 					
 		  //  window.location.reload();
 		 			
-		});		
+		});	
+		
+ 		
 </script>
 
 

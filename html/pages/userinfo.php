@@ -14,6 +14,7 @@ $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
 $fid= isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
 $username= isset($_REQUEST['username'])?$_REQUEST['username']:'';
 $depid= isset($_REQUEST['depid'])?$_REQUEST['depid']:'';
+
 if($act=='del' && $fid!=''){
 	
 	$res = User_Userinfo::delUserinfo($merid,$fid);
@@ -148,101 +149,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
         <!-- END HEADER & CONTENT DIVIDER -->
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
-            <!-- BEGIN SIDEBAR -->
-            <div class="page-sidebar-wrapper">
-                <!-- BEGIN SIDEBAR -->
-                <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-                <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                <div class="page-sidebar navbar-collapse collapse">
-                    <!-- BEGIN SIDEBAR MENU -->
-                    <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
-                    <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
-                    <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
-                    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-                    <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
-                    <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                    <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
-                        <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
-                        <li class="sidebar-toggler-wrapper hide">
-                            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-                            <div class="sidebar-toggler">
-                                <span></span>
-                            </div>
-                            <!-- END SIDEBAR TOGGLER BUTTON -->
-                        </li>
-                        <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
-                     
-                        <li class="nav-item start ">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="icon-home"></i>
-                                <span class="title">目录树管理</span>
-                                <span class="arrow open"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item start ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">添加新站点</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bulb"></i>
-                                        <span class="title">添加目录树</span>                                        
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="permission.html" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">添加权限ID</span>                                        
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>                                                           
-                <li class="nav-item active open ">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="icon-user"></i>
-                                <span class="title">用户与角色管理</span>
-								<span class="selected"></span>
-                                <span class="arrow open"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="adduserinfo.php" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">添加新用户</span>
-                                    </a>
-                                </li>
-							  
-							  <li class="nav-item active open ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">用户列表</span>
-                                    </a>
-                                </li>
-								
-                                <li class="nav-item  ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bulb"></i>
-                                        <span class="title">角色管理</span>                                        
-                                    </a>
-                                </li>
-                                <li class="nav-item  ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">修改商户信息</span>                                        
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-						
-                    </ul>
-                    
-                    <!-- END SIDEBAR MENU -->
-                </div>
-                <!-- END SIDEBAR -->
-            </div>
-            <!-- END SIDEBAR -->
+             <?=include 'sidebar_left.php' ?>
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
@@ -270,16 +177,14 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
 					
-                    <h3 class="page-title"> 用户列表
-                        <small></small>
-                    </h3>
+                    
                     <!-- END PAGE TITLE-->
                     <!-- END PAGE HEADER-->
-        
+         
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
-                            <div class="portlet">
-                               
+                            <div class="portlet">                               
                                 <div class="portlet-body">
+                                	
                                     <div class="table-scrollable">
                                         <table class="table table-striped table-bordered table-advance table-hover">
                                             <thead>
@@ -314,29 +219,34 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
 											<?php
 											//var_dump($res);
 											if($res['LIST']){
-												foreach($res['LIST'] as $k=>$v){													
+												foreach($res['LIST'] as $k=>$v){
+													$groupname=array();
+													if($v['groupid']>0){
+													   $groupname = User_Group::getGroupName($merid,$siteid=-1,$v['groupid']);
+													   //var_dump($groupname);
+													 }													
 												?>
-                                                <tr>
+                         <tr>
 												    <td ><?=$v['f_id']?></td>
-                                                    <td>
-                                                     <?=$v['f_username']?>
-                                                    </td>
-                                                    <td ><?=$v['f_truename']?></td>
-                                                    <td><?=$v['f_date']?> </td>
-                                                    <td><?=$v['f_mobile']?></td>
+                            <td>
+                             <?=$v['f_username']?>
+                            </td>
+                            <td ><?=$v['f_truename']?></td>
+                            <td><?=$v['f_date']?> </td>
+                            <td><?=$v['f_mobile']?></td>
 													<td><?=$v['f_email']?></td>
 													<td><?=$v['f_department']?></td>
-													<td>--</td>
+													<td><?=(isset($groupname[0]['groupname'])?$groupname[0]['groupname']:'--')?></td>
 													<td><?=($v['f_valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
 													<td><?=$v['f_lastdate']?></td>
 													<td><?=$v['f_lastip']?></td>
 													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>
-                                                </tr>
+                           </tr>
                                                 
-                                                <?php
+                          <?php
 												}
 											}
-											?>
+										?>
                                                 
                                             </tbody>
                                         </table>

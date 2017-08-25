@@ -7,14 +7,14 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
      
    $retArr=array('CNT'=>0,'LIST'=>'');
   
-  $sqlcount = "select count(*) as cnt from pw_user_group where f_merid=? and f_siteid=? and (f_groupname=? or ?='')";
+  $sqlcount = "select count(*) as cnt from pw_user_group where f_merid=? and (f_siteid=? or ?=-1) and (f_groupname=? or ?='')";
   
   
-  $sql  = "select f_id,f_groupname,f_about from pw_user_group where f_merid=? and f_siteid=? and (f_groupname=? or ?='') ORDER BY f_id LIMIT ?,?";
+  $sql  = "select f_id,f_groupname,f_about from pw_user_group where f_merid=? and (f_siteid=? or ?=-1) and (f_groupname=? or ?='') ORDER BY f_id LIMIT ?,?";
   
   $conn =  Db_Mysqli::getIntance()->getConnection();
   $stmt= $conn->prepare($sqlcount);
-  $stmt->bind_param('iiss', $merid,$siteid,$groupname,$groupname);  
+  $stmt->bind_param('iiiss', $merid,$siteid,$siteid,$groupname,$groupname);  
   $result = $stmt->execute() ;
   $stmt->bind_result($cnt);
   while ($stmt->fetch()) {
@@ -24,7 +24,7 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
   // echo "$merid,$depid,$depid,$username,$username";
   $stmt= $conn->prepare($sql);
   $limit_page = ($page-1)*$pagesize;
-  $stmt->bind_param('iissii',$merid,$siteid,$groupname,$groupname,$limit_page,$pagesize);  
+  $stmt->bind_param('iiissii',$merid,$siteid,$siteid,$groupname,$groupname,$limit_page,$pagesize);  
   $result = $stmt->execute() ;
   $stmt->bind_result($fid,$groupname,$about);
   $listArr = array();
@@ -75,5 +75,21 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
 		
  }
  
-	
+	public static function getGroupName($merid,$siteid,$groupid){
+  
+  $sql  = "select f_id,f_groupname,f_about,f_siteid from pw_user_group where f_merid=? and (f_siteid=? or ?=-1) and f_id = ? ";
+  $listArr=array();
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('iiii', $merid,$siteid,$siteid,$groupid);  
+  $result = $stmt->execute() ;
+  $stmt->bind_result($gid,$groupname,$about,$siteid);
+  while ($stmt->fetch()) {
+	     $listArr[] = array("gid"=>$gid,"groupname"=>$groupname,"about"=>$about,"siteid"=>$siteid);
+   }    
+   
+   $stmt->close();
+   
+   return $listArr;  
+  }
 }

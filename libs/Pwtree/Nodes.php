@@ -342,13 +342,13 @@ public static function delPemid($merid,$pemid,$siteid)
     $stmt = '';
     $result = false;
     
-    if($groupid!='')
+    if($groupid!='' && $userid=='')
     {
 		  $treesql = 'select f_permissionid,f_treenavid from pw_permission_treenav where f_siteid = ? and f_merid = ? and f_groupid = ? ';
 		  $stmt = $conn->prepare($treesql);	 	 
 		  $stmt->bind_param('iii',$siteid,$merid,$groupid);
 		  $result = $stmt->execute();
-		 }else{
+		 }else if($userid!='' && $groupid==''){
 			 	$treesql = 'select f_permissionid,f_treenavid from pw_permission_treenav where f_siteid = ? and f_merid = ? and f_userid = ? ';
 			  $stmt = $conn->prepare($treesql);	 	 
 			  $stmt->bind_param('iii',$siteid,$merid,$userid);

@@ -4,21 +4,20 @@ require_once($_SERVER["Root_Path"]."/inc/function.php");
 
 
 $page = 1;
-$pagesize = 10;
+$pagesize = 1000;
 
 //echo getBuildTree3($siteid='10000',$merid,$userid='4');
 //exit;
 //$rtt = Pwtree_Nodes::getPermissionTreenavList($siteid='10000',$merid,$userid='4');
 //var_dump($rtt);exit;
-
-$page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
-
 $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
-$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
 $groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
+$siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'-1';
 
 //var_dump($res);
 $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
+
+$grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
 
 //var_dump($res);
 ?>
@@ -278,21 +277,24 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
               <div class="portlet light bordered" >
                 <div class="portlet-title"> 								 
 								<div class="caption">								
-               <select class="form-control" id="site_list" onchange="droplistChange()">
+               <select class="form-control" id="site_list">
 									<?php
-									$site_rs = Pwtree_Nodes::getSites($merid);									 
+									 $site_rs = Pwtree_Nodes::getSites($merid);
 									 if($site_rs){
-                             foreach($site_rs as $k=>$v){                                                	 
-                                                echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
-                                         }
-                                      }
-                                                ?>
+                             foreach($site_rs as $k=>$v){ 
+                             	    if($siteid==$v['id']){                                                	 
+                                    echo "<option value=\"".$v['id']."\" selected>".$v['sitename']."</option>";
+                                  }else{
+                                  	echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+                                  }
+                              }
+                     }
+                  ?>
 									</select>  
 									
 								</div>	
 								
-                                    <div class="actions">
-                                         <input type="hidden" id="treeuserid" value="<?=$userid?>" />                                  
+                      <div class="actions">                                        
                                          <input type="hidden" id="groupid" value="<?=$groupid?>" /> 
                                     </div>
                                 </div>
@@ -322,20 +324,20 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                     <thead>
                                                         <tr>
                                                             <th> # </th>
-                                                            <th> User Name </th>
-                                                            <th> True Name </th>                                                           
+                                                            <th> Group Name </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                         <?php
-                                                         $res = User_Userinfo::getUserinfo($merid,$username='',$page=1,$pagesize=1000);
-                                                         //var_dump($res);
-                                                         if($res['LIST']){
-                                                         		foreach($res['LIST'] as $k=>$v){
-                                                         			echo "<tr>";
-                                                         			echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['f_id']."'/></td>";
-                                                         			echo "<td>".$v['f_username']."</td>";
-                                                         			echo "<td>".$v['f_truename']."</td>";
+                                                         <?php									
+																												if($grs['LIST']){
+																															foreach($grs['LIST'] as $k=>$v){																																 
+                                                         		   echo "<tr>";                                                         		 
+                                                         			if ($groupid==$v['gid']){                                                         			 
+                                                         		    echo "<td><input type=\"radio\"  name=\"gid\" value=\"".$v['gid']."\" checked></td>";
+                                                         		   }else{  
+                                                         		  	echo "<td><input type=\"radio\"  name=\"gid\" value=\"".$v['gid']."\" ></td>";
+                                                         		  }
+                                                         			echo "<td>".$v['groupname']."</td>";
                                                          			echo "</tr>";
                                                          		}
                                                           }
@@ -407,7 +409,7 @@ $(function() {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&userid="+$("#treeuserid").val()+ "&groupid="+$("#groupid").val()+"&rnd=" + Math.random(),
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&groupid="+$("#groupid").val()+"&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
@@ -438,7 +440,7 @@ $(":radio").change(function () {
 	
     if($(this).is(':checked')){
     	 console.info( $(this).val());
-		 $("#treeuserid").val($(this).val());
+		 $("#groupid").val($(this).val());
     	 //$(this).parent().parent().addClass("warning");
     }else{
         //$(this).parent().parent().removeClass("warning");
@@ -454,7 +456,11 @@ function droplistChange(selectid=''){
   
   // tree1111.select_node(selectid);
 }	
-						
+
+$("#site_list").change(function(){
+	 location.href="treepreview_group.php?siteid="+$("#site_list").val()+"&groupid=<?=$groupid?>"
+	});
+	
 </script>
                         
     </body>
