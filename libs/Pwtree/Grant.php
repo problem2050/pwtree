@@ -112,17 +112,39 @@ class Pwtree_Grant{
 			   }
 			 }		
 	    }
-	    
-	    
 	  
-	  
-	  
-		$conn->commit();
+	$conn->commit();
     if($stmt2){		$stmt2->close();}
 		return $res2;
 	}
 	
+ public static function getPermissiongroup($groupid,$siteid,$merid)
+	{
+								
+	  $conn =  Db_Mysqli::getIntance()->getConnection();							 
+
+	  $treesql = "select pgroup.f_id,pgroup.f_userid,pgroup.f_siteid,pgroup.f_groupid,uinfo.f_username,uinfo.f_truename
+					from pw_permissiongroup  as pgroup inner join pw_userinfo as uinfo on pgroup.f_userid=uinfo.f_id where pgroup.f_groupid=? 
+					and  pgroup.f_siteid=? and pgroup.f_merid=?";
+	  $stmt = $conn->prepare($treesql);	 	 
+	  $stmt->bind_param('iii',$groupid,$siteid,$merid);
+	  $result = $stmt->execute();
+          
+	  if($result==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		}
+	
+	  $stmt->bind_result($fid,$userid,$siteid,$groupid,$username,$truename);
+	  $listArr = array();
  
+	  while ($stmt->fetch()) {
+		     	$listArr[] = array("id"=>$fid,"userid"=>$userid,"siteid"=>$siteid,"groupid"=>$groupid,"username"=>$username,"truename"=>$truename);
+	   }
+	      
+		return $listArr;   		
+		
+	}
 
 }
 

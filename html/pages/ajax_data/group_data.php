@@ -28,7 +28,35 @@ if($act =='editgroup'){
 		  exit;
 	}
 }
- 
+if($act =='insusertogroup'){
+	$siteid    = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
+	$userid    = isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+	$groupid    = isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
+	
+	if($siteid!='' && intval($siteid)>0 && intval($groupid)>0){
+		$pms=false;
+		$pms =  User_Group::insertPermissionGroup($merid,$siteid,$userid,$groupid);
+		echo json_encode(array("STATE"=>($pms)?"1":"-1","MSG"=>'',"DATA"=>array()));
+        exit;
+	}else{
+		  echo json_encode(array("STATE"=>"-1","MSG"=>'站点ID错误',"DATA"=>array()));
+		  exit;
+	}
+}
+if($act =='delusertogroup'){
+	$siteid    = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
+	$userid    = isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+	$groupid    = isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
+	
+	if($siteid!='' && intval($siteid)>0 && intval($groupid)>0){
+		$pms =  User_Group::delPermissionGroup($merid,$siteid,$userid,$groupid);;
+		echo json_encode(array("STATE"=>($pms)?"1":"-1","MSG"=>'',"DATA"=>array()));
+    exit;
+	}else{
+		  echo json_encode(array("STATE"=>"-1","MSG"=>'站点ID错误',"DATA"=>array()));
+		  exit;
+	}
+}
 ?>
 
 

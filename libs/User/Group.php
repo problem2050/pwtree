@@ -92,4 +92,87 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
    
    return $listArr;  
   }
+  
+ public static function  insertPermissionGroup($merid,$siteid,$userid,$groupid){
+	
+	
+	$sql = "insert into pw_permissiongroup(f_userid,f_siteid,f_merid,f_groupid)values(?,?,?,?)";
+	$conn =  Db_Mysqli::getIntance()->getConnection();
+	 
+    if(self::checkPermissionGroup($merid,$siteid,$userid,$groupid)==true)
+	{
+		return true;
+	}
+	
+	$stmt = $conn->prepare($sql); 
+	$stmt->bind_param('iiii',$userid,$siteid ,$merid,$groupid);		
+	$res = $stmt->execute() ;		
+	if($res==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  $conn->rollback();
+	  return false;
+	}	
+	return $res;		
+ }
+ 
+ public static function checkPermissionGroup($merid,$siteid,$userid,$groupid)
+ {
+	 $query = "select count(*) cnt from  pw_permissiongroup where  f_userid=? and f_siteid=? and f_merid=? and f_groupid=? ";
+	 $conn =  Db_Mysqli::getIntance()->getConnection();
+	
+	$stmt = $conn->prepare($query); 
+	$stmt->bind_param('iiii',$userid,$siteid ,$merid,$groupid);		
+	$res = $stmt->execute() ;
+	$stmt->bind_result($cnt);
+	$qcnt = 0 ;
+    while ($stmt->fetch()) {
+	     $qcnt = $cnt;
+	}    
+	if ($qcnt>0){
+	   $stmt->close();
+	   return true;
+	}
+	
+	return false;
+ }
+ 
+ public static function checkUserinOtherGroup($merid,$siteid,$userid,$groupid)
+ {
+	 $query = "select count(*) cnt from  pw_permissiongroup where  f_userid=? and f_siteid=? and f_merid=? and f_groupid!=? ";
+	 $conn =  Db_Mysqli::getIntance()->getConnection();
+	
+	$stmt = $conn->prepare($query); 
+	$stmt->bind_param('iiii',$userid,$siteid ,$merid,$groupid);		
+	$res = $stmt->execute() ;
+	$stmt->bind_result($cnt);
+	$qcnt = 0 ;
+    while ($stmt->fetch()) {
+	     $qcnt = $cnt;
+	}    
+	if ($qcnt>0){
+	   $stmt->close();
+	   return true;
+	}
+	
+	return false;
+ }
+ 
+ 
+ public static function  delPermissionGroup($merid,$siteid,$userid,$groupid){
+	
+	$sql = "delete from  pw_permissiongroup where  f_userid=? and f_siteid=? and f_merid=? and f_groupid=? ";
+	$conn =  Db_Mysqli::getIntance()->getConnection();
+	$stmt = $conn->prepare($sql); 
+	$stmt->bind_param('iiii',$userid,$siteid ,$merid,$groupid);		
+	$res = $stmt->execute() ;		
+	if($res==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  $conn->rollback();
+	  return false;
+	}	
+	return $res;		
+ }
+ 
 }
