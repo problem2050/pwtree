@@ -2,31 +2,16 @@
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
-
+$rolename= isset($_REQUEST['rolename'])?$_REQUEST['rolename']:'';
+$siteid = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:10000;
 $page = 1;
-$pagesize = 10;
+$pagesize =10;
 
-
-$username = '';
-$page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
-
-$act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
-$fid= isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
-$username= isset($_REQUEST['username'])?$_REQUEST['username']:'';
-$depid= isset($_REQUEST['depid'])?$_REQUEST['depid']:'';
-
-if($act=='del' && $fid!=''){
-	
-	$res = User_Userinfo::delUserinfo($merid,$fid);
-
-}
-//var_dump($res);
-
-$res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
-
+$grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
+//var_dump($grs,$merid,$siteid,$groupname='',$page,$pagesize);
 
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
@@ -57,6 +42,20 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
         <link href="../assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
+<script type="text/javascript">
+
+function editgroup(obj){
+	 var thisObj=$(obj);
+	 var gid = thisObj.attr("edgroupId");
+   $("#groupname").val($("#groupname_"+gid).html());
+ 	 $("#groupabout").val($("#groupabout_"+gid).html());
+	 $("#fid").val(gid);	 
+	 $("#addgroup").hide();
+	 $("#editgroup").show();	 
+	 $("#groupaddform").modal('show');	
+}
+ 
+ </script>
     <!-- END HEAD -->
 
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
@@ -98,7 +97,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a href="page_user_profile_1.html">
+                                    <a href="adduserinfo.php">
                                         <i class="icon-user"></i> My Profile </a>
                                 </li>
                                 <li>
@@ -149,7 +148,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
         <!-- END HEADER & CONTENT DIVIDER -->
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
-             <?=include 'sidebar_left.php' ?>
+            <?=include 'sidebar_left.php' ?>
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
@@ -163,11 +162,11 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
                     <div class="page-bar">
                         <ul class="page-breadcrumb">
                             <li>
-                                 <span>用户与角色管理 </span>
+                                 <span>目录树管理 </span>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <span>用户列表</span>
+                                <span>角色管理</span>
                             </li>
                         </ul>
                         <div class="page-toolbar">
@@ -176,77 +175,78 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
-					
-                    
+					        
+                   <br>
+                   <div class="portlet light bordered" style="width:60%" >
+                                <div class="portlet-title">                                    
+                                   	<div class="caption">								
+							               <select class="form-control" id="site_list" onchange="droplistChange()">
+																<?php
+																$site_rs = Pwtree_Nodes::getSites($merid);
+																 
+																 if($site_rs){
+							                             foreach($site_rs as $k=>$v){                                                	 
+							                                                echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+							                                          }
+							                                        }
+							                                                ?>
+																</select>  
+									
+													</div>	
+									
+                                   
+                                    <div class="actions">									
+                                          <input type="hidden" value="<?=$parentid?>" id="hiparentid" />                                  
+                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
+                                    </div>
+                                </div>
+                                
                     <!-- END PAGE TITLE-->
                     <!-- END PAGE HEADER-->
-         
+        
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
-                            <div class="portlet">                               
+                            <div class="portlet">
+                               
                                 <div class="portlet-body">
-                                	
                                     <div class="table-scrollable">
                                         <table class="table table-striped table-bordered table-advance table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>
-                                                        <i class="fa "></i>用户ID</th>
+                                                    <th width="5%">
+                                                        <i class="fa "></i>选择</th>
                                                     <th >
-                                                        <i class="fa "></i>用户名</th>
-                                                    <th>
-                                                        <i class="fa"></i>真实姓名</th>
-                                                    <th>
-													<i class="fa"></i>添加时间</th>
-													 <th>
-													<i class="fa"></i>手机</th>
-													 <th>
-													<i class="fa"></i>邮箱</th>
-												<th>
-													<i class="fa"></i>部门</th>	
-												<th>
-													<i class="fa"></i>角色</th>				
-												 <th>
-													<i class="fa"></i>状态</th>	
-												<th>
-													<i class="fa"></i>最后登录时间</th>														 
-												 <th>
-													<i class="fa"></i>最后登录IP</th>		
-												 <th> 		
-													<i class="fa"></i>操作</th>	
+                                                        <i class="fa "></i>角色名称</th>
+                                                    <th >
+                                                        <i class="fa "></i>角色描述</th>
+                                                    <th >
+                                                        <i class="fa "></i>操作</th>
+													           
                                                 </tr>
                                             </thead>
                                             <tbody>
-											<?php
-											//var_dump($res);
-											if($res['LIST']){
-												foreach($res['LIST'] as $k=>$v){
-													$groupname=array();
-													if($v['groupid']>0){
-													   $groupname = User_Group::getGroupName($merid,$siteid=-1,$v['groupid']);
-													   //var_dump($groupname);
-													 }													
+											<?php											
+											if($grs['LIST']){
+												foreach($grs['LIST'] as $k=>$v){													
 												?>
-                         <tr>
-												    <td ><?=$v['f_id']?></td>
-                            <td>
-                             <?=$v['f_username']?>
-                            </td>
-                            <td ><?=$v['f_truename']?></td>
-                            <td><?=$v['f_date']?> </td>
-                            <td><?=$v['f_mobile']?></td>
-													<td><?=$v['f_email']?></td>
-													<td><?=$v['f_department']?></td>
-													<td><?=(isset($groupname[0]['groupname'])?$groupname[0]['groupname']:'--')?></td>
-													<td><?=($v['f_valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
-													<td><?=$v['f_lastdate']?></td>
-													<td><?=$v['f_lastip']?></td>
-													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>
-                           </tr>
+                                                <tr>
+												    <td ><input type="checkbox" name="treeid[]" value="<?=$v['gid']?>" /></td>
+                                                    <td>
+                                                    	<span id="groupname_<?=$v['gid']?>"><?=$v['groupname']?></span>
+                                                    </td>                                                     
+                                                   <td>
+                                                     <span id="groupabout_<?=$v['gid']?>"><?=$v['about']?></span>
+                                                    </td>                                                                                             
+																												<td>
+																													[<a href="grantpower_group.php?groupid=<?=$v['gid']?>">角色授权</a>]&nbsp;&nbsp;&nbsp;
+                                                    [<a href="treepreview_group.php?groupid=<?=$v['gid']?>"> 查看角色权限</a>] &nbsp;&nbsp;&nbsp;
+                                                    [<a href="javascript:void(0);" onclick="editgroup(this)" edgroupId="<?=$v['gid']?>" >修改</a>]
+                                                    </td>  
+                                                </tr>
                                                 
-                          <?php
+                                                <?php
 												}
 											}
-										?>
+											?>
                                                 
                                             </tbody>
                                         </table>
@@ -254,23 +254,55 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
                                 </div>
                             </div>
                             <!-- END SAMPLE TABLE PORTLET-->
-							<ul class="pagination" style="visibility: visible;">
-							<?php
 							 
-							if($res['CNT']>0){
-							echo getPageHtml($res['CNT'],$page,$pagesize);
-							}
-							?>
-							</ul>
                         </div>
                     </div>
                 </div>
                 <!-- END CONTENT BODY -->
             </div>
-            <!-- END CONTENT -->
-            <!-- BEGIN QUICK SIDEBAR -->
+            <!-- END CONTENT -->         
            
-			
+           <!--BEGIN MODAL-DIALOG -->
+           <div id="groupaddform" class="modal fade" tabindex="-1" data-width="400">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <h4 class="modal-title">添加新角色</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                        <div class="form-group">
+                                                <label>角色名称:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa icon-docs"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入角色名称" id="groupname" value=""> </div>
+                                            </div>                                            
+                                           <div class="form-group">
+                                                <label>角色描述:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa icon-link"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="角色描述" id="groupabout" value=""> </div>
+                                            </div> 
+                                       
+                                             <span id="addresult"></span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
+                                                    <button type="button" class="btn red" id="addgroup">添加</button>
+													<button type="button" class="btn red" id="editgroup">修改</button>
+													<input type="hidden" id="fid" value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                             </div>
+                             
+            
+                                    
+			              <!--END MODAL-DIALOG -->
         </div>
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
@@ -304,5 +336,85 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
         <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
+        
+        
+<script type="text/javascript">
+ 
+ $("#addgroup").click(function(){
+ 	groupname = $("#groupname").val();
+ 	siteid = $("#site_list").val();
+ 	groupabout = $("#groupabout").val();
+ 	$.ajax({
+					  url: "ajax_data/group_data.php",
+					  type: 'post',
+					  data:{"groupname":groupname,"groupabout":groupabout,"siteid":siteid,"act":"addgroup"},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("添加成功!");					 	  
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("添加失败!");
+					     
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+					
+		   // window.location.reload();
+		 			
+		});
+		
+	$("#addlink").click(function(){
+			 //$("#adddept").hide();
+			 $("#editgroup").hide();
+			 $("#groupaddform").modal('show');
+		});
+
+
+ 
+ $("#editgroup").click(function(){
+ 	groupname = $("#groupname").val();
+ 	siteid = $("#site_list").val();
+ 	groupabout = $("#groupabout").val();
+ 	 
+	fid = $("#fid").val();
+	
+ 	$.ajax({
+					  url: "ajax_data/group_data.php",
+					  type: 'post',					  
+					  data:{"fid":fid,"groupname":groupname,"siteid":siteid,"groupabout":groupabout,"act":"editgroup"},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("修改成功!");
+					 	  $("#groupname_"+fid).html(groupname);
+					 	  $("#groupabout_"+fid).html(groupabout);
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("修改失败!");
+					     
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+					
+		  //  window.location.reload();
+		 			
+		});	
+		
+ 		
+</script>
+
+
     </body>
 </html>
+

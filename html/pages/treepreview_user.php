@@ -6,12 +6,15 @@ require_once($_SERVER["Root_Path"]."/inc/function.php");
 $page = 1;
 $pagesize = 10;
 
-$rtt = Pwtree_Grant::insertPermissionTreeNav($userid='4,5,7',$siteid='10000',$merid,$groupid='',$pemidList='1000017,1000018,1000019,1000020');
-
+//echo getBuildTree3($siteid='10000',$merid,$userid='4');
+//exit;
+//$rtt = Pwtree_Nodes::getPermissionTreenavList($siteid='10000',$merid,$userid='4');
+//var_dump($rtt);exit;
 
 $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
 $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
+$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
 
 //var_dump($res);
 $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
@@ -286,9 +289,9 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 									</select>  
 									
 								</div>	
+								
                                     <div class="actions">
-                                                                           
-                                         <button type="button" class="btn red" id="savepemid">保存 </a>
+                                         <input type="hidden" id="treeuserid" value="<?=$userid?>" />                                  
                                     </div>
                                 </div>
                                 
@@ -328,7 +331,11 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                          if($res['LIST']){
                                                          		foreach($res['LIST'] as $k=>$v){
                                                          			echo "<tr>";
-                                                         			echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['f_id']."'/></td>";
+                                                         			if($userid==$v['f_id']){
+                                                         			   echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['f_id']."' checked></td>";
+                                                         			}else{
+                                                         				 echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['f_id']."'></td>";
+                                                         			}
                                                          			echo "<td>".$v['f_username']."</td>";
                                                          			echo "<td>".$v['f_truename']."</td>";
                                                          			echo "</tr>";
@@ -352,10 +359,9 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
             </div>
             <!-- END CONTENT -->         
            
-           <!--BEGIN MODAL-DIALOG -->
+           <!--BEGIN MODAL-DIALOG -->           
            
-                                    
-			    <!--END MODAL-DIALOG -->
+		 <!--END MODAL-DIALOG -->
         
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
@@ -383,57 +389,27 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
+		<script src="../assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <script src="../assets/pages/scripts/ui-tree.min.js" type="text/javascript"></script>
+		 <script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
 <script type="text/javascript">
- 
-  $("#savepemid").click(function(){
- 
-        var str = "";  
-        $("input[name='userid']").each(function(){  
-            if($(this).is(":checked"))  
-            {  
-                str += "——" + $(this).val();  
-            }  
-        });  
-         inst =$("#tree_1111").jstree().get_checked(); 
-		 console.info(inst);return;
-		 
-	     siteid = $("#site_list").val();
-			 $.ajax({
-					  url: "ajax_data/pemid_data.php",
-					  type: 'post',
-					  data:{"siteid":siteid,"act":"category","rnd": Math.random()},
-					  dataType: 'json',
-					  timeout: 1000,
-					  success: function (data, status) {	
-					   $("#categorytype").empty();
-					  $.each(data, function (index, item) {					     
-					    $("#categorytype").append("<option value=\'"+item.id+"\'>"+item.category+"</option>"); 
-					   });
-					  },
-					  fail: function (err, status) {
-					    console.log(err)
-					  }
-					})
-			
-		});
 
 $(function() {
-	//Siteid = $("#site_list").val();
+	userid = $("#treeuserid").val();
 	$('#tree_1111').jstree({
 	'core' : {
 			'check_callback': true,
 			"data" : function (obj, callback){
 							$.ajax({
-								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+ "&rnd=" + Math.random(),
+								url : "ajax_data/tree_data.php?siteid="+$("#site_list").val()+"&treetype=usertree&userid="+$("#treeuserid").val()+"&rnd=" + Math.random(),
 								dataType : "json",
 								type : "POST",
 								success : function(data) {
@@ -447,7 +423,7 @@ $(function() {
 							});
 					}
 				},
-				"plugins" : [ "checkbox" ]
+				//"plugins" : [ "checkbox" ]
 			}).on("changed.jstree", function(event, data) {
 			 
 			var inst = data.instance;		
@@ -460,14 +436,18 @@ $(function() {
 		});
 
 
-$(":checkbox").change(function () {
+$(":radio").change(function () {
 	
     if($(this).is(':checked')){
-    	   console.info( $(this).val());
-    	  $(this).parent().parent().addClass("warning");
+    	 console.info( $(this).val());
+		 $("#treeuserid").val($(this).val());
+    	 //$(this).parent().parent().addClass("warning");
     }else{
-        $(this).parent().parent().removeClass("warning");
+        //$(this).parent().parent().removeClass("warning");
     }
+	
+	droplistChange();
+	
 });	
 
 function droplistChange(selectid=''){
@@ -476,7 +456,10 @@ function droplistChange(selectid=''){
   
   // tree1111.select_node(selectid);
 }	
-						
+
+$("#site_list").change(function(){
+	 location.href="treepreview_group.php?siteid="+$("#site_list").val()+"&userid=<?=$userid?>"
+	});
 </script>
                         
     </body>
