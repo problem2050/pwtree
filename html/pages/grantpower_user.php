@@ -329,12 +329,9 @@ $(function() {
 				},
 				"plugins"	:	[	"checkbox" ]
 			}).on("changed.jstree",	function(event,	data)	{
-
 			var	inst = data.instance;
-
 			var	selectedNode = inst.get_node(data.selected);
 			console.log(data.selected);
-
 
 			});
 		});

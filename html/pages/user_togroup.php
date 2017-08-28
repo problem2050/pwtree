@@ -54,16 +54,11 @@
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
-$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
+$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:-1;
 $siteid = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:-1;
 $page = 1;
 $pagesize =1000;
 
-if($siteid<=0)
-{
-	echo "<script>alert('错误的站点id');</script>";
-	exit;
-}
 
 
 //$grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
@@ -143,14 +138,19 @@ $urs = User_Userinfo::getUserinfo($merid,$username='',$page,$pagesize,$depid='')
 																$site_rs = Pwtree_Nodes::getSites($merid);
 																 
 															 if($site_rs){
-							                                     foreach($site_rs as $k=>$v){  
-                                                                   	if($siteid==$v['id']){														 
-							                                         echo "<option value=\"".$v['id']."\" selected >".$v['sitename']."</option>";
+															 	
+															 	   if($siteid<=0){
+															 	    	$siteid = $site_rs[0]['id'];
+															 	    }
+															 	    
+							                      foreach($site_rs as $k=>$v){							                      	  
+                                      if($siteid==$v['id']){														 
+							                           echo "<option value=\"".$v['id']."\" selected >".$v['sitename']."</option>";
 																	}else{
 																		echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
 																     	}
-							                                          }
-							                                        }
+							                      }
+							                 }
 							                                                ?>
 											    </select>  
 											</div>
@@ -162,8 +162,12 @@ $urs = User_Userinfo::getUserinfo($merid,$username='',$page,$pagesize,$depid='')
 									 $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
 									  
 									 if($grs['LIST']){
+									 	if($groupid<=0)
+									 	{
+									 		$groupid=$grs['LIST'][0]['gid'];
+									 	}
 							            foreach($grs['LIST'] as $k=>$v){  
-                                          	if($groupid==$v['gid']){														 
+                                if($groupid==$v['gid']){														 
 							                echo "<option value=\"".$v['gid']."\" selected >".$v['groupname']."</option>";
 											}else{
 												echo "<option value=\"".$v['gid']."\">".$v['groupname']."</option>";

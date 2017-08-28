@@ -74,14 +74,24 @@ public static function  delUserinfo($merid,$fid){
 }
 
 public static function getUserinfoOne($fid,$merid){
-   
-  $sql = "select *from pw_userinfo where  f_id =".$fid." and f_merid=".$merid;
- 
-  $res = Db_Mysqli::getIntance()->queryOne($sql);
-    
-  return $res;
+  
+  $listArr = array();
+  $sql = "select f_id,f_username,f_truename  from pw_userinfo where  f_id = ? and f_merid= ?"; 
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('ii', $fid,$merid);  
+  $result = $stmt->execute() ;
+  $stmt->bind_result($fid,$username,$truename);
+  while ($stmt->fetch()) {
+	     	$listArr[] = array("fid"=>$fid,"username"=>$username,"truename"=>$truename);
+   }
+  
+  if($stmt){$stmt->close();}
+  
+  return $listArr;
   
 }
+
 
 
 public static function getDepmlist($merid,$depname,$page,$pagesize){

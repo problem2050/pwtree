@@ -175,4 +175,47 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
 	return $res;		
  }
  
+ public static function getUserinGroupList($merid,$userid){
+  
+  $sql  = "select pgroup.f_userid,pgroup.f_siteid,pgroup.f_groupid,psite.f_sitename,psite.f_sitedomain,pugroup.f_groupname ";
+  $sql .=" from pw_permissiongroup as pgroup inner join pw_sites as psite on pgroup.f_siteid = psite.f_id and pgroup.f_merid=psite.f_merid ";
+  $sql .=" inner join pw_user_group as pugroup  on pgroup.f_groupid = pugroup.f_id and pgroup.f_merid = pugroup.f_merid ";
+  $sql .=" where pgroup.f_merid = ? and pgroup.f_userid = ?";
+  $listArr=array();
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('ii', $merid,$userid);
+  $result = $stmt->execute() ;
+  $stmt->bind_result($userid,$siteid,$groupid,$sitename,$sitedomain,$groupname);
+  while ($stmt->fetch()) {
+	     $listArr[] = array("userid"=>$userid,"siteid"=>$siteid,"groupid"=>$groupid,"sitename"=>$sitename,"groupname"=>$groupname);
+   }
+   
+   $stmt->close();
+   
+   return $listArr;  
+  }
+  
+  
+ public static function getPemidInUserorGroup($pemid,$merid,$siteid)
+ {
+ 	
+	$query = "select f_id,f_userid,f_treenavid,f_siteid,f_permissionid,f_groupid from pw_permission_treenav   where f_permissionid = ? and f_merid=? and f_siteid=? ";
+	$conn =  Db_Mysqli::getIntance()->getConnection();
+	
+	$stmt = $conn->prepare($query); 
+	$stmt->bind_param('iii',$pemid,$merid,$siteid);		
+	$res = $stmt->execute() ;
+	$stmt->bind_result($fid,$userid,$treenavid,$siteid,$pemid,$groupid);
+	$listArr=array();
+  while ($stmt->fetch()) {
+	    $listArr[] = array("fid"=>$fid,"userid"=>$userid,"treenavid"=>$treenavid,"siteid"=>$siteid,"pemid"=>$pemid,"groupid"=>$groupid);
+	 }
+	 
+	if ($stmt)	$stmt->close();	
+	
+	return $listArr;
+	
+ }
+ 
 }
