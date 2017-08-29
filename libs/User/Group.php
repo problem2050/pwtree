@@ -137,6 +137,27 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
 	return false;
  }
  
+ public static function checkUserinPermissionGroup($merid,$siteid,$userid)
+ {
+	 $query = "select count(*) cnt from  pw_permissiongroup where  f_userid=? and f_siteid=? and f_merid=?  ";
+	 $conn =  Db_Mysqli::getIntance()->getConnection();
+	
+	$stmt = $conn->prepare($query); 
+	$stmt->bind_param('iii',$userid,$siteid ,$merid);		
+	$res = $stmt->execute() ;
+	$stmt->bind_result($cnt);
+	$qcnt = 0 ;
+    while ($stmt->fetch()) {
+	     $qcnt = $cnt;
+	}    
+	if ($qcnt>0){
+	   $stmt->close();
+	   return true;
+	}
+	
+	return false;
+ }
+ 
  public static function checkUserinOtherGroup($merid,$siteid,$userid,$groupid)
  {
 	 $query = "select count(*) cnt from  pw_permissiongroup where  f_userid=? and f_siteid=? and f_merid=? and f_groupid!=? ";

@@ -76,8 +76,8 @@ if($act =='getpidinuserorgroup'){
 				  {
 				  	$uinfo = User_Userinfo::getUserinfoOne($v['userid'],$merid);
 				  	if($uinfo){
-				  	 $tmp_arr['username'] = $uinfo[0]['username'];
-				  	 $tmp_arr['truename'] = $uinfo[0]['truename'];
+				  	 $tmp_arr['username'] = $uinfo['username'];
+				  	 $tmp_arr['truename'] = $uinfo['truename'];
 				  	}
 				  }
 				  

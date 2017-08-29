@@ -76,14 +76,16 @@ public static function  delUserinfo($merid,$fid){
 public static function getUserinfoOne($fid,$merid){
   
   $listArr = array();
-  $sql = "select f_id,f_username,f_truename  from pw_userinfo where  f_id = ? and f_merid= ?"; 
+  $sql = "select f_id,f_username,f_truename,f_userpwd,f_department,f_valid,f_mobile,f_email  from pw_userinfo where  f_id = ? and f_merid= ?"; 
   $conn =  Db_Mysqli::getIntance()->getConnection();
   $stmt= $conn->prepare($sql);
   $stmt->bind_param('ii', $fid,$merid);  
   $result = $stmt->execute() ;
-  $stmt->bind_result($fid,$username,$truename);
+  $stmt->bind_result($fid,$username,$truename,$userpwd,$department,$valid,$mobile,$email);
   while ($stmt->fetch()) {
-	     	$listArr[] = array("fid"=>$fid,"username"=>$username,"truename"=>$truename);
+	     	$listArr = array("fid"=>$fid,"username"=>$username,"truename"=>$truename,
+	     	                   "userpwd"=>$userpwd,"department"=>$department,"valid"=>$valid,
+	     	                   "mobile"=>$mobile,"email"=>$email);
    }
   
   if($stmt){$stmt->close();}
@@ -279,5 +281,24 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
 	
 	}
 	
-	
+ public static function checkUserinPemid($userid,$siteid,$merid){
+  
+ 
+  $allcnt = 0;
+  $sql = "select count(*) cnt from pw_permission_treenav where f_userid=? and f_siteid=? and f_merid=?"; 
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('iii', $userid,$siteid,$merid);  
+  $result = $stmt->execute() ;
+  $stmt->bind_result($cnt);  
+  while ($stmt->fetch()) {
+	   $allcnt = $cnt;        
+   }
+     
+  if($stmt){$stmt->close();}
+  
+  if($allcnt>0) {return true;}else{ return false;}
+  
+}
+
 }

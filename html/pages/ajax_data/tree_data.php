@@ -17,6 +17,18 @@ if($treetype=='tree3'){
 		echo json_encode(array());
 		exit;
 	}
+}else if($treetype=='tree4'){
+	$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+	$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
+
+   
+	if($siteid!='' && intval($siteid)>0){
+		echo  getBuildTree4($siteid,$merid,$userid,$groupid);
+	}else{
+		
+		echo json_encode(array());
+		exit;
+	}
 }else if($treetype=='usertree'){
 	 $userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
    $groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';

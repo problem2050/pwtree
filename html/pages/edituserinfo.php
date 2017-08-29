@@ -22,8 +22,8 @@ if($act=='editinfo'){
 $result = User_Userinfo::getUserinfoOne($fid,$merid);
 
 
-$deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
-
+$deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
+//var_dump($deptrs);
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -229,7 +229,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user-plus"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入用户名" name="username" value="<?=isset($result['f_username'])?$result['f_username']:''?>" > </div>
+                                                    <input type="text" class="form-control" placeholder="请输入用户名" name="username" value="<?=isset($result['username'])?$result['username']:''?>" > </div>
                                             </div>
 										   
 										                    <div class="form-group">
@@ -238,7 +238,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入真实户名" name="truename" value="<?=isset($result['f_truename'])?$result['f_truename']:''?>"> </div>
+                                                    <input type="text" class="form-control" placeholder="请输入真实户名" name="truename" value="<?=isset($result['truename'])?$result['truename']:''?>"> </div>
                                             </div>
 										                    <div class="form-group">
                                                 <label>密码:</label>
@@ -246,7 +246,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-user font-red"></i>
                                                     </span>
-                                                    <input type="password" class="form-control" placeholder="请输入8-16位密码" name="password" value="<?=isset($result['f_userpwd'])?$result['f_userpwd']:''?>" > </div>
+                                                    <input type="password" class="form-control" placeholder="请输入8-16位密码" name="password" value="<?=isset($result['userpwd'])?$result['userpwd']:''?>" > </div>
                                             </div>
 										                      <div class="form-group">
                                                 <label>所属部门:</label>
@@ -256,7 +256,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
 																						if($deptrs['LIST']){
                                                 foreach($deptrs['LIST'] as $k=>$v){
                                                 	
-                                                	if($result['f_department']==$v['f_id']){ 
+                                                	if($result['department']==$v['f_id']){ 
                                                 		echo "<option value=\"".$v['f_id']."\" selected>".$v['f_department']."</option>";
                                                 	}else{
                                                 	echo "<option value=\"".$v['f_id']."\">".$v['f_department']."</option>";
@@ -271,11 +271,11 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                                                 <label>是否禁用</label>
                                                 <div class="mt-radio-inline">
                                                     <label class="mt-radio">
-                                                        <input type="radio" name="isvalid" id="optionsRadios4" value="0" <?=($result['f_valid']==0)?"checked":""?> >有效
+                                                        <input type="radio" name="isvalid" id="optionsRadios4" value="0" <?=($result['valid']==0)?"checked":""?> >有效
                                                         <span></span>
                                                     </label>
                                                     <label class="mt-radio">
-                                                        <input type="radio" name="isvalid" id="optionsRadios5" value="1" <?=($result['f_valid']==1)?"checked":""?> >禁用
+                                                        <input type="radio" name="isvalid" id="optionsRadios5" value="1" <?=($result['valid']==1)?"checked":""?> >禁用
                                                         <span></span>
                                                     </label>                                                   
                                                 </div>
@@ -287,7 +287,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-phone"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入有效的手机号码" name="phone" value="<?=isset($result['f_mobile'])?$result['f_mobile']:''?>" > </div>
+                                                    <input type="text" class="form-control" placeholder="请输入有效的手机号码" name="phone" value="<?=isset($result['mobile'])?$result['mobile']:''?>" > </div>
                                             </div>
 											
                                             <div class="form-group">
@@ -296,7 +296,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-envelope"></i>
                                                     </span>
-                                                    <input type="text" class="form-control" placeholder="请输入有效的EMAIL地址" name="email" value="<?=isset($result['f_email'])?$result['f_email']:''?>" > </div>
+                                                    <input type="text" class="form-control" placeholder="请输入有效的EMAIL地址" name="email" value="<?=isset($result['email'])?$result['email']:''?>" > </div>
                                             </div>
 											
                                              
@@ -325,14 +325,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname,1,1000);
         </div>
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
-        <div class="page-footer">
-            <div class="page-footer-inner"> 2017 &copy; pwtree.
-                <a href="http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" title="Purchase Metronic just for 27$ and get lifetime updates for free" target="_blank">Purchase Metronic!</a>
-            </div>
-            <div class="scroll-to-top">
-                <i class="icon-arrow-up"></i>
-            </div>
-        </div>
+        <?=include 'page_footer.php' ?>
         <!-- END FOOTER -->
         <!--[if lt IE 9]>
 <script src="../assets/global/plugins/respond.min.js"></script>

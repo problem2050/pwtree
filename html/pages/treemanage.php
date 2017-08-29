@@ -209,12 +209,11 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                 <div class="form-horizontal" >
 																		<div class="form-body">
 																			 <div class="form-group">                                                      
-                                               <li class="list-group-item bg-yellow bg-font-yellow"> 拥有权限的用户和角色： </li>                                                   
+                                               <li class="list-group-item bg-yellow bg-font-yellow"> 拥有此权限ID的用户和角色： </li>                                                   
 											                   </div>
 																				 <table	class="table table-hover" id="pemid_inuserorgroup">
 																										<thead>
-																												<tr>
-																														<th> # </th>
+																												<tr>																													
 																														<th> User	Name </th>
 																														<th> True	Name </th>
 																														<th> Role	Name </th>
@@ -222,33 +221,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 																												</tr>
 																										</thead>
 																										<tbody id="tbody_inuserorgroup">
-																												 <?php
-																												 $res	=	User_Userinfo::getUserinfo($merid,$username='',$page=1,$pagesize=1000);
-																												 //var_dump($res);
-																												 if($res['LIST']){
-																														foreach($res['LIST'] as	$k=>$v){
-																															//var_dump($v);
-																															$groupname=array();
-																															 
-																															echo "<tr>";
-																															//if($v['groupid']>0){
-																																//echo "<td>--</td>";
-																															//}else{
-																															   echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['f_id']."'/></td>";
-																															// }
-																															 
-																															echo "<td>".$v['f_username']."</td>";
-																															echo "<td>".$v['f_truename']."</td>";
-																															//if($v['groupid']>0){
-																															//	echo "<td><a href=\"treepreview_group.php?groupid=".$groupname[0]['gid']."&siteid=".$groupname[0]['siteid']."\">".$groupname[0]['groupname']."</a></td>";
-																															//}else{
-																															   echo "<td>--</td>";
-																															// }																															
-																															echo "<td><a href='treepreview_user.php?userid=".$v['f_id']."&siteid='	>View</a></td>";
-																															echo "</tr>";
-																														}
-																													}
-																												 ?>
+																												 
 																										</tbody>
 																								</table>
 
@@ -671,11 +644,12 @@ function getpemidinuserorgroup(siteid,pemid){
 					 	 //var table_userandgroup = $('#pemid_inuserorgroup'); 
 					 	 $("#tbody_inuserorgroup").html("");
 					 	 $.each(data.DATA, function (index, item) {
-						    	$("#tbody_inuserorgroup").append("<tr><td>"+item.userid+"</td><td>"+item.username+"</td><td>"+item.truename+"</td><td>"+item.groupname+"</td><td>--</td></tr>"); 						     
+						    	$("#tbody_inuserorgroup").append("<tr><td>"+item.username+"</td><td>"+item.truename+"</td><td>"+item.groupname+"</td><td>--</td></tr>"); 						     
 					      
 					   });
 					   			 	  
-					   }else{					   	 
+					   }else{	
+					   	 $("#tbody_inuserorgroup").html("");				   	 
 					   	 console.info(data);
 					   }
 					  },

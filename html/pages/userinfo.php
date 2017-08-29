@@ -90,9 +90,9 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
         <!-- END HEADER & CONTENT DIVIDER -->
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
-             <?=include 'sidebar_left.php' ?>
+           <?=include 'sidebar_left.php' ?>
             <!-- BEGIN CONTENT -->
-            <div class="page-content-wrapper">
+         <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
                 <div class="page-content">
                     <!-- BEGIN PAGE HEADER-->
@@ -178,7 +178,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
 													<td><?=($v['f_valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
 													<td><?=$v['f_lastdate']?></td>
 													<td><?=$v['f_lastip']?></td>
-													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a></td>
+													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a> <a href="view_userinfo.php?fid=<?=$v['f_id']?>">查看</a></td>
                            </tr>
                                                 
                           <?php
@@ -196,7 +196,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
 							<?php
 							 
 							if($res['CNT']>0){
-							echo getPageHtml($res['CNT'],$page,$pagesize);
+								echo getPageHtml($res['CNT'],$page,$pagesize);
 							}
 							?>
 							</ul>
@@ -212,14 +212,7 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
         </div>
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
-        <div class="page-footer">
-            <div class="page-footer-inner"> 2017 &copy; pwtree.
-                <a href="http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" title="Purchase Metronic just for 27$ and get lifetime updates for free" target="_blank">Purchase Metronic!</a>
-            </div>
-            <div class="scroll-to-top">
-                <i class="icon-arrow-up"></i>
-            </div>
-        </div>
+        <?=include 'page_footer.php' ?>
         <!-- END FOOTER -->
         <!--[if lt IE 9]>
 <script src="../assets/global/plugins/respond.min.js"></script>
