@@ -73,66 +73,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                 </a>
                 <!-- END RESPONSIVE MENU TOGGLER -->
                 <!-- BEGIN TOP NAVIGATION MENU -->
-                <div class="top-menu">
-                    <ul class="nav navbar-nav pull-right">
-                        <!-- BEGIN NOTIFICATION DROPDOWN -->
-                         
-                        <!-- END NOTIFICATION DROPDOWN -->
-                        <!-- BEGIN INBOX DROPDOWN -->
-                        
-                        <!-- END INBOX DROPDOWN -->
-                        
-                        <!-- BEGIN USER LOGIN DROPDOWN -->
-                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                        <li class="dropdown dropdown-user">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg" />
-                                <span class="username username-hide-on-mobile"> Nick </span>
-                                <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-default">
-                                <li>
-                                    <a href="adduserinfo.php">
-                                        <i class="icon-user"></i> My Profile </a>
-                                </li>
-                                <li>
-                                    <a href="app_calendar.html">
-                                        <i class="icon-calendar"></i> My Calendar </a>
-                                </li>
-                                <li>
-                                    <a href="app_inbox.html">
-                                        <i class="icon-envelope-open"></i> My Inbox
-                                        <span class="badge badge-danger"> 3 </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="app_todo.html">
-                                        <i class="icon-rocket"></i> My Tasks
-                                        <span class="badge badge-success"> 7 </span>
-                                    </a>
-                                </li>
-                                <li class="divider"> </li>
-                                <li>
-                                    <a href="page_user_lock_1.html">
-                                        <i class="icon-lock"></i> Lock Screen </a>
-                                </li>
-                                <li>
-                                    <a href="page_user_login_1.html">
-                                        <i class="icon-key"></i> Log Out </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- END USER LOGIN DROPDOWN -->
-                        <!-- BEGIN QUICK SIDEBAR TOGGLER -->
-                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                        <li class="dropdown dropdown-quick-sidebar-toggler">
-                            <a href="javascript:;" class="dropdown-toggle">
-                                <i class="icon-logout"></i>
-                            </a>
-                        </li>
-                       
-                    </ul>
-                </div>
+                  <?=include 'top_navigation_menu.php' ?>
                 <!-- END TOP NAVIGATION MENU -->
             </div>
             <!-- END HEADER INNER -->
@@ -143,101 +84,9 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <!-- END HEADER & CONTENT DIVIDER -->
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
-            <!-- BEGIN SIDEBAR -->
-            <div class="page-sidebar-wrapper">
-                <!-- BEGIN SIDEBAR -->
-                <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-                <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                <div class="page-sidebar navbar-collapse collapse">
-                    <!-- BEGIN SIDEBAR MENU -->
-                    <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
-                    <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
-                    <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
-                    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-                    <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
-                    <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                    <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
-                        <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
-                        <li class="sidebar-toggler-wrapper hide">
-                            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-                            <div class="sidebar-toggler">
-                                <span></span>
-                            </div>
-                            <!-- END SIDEBAR TOGGLER BUTTON -->
-                        </li>
-                        <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
-                     
-                        <li class="nav-item start ">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="icon-home"></i>
-                                <span class="title">目录树管理</span>
-                                <span class="arrow open"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item start ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">添加新站点</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bulb"></i>
-                                        <span class="title">添加目录树</span>                                        
-                                    </a>
-                                </li>
-                                <li class="nav-item start ">
-                                    <a href="permission.html" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">添加权限ID</span>                                        
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>                                                           
-                <li class="nav-item active open ">
-                            <a href="javascript:;" class="nav-link nav-toggle">
-                                <i class="icon-user"></i>
-                                <span class="title">用户与角色管理</span>
-								<span class="selected"></span>
-                                <span class="arrow open"></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="adduserinfo.php" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">添加新用户</span>
-                                    </a>
-                                </li>
-							  
-							  <li class="nav-item active open ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bar-chart"></i>
-                                        <span class="title">用户列表</span>
-                                    </a>
-                                </li>
-								
-                                <li class="nav-item  ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-bulb"></i>
-                                        <span class="title">角色管理</span>                                        
-                                    </a>
-                                </li>
-                                <li class="nav-item  ">
-                                    <a href="#" class="nav-link ">
-                                        <i class="icon-graph"></i>
-                                        <span class="title">修改商户信息</span>                                        
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-						
-                    </ul>
-                    
-                    <!-- END SIDEBAR MENU -->
-                </div>
-                <!-- END SIDEBAR -->
-            </div>
-            <!-- END SIDEBAR -->
+            <?=include 'sidebar_left.php' ?>
+            
+           
             <!-- BEGIN CONTENT -->
             <div class="page-content-wrapper">
                 <!-- BEGIN CONTENT BODY -->
@@ -285,8 +134,8 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 									
 								</div>	
                                     <div class="actions">
-                                                                           
-                                         <button type="button" class="btn red" id="addlink">添加 </a>
+                                         <button type="button" class="btn red" disabled id="addnode">添加目录树</button>                                  
+                                         <button type="button" class="btn red" disabled id="addlink">添加 </a>
                                     </div>
                                 </div>
                                 
@@ -355,9 +204,37 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                             <label id="saveresult"></label>
                                         </div>
                                     </div>
-                                </div>
+                                </div>                                
+                          <br>
+                                <div class="form-horizontal" >
+																		<div class="form-body">
+																			 <div class="form-group">                                                      
+                                               <li class="list-group-item bg-yellow bg-font-yellow"> 拥有此权限ID的用户和角色： </li>                                                   
+											                   </div>
+																				 <table	class="table table-hover" id="pemid_inuserorgroup">
+																										<thead>
+																												<tr>																													
+																														<th> User	Name </th>
+																														<th> True	Name </th>
+																														<th> Role	Name </th>
+																														<th> View	</th>
+																												</tr>
+																										</thead>
+																										<tbody id="tbody_inuserorgroup">
+																												 
+																										</tbody>
+																								</table>
+
+																		</div>
+																</div>
+															 
+																
                             </div>
                       </div>
+                      
+                      
+											 
+											 
                     </div>
                       
                       
@@ -402,17 +279,61 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
-                                                    <button type="button" class="btn red" id="addpemid">添加</button>													
+														
+                                                    <button type="button" class="btn red" id="addpemid">添加权限ID</button>													
 													<input type="hidden" id="treenavid" value="" />
                                                 </div>
                                             </div>
                                         </div>
-                             </div>
-                             
-            
-                                    
-			              <!--END MODAL-DIALOG -->
+                             </div> 
         </div>
+		 <!--END MODAL-DIALOG -->
+		  <!--BEGIN MODAL-DIALOG -->
+           <div id="siteaddform" class="modal fade" tabindex="-1" data-width="400">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                    <h4 class="modal-title">添加新站点</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                        <div class="form-group">
+                                                <label>节点名称:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa icon-docs"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="请输入节点名称" id="nodename" value=""> </div>
+                                            </div>                                            
+                                           <div class="form-group">
+                                                <label>URL地址:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa icon-link"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="URL地址,相对或绝对URL" id="urlpath" value=""> </div>
+                                            </div> 
+                                       <div class="form-group">
+                                                <label>排序ID:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa icon-arrow-up"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" placeholder="排序ID，按升序排列" id="sortid" value=""> </div>
+                                            </div> 
+                                             <span id="addresult"></span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">关闭</button>
+                                                    <button type="button" class="btn red"  id="addsite">添加</button>
+													<button type="button" class="btn red" id="editsite">修改</button>
+													<input type="hidden" id="fid" value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                             </div>
+			              <!--END MODAL-DIALOG -->
+						  
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
@@ -485,7 +406,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 					 	  $("#addresult").css("color","blue");
 					 	  $("#addresult").html("添加成功!");	
 					 	  //createId(data.MSG,pemname); 
-					 	   	 droplistChange(treenavid); 	  
+					 	   	 droplistChange(); 	  
 					   }else{					   	 
 					   	 $("#addresult").css("color","red");
 					     $("#addresult").html("添加失败!");
@@ -593,9 +514,14 @@ $(function() {
 			
 				if(selectedNode.original.nodetype=='page'){									
 					$("#addlink").removeAttr("disabled");
+					$("#addnode").attr("disabled",true);
 				}else if(selectedNode.original.nodetype=='nodes'){
 				  $("#addlink").attr("disabled",true);
+				  $("#addnode").removeAttr("disabled");
 				}else if(selectedNode.original.nodetype=='pemid'){
+					$("#addnode").attr("disabled",true);
+					$("#addlink").attr("disabled",true);
+					
 					$("#show_pemid").val(selectedNode.original.id);
 					$("#show_pemname").val(selectedNode.original.showname);
 					$("#show_about").val(selectedNode.original.about);
@@ -623,20 +549,123 @@ $(function() {
 					  }
 					});
 					
+					//加载用户列表
+					getpemidinuserorgroup(siteid,selectedNode.original.id);
+					
 				}
 			} 
 			
+			//
+			
+			
+			//函数结束的地方
 			});
 		});
 
-
-function droplistChange(selectid=''){
+$("#addsite").click(function(){
+ 	nodename = $("#nodename").val();
+ 	urlpath = $("#urlpath").val();
+ 	sortid = $("#sortid").val();
+	inst =$("#tree_1111").jstree(true); 
+	hiparentid =  parseInt(inst._data.core.selected);;	
+ 	$.ajax({
+					  url: "ajax_data/treelist.php",
+					  type: 'post',
+					  data:{"nodename":nodename,"urlpath":urlpath,"hiparentid":hiparentid,"sortid":sortid,"act":"ad"},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("添加成功!");	
+                          droplistChange(); 						  
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("添加失败!");
+					     
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+					
+		   // window.location.reload();
+		 			
+		});
+$("#editsite").click(function(){
+ 	nodename = $("#nodename").val();
+ 	urlpath = $("#urlpath").val();
+ 	sortid = $("#sortid").val();
+ 	 
+	fid = $("#fid").val();
+	
+ 	$.ajax({
+					  url: "ajax_data/treelist.php",
+					  type: 'post',					  
+					  data:{"fid":fid,"nodename":nodename,"urlpath":urlpath,"sortid":sortid,"act":"ed"},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	  $("#addresult").css("color","blue");
+					 	  $("#addresult").html("添加成功!");					 	  
+					   }else{					   	 
+					   	 $("#addresult").css("color","red");
+					     $("#addresult").html("添加失败!");
+					     
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+					
+		  //  window.location.reload();
+		 			
+		});			
+function droplistChange(){
 	var tree1111 = $.jstree.reference("#tree_1111");
    tree1111.refresh();
   
   // tree1111.select_node(selectid);
-}		
+}	
+	
+function getpemidinuserorgroup(siteid,pemid){
+	 $.ajax({
+					  url: "ajax_data/group_data.php",
+					  type: 'post',					  
+					  data:{"pemid":pemid,"siteid":siteid,"act":"getpidinuserorgroup"},
+					  dataType: 'json',
+					  timeout: 1000,
+					  success: function (data, status) {					   
+					 if (data.STATE==true) {
+					 	 console.info(data);
+					 	 //var table_userandgroup = $('#pemid_inuserorgroup'); 
+					 	 $("#tbody_inuserorgroup").html("");
+					 	 $.each(data.DATA, function (index, item) {
+						    	$("#tbody_inuserorgroup").append("<tr><td>"+item.username+"</td><td>"+item.truename+"</td><td>"+item.groupname+"</td><td>--</td></tr>"); 						     
+					      
+					   });
+					   			 	  
+					   }else{	
+					   	 $("#tbody_inuserorgroup").html("");				   	 
+					   	 console.info(data);
+					   }
+					  },
+					  fail: function (err, status) {
+					    console.log(err)
+					  }
+					})
+	
+}
 
+$("#addnode").click(function(){
+			 //$("#adddept").hide();
+			 $("#editsite").hide();
+			 $("#siteaddform").modal('show');
+		});
+		
 $("#addlink").click(function(){
 			 //$("#adddept").hide();
 			 			  

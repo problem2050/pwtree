@@ -8,12 +8,12 @@ public static function getUserinfo($merid,$username='',$page,$pagesize,$depid=''
    $retArr=array('CNT'=>0,'LIST'=>'');
   
   $sqlcount = "select count(*) as cnt from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id ";
-  $sqlcount .= " where uinfo.f_merid=? and (dept.f_id=? or ?='') and (uinfo.f_username=? or ?='') ";
+  $sqlcount .= "    where uinfo.f_merid=? and (dept.f_id=? or ?='') and (uinfo.f_username=? or ?='') ";
   
   $sql  = "select uinfo.f_id,f_username,f_truename,f_userpwd,f_date,f_lastdate,f_valid,f_lastip,f_pwdtime,uinfo.f_department,uinfo.f_merid,f_mobile,f_email,dept.f_department ";
-  $sql .=" from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id";
+  $sql .=" from pw_userinfo as uinfo left join pw_dept as dept on uinfo.f_merid=dept.f_merid and uinfo.f_department=dept.f_id  ";
   $sql .=" where uinfo.f_merid =? and (dept.f_id=? or ?='') and (uinfo.f_username=? or ?='')  ORDER BY f_id LIMIT ?,?";
-  
+   
   $conn =  Db_Mysqli::getIntance()->getConnection();
   $stmt= $conn->prepare($sqlcount);
   $stmt->bind_param('iiiss', $merid,$depid,$depid,$username,$username);  
@@ -35,7 +35,7 @@ public static function getUserinfo($merid,$username='',$page,$pagesize,$depid=''
 			                   "f_userpwd"=>$userpwd,"f_date"=>$date,"f_lastdate"=>$lastdate,
 							   "f_valid"=>$valid,"f_lastip"=>$lastip,"f_pwdtime"=>$pwdtime,
 							   "f_departmentid"=>$departmentid,"f_merid"=>$merid,"f_mobile"=>$mobile,
-							   "f_email"=>$email,"f_department"=>$department,);
+							   "f_email"=>$email,"f_department"=>$department);
    }
    
    $retArr['LIST'] =  $listArr;
@@ -74,14 +74,26 @@ public static function  delUserinfo($merid,$fid){
 }
 
 public static function getUserinfoOne($fid,$merid){
-   
-  $sql = "select *from pw_userinfo where  f_id =".$fid." and f_merid=".$merid;
- 
-  $res = Db_Mysqli::getIntance()->queryOne($sql);
-    
-  return $res;
+  
+  $listArr = array();
+  $sql = "select f_id,f_username,f_truename,f_userpwd,f_department,f_valid,f_mobile,f_email  from pw_userinfo where  f_id = ? and f_merid= ?"; 
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('ii', $fid,$merid);  
+  $result = $stmt->execute() ;
+  $stmt->bind_result($fid,$username,$truename,$userpwd,$department,$valid,$mobile,$email);
+  while ($stmt->fetch()) {
+	     	$listArr = array("fid"=>$fid,"username"=>$username,"truename"=>$truename,
+	     	                   "userpwd"=>$userpwd,"department"=>$department,"valid"=>$valid,
+	     	                   "mobile"=>$mobile,"email"=>$email);
+   }
+  
+  if($stmt){$stmt->close();}
+  
+  return $listArr;
   
 }
+
 
 
 public static function getDepmlist($merid,$depname,$page,$pagesize){
@@ -108,7 +120,7 @@ public static function getDepmlist($merid,$depname,$page,$pagesize){
   $stmt->bind_result($co1,$co3,$co2);
   $listArr = array();
   while ($stmt->fetch()) {
-	     	$listArr[] = array("f_id"=>$co1,"f_department"=>$co2,"f_about"=>$co3);
+	     	$listArr[] = array("f_id"=>$co1,"f_department"=>$co3,"f_about"=>$co2);
    }
    
    $retArr['LIST'] =  $listArr;
@@ -129,11 +141,22 @@ public static function  insertDept($merid,$deptname,$about){
 
 public static function  updateDept($merid,$fid,$deptname,$about){	
 	$sql = "update pw_dept set f_department=?,f_about = ? where f_merid=? and f_id = ?";
-	$args = [$deptname,$about,$merid,$fid];
-	$res = Db_Mysqli::getIntance()->execPrepared($sql,$args);
-	return $res;
-	
+	$conn =  Db_Mysqli::getIntance()->getConnection();
+    $stmt= $conn->prepare($sql);
+    
+    $stmt->bind_param('ssii', $deptname,$about,$merid,$fid);  
+    $result = $stmt->execute() ;
+  
+	if($result==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  return false;
 	}
+	$stmt->close();
+	
+	return $result;
+	
+ }
 	
  
 	
@@ -258,5 +281,24 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
 	
 	}
 	
-	
+ public static function checkUserinPemid($userid,$siteid,$merid){
+  
+ 
+  $allcnt = 0;
+  $sql = "select count(*) cnt from pw_permission_treenav where f_userid=? and f_siteid=? and f_merid=?"; 
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('iii', $userid,$siteid,$merid);  
+  $result = $stmt->execute() ;
+  $stmt->bind_result($cnt);  
+  while ($stmt->fetch()) {
+	   $allcnt = $cnt;        
+   }
+     
+  if($stmt){$stmt->close();}
+  
+  if($allcnt>0) {return true;}else{ return false;}
+  
+}
+
 }
