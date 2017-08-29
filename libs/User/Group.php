@@ -139,23 +139,24 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
  
  public static function checkUserinPermissionGroup($merid,$siteid,$userid)
  {
-	 $query = "select count(*) cnt from  pw_permissiongroup where  f_userid=? and f_siteid=? and f_merid=?  ";
-	 $conn =  Db_Mysqli::getIntance()->getConnection();
-	
-	$stmt = $conn->prepare($query); 
-	$stmt->bind_param('iii',$userid,$siteid ,$merid);		
-	$res = $stmt->execute() ;
-	$stmt->bind_result($cnt);
-	$qcnt = 0 ;
-    while ($stmt->fetch()) {
-	     $qcnt = $cnt;
-	}    
-	if ($qcnt>0){
-	   $stmt->close();
-	   return true;
-	}
-	
-	return false;
+	   //echo "$merid,$siteid,$userid";
+	  $returnArr = array();
+	  $sql  = "select pgroup.f_groupid,ugroup.f_groupname  from pw_permissiongroup as pgroup inner join ";
+	  $sql .=" pw_user_group as ugroup on pgroup.f_groupid = ugroup.f_id ";
+	  $sql .=" where pgroup.f_siteid=? and pgroup.f_merid=? and pgroup.f_userid=?"; 
+	  $conn =  Db_Mysqli::getIntance()->getConnection();
+	  $stmt= $conn->prepare($sql);
+	 // echo $sql;
+	  $stmt->bind_param('iii', $siteid,$merid,$userid);  
+	  $result = $stmt->execute() ;
+	  $stmt->bind_result($groupid,$groupname);  
+	  while ($stmt->fetch()) {
+		   $returnArr = array("groupid"=>$groupid,"groupname"=>$groupname);        
+	   }
+	   
+	  if($stmt){$stmt->close();}
+	  
+	  return $returnArr;
  }
  
  public static function checkUserinOtherGroup($merid,$siteid,$userid,$groupid)
@@ -221,7 +222,7 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
  public static function getPemidInUserorGroup($pemid,$merid,$siteid)
  {
  	
-	$query = "select f_id,f_userid,f_treenavid,f_siteid,f_permissionid,f_groupid from pw_permission_treenav   where f_permissionid = ? and f_merid=? and f_siteid=? ";
+	$query = "select f_id,f_userid,f_treenavid,f_siteid,f_permissionid,f_groupid from pw_permission_treenav   where f_permissionid = ? and f_merid=? and f_siteid=? order by f_groupid desc ";
 	$conn =  Db_Mysqli::getIntance()->getConnection();
 	
 	$stmt = $conn->prepare($query); 

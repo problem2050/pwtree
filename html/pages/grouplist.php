@@ -7,7 +7,7 @@ $siteid = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:-1;
 $page = 1;
 $pagesize =10;
 
-$grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
+
 //var_dump($grs,$merid,$siteid,$groupname='',$page,$pagesize);
 
 ?>
@@ -172,7 +172,8 @@ function editgroup(obj){
                                                 </tr>
                                             </thead>
                                             <tbody>
-											<?php											
+											<?php			
+                                          $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);											
 											if($grs['LIST']){
 												foreach($grs['LIST'] as $k=>$v){													
 												?>
@@ -185,8 +186,8 @@ function editgroup(obj){
                                                      <span id="groupabout_<?=$v['gid']?>"><?=$v['about']?></span>
                                                     </td>                                                                                             
 													<td>
-													[<a href="grantpower_group.php?groupid=<?=$v['gid']?>">角色授权</a>]&nbsp;&nbsp;&nbsp;
-                                                    [<a href="treepreview_group.php?groupid=<?=$v['gid']?>"> 查看角色权限</a>] &nbsp;&nbsp;&nbsp;
+													[<a href="grantpower_group.php?groupid=<?=$v['gid']?>&siteid=<?=$siteid?>">角色授权</a>]&nbsp;&nbsp;&nbsp;
+                                                    [<a href="treepreview_group.php?groupid=<?=$v['gid']?>&siteid=<?=$siteid?>"> 查看角色权限</a>] &nbsp;&nbsp;&nbsp;
 													[<a href="user_togroup.php?groupid=<?=$v['gid']?>&siteid=<?=$siteid?>"> 为角色添加用户</a>] &nbsp;&nbsp;&nbsp;
                                                     [<a href="javascript:void(0);" onclick="editgroup(this)" edgroupId="<?=$v['gid']?>" >修改</a>]
                                                     </td>  

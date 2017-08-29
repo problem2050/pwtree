@@ -199,6 +199,9 @@ $urs = User_Userinfo::getUserinfo($merid,$username='',$page,$pagesize,$depid='')
 											if(User_Group::checkUserinOtherGroup($merid,$siteid,$v['f_id'],$groupid)){
 												continue;
 											}
+											if( User_Userinfo::checkUserinPemid($v['f_id'],$siteid,$merid)){
+												continue;
+											}
 											
 											$ischeck = User_Group::checkPermissionGroup($merid,$siteid,$v['f_id'],$groupid);
 											

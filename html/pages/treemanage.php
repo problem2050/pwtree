@@ -116,7 +116,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 					      <br>
 					     <div class="page-content-inner">
 					    	<div class="row"> 
-              <div class="col-md-8">
+              <div class="col-md-7">
               <div class="portlet light bordered" style="width:100%">
                 <div class="portlet-title"> 								 
 								<div class="caption">								
@@ -161,7 +161,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                       
                       </div>
                        <!-- END SAMPLE  COL-->
-                       <div class="col-md-4">
+                       <div class="col-md-5">
                        
 						<div class="portlet light bordered" >                                
                                 <div class="form-horizontal" >
@@ -169,21 +169,22 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 										<div class="form-group">
                                                         <label class="control-label col-md-3">权限ID                                                        
                                                         </label>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-9">
                                                            <input type="text" disabled id="show_pemid" data-required="1" class="form-control" /> 
 			                                </div>
 									   </div>
   										<div class="form-group">
                                                         <label class="control-label col-md-3">名称：                                                        
                                                         </label>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-9">
                                                  <input type="text" id="show_pemname" data-required="1" class="form-control" /> 
 			                                </div>
 						              </div>
+									  <!--
 						                    <div class="form-group">
                                                         <label class="control-label col-md-3">描述：                                                        
                                                         </label>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-9">
                                                  <input type="text" id="show_about" data-required="1" class="form-control" /> 
 			                                      </div>
 											</div>
@@ -191,13 +192,13 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                         <label class="control-label col-md-3">分类：
                                                       
                                                         </label>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-9">
                                                             <select class="form-control select2me" id="show_cateid">
                                                                 
                                                             </select>
                                                         </div>
                                                     </div>
-                             			                                      
+                             			          -->                          
                                    
                                         <div class="form-actions">
                                             <button type="submit" class="btn blue" id="saveapembout">保存</button>
@@ -214,10 +215,10 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 																				 <table	class="table table-hover" id="pemid_inuserorgroup">
 																										<thead>
 																												<tr>																													
-																														<th> User	Name </th>
-																														<th> True	Name </th>
-																														<th> Role	Name </th>
-																														<th> View	</th>
+																														<th>用户名</th>
+																														<th>真实姓名</th>
+																														<th>角色名</th>
+																														
 																												</tr>
 																										</thead>
 																										<tbody id="tbody_inuserorgroup">
@@ -644,7 +645,7 @@ function getpemidinuserorgroup(siteid,pemid){
 					 	 //var table_userandgroup = $('#pemid_inuserorgroup'); 
 					 	 $("#tbody_inuserorgroup").html("");
 					 	 $.each(data.DATA, function (index, item) {
-						    	$("#tbody_inuserorgroup").append("<tr><td>"+item.username+"</td><td>"+item.truename+"</td><td>"+item.groupname+"</td><td>--</td></tr>"); 						     
+						    	$("#tbody_inuserorgroup").append("<tr><td>"+item.username+"</td><td>"+item.truename+"</td><td>"+item.groupname+"</td></tr>"); 						     
 					      
 					   });
 					   			 	  

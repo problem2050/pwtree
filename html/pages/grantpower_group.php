@@ -136,9 +136,9 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
 											 foreach($site_rs	as $k=>$v){
 											 	  if($siteid==$v['id']){
 														 echo	"<option value=\"".$v['id']."\" selected>".$v['sitename']."</option>";
-														}else{
-															echo	"<option value=\"".$v['id']."\">".$v['sitename']."</option>";
-														}
+														}//else{
+														//	echo	"<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+														//}
 													 }
 											 }
 										?>

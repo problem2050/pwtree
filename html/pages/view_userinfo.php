@@ -3,10 +3,26 @@ require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
 
 $fid=isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
+
+$act=isset($_REQUEST['act'])?$_REQUEST['act']:'';
+
 $result = User_Userinfo::getUserinfoOne($fid,$merid);
 
 $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
-var_dump($result);
+
+$res = '';
+if($act=='removeuserpid'){
+	$userid=isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+	$siteid=isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
+	$fid=isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
+	$res = User_Userinfo::delUserofPermissionTreeid($merid,$userid,$siteid);
+}else if($act=='removegroupid'){
+	$groupid=isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
+	$siteid=isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
+	$fid=isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
+	$res = User_Userinfo::delUserofGroupid($merid,$groupid,$siteid);
+}
+var_dump($res);
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -135,7 +151,7 @@ var_dump($result);
                                                 <label class="control-label col-md-3">所属部门:</label>
                                                  <div class="col-md-8">                                                   
                                          <?php																							
-																						if($deptrs['LIST']){
+											 if($deptrs['LIST']){
                                                 foreach($deptrs['LIST'] as $k=>$v){
                                                 	
                                                 	if($result['department']==$v['f_id']){ 
@@ -145,8 +161,8 @@ var_dump($result);
                                                 	 }
                                                 }
                                               }
-																					?>
-																				  <input class="form-control" disabled name="dep" value="<?=$department?>">
+										 ?>
+									    <input class="form-control" disabled name="dep" value="<?=$department?>">
                                          </div>
                                        </div>
                                             
@@ -173,7 +189,7 @@ var_dump($result);
                                 </div>
                             </div>
                         <!-- END SAMPLE TABLE PORTLET-->
-                        <div class="col-md-5">
+                        <div class="col-md-7">
                              <div class="form-horizontal">
                                <div class="form-body">
 										            <div class="form-group">
@@ -190,22 +206,31 @@ var_dump($result);
                                      	
                                      <tbody>
                                       <?php
-																      $site_rs = Pwtree_Nodes::getSites($merid);									 
-									 								     if($site_rs){
+										 $site_rs = Pwtree_Nodes::getSites($merid);									 
+									 	  if($site_rs){
                              				  	foreach($site_rs as $k=>$v){
                              				  		  $crs = User_Userinfo::checkUserinPemid($result['fid'],$v['id'],$merid);
                              				  		  $grs = User_Group::checkUserinPermissionGroup($merid,$v['id'],$result['fid']);
+													   
                              				  		  $link1 = '--';
                              				  		  $link2 = "--";
-                             				  		  
+                             				  		  $removelink = '';
+													  
                              				  		  if($crs==true)
                              				  		  {
-                             				  		  	$link1 = "<a href=\"#\" >独立授权用户</a>";
+                             				  		  	$link1 = "<a href=\"/pages/treepreview_user.php?userid=".$result['fid']."&siteid=".$v['id']."\" >独立授权用户</a>";
+														$removelink ="<a href=\"view_userinfo.php?act=removeuserpid&userid=".$result['fid']."&siteid=".$v['id']."&fid=".$fid." \" >remove</a>";
                              				  		  }
-                             				  		  if($grs==true){
-                             				  		  	$link2 = "<a href=\"#\" >角色用户</a>";
+                             				  		  if(isset($grs['groupid'])){
+                             				  		  	$link2 = "<a href=\"/pages/treepreview_group.php?groupid=".$grs['groupid']."&siteid=".$v['id']."\" >".$grs['groupname']."</a>";
+														$removelink ="<a href=\"view_userinfo.php?act=removegroupid&groupid=".$grs['groupid']."&siteid=".$v['id']."&fid=".$fid."\" >remove</a>";
                              				  		  }
-                                            echo "<tr><td>".$v['sitename']."</td><td>".$v['sitedomain']."</td><td>$link1</td><td>$link2</td><td>view</td></tr>";
+													  if($removelink=='')
+													  {
+														  $removelink ="<a href=\"/pages/grantpower_user.php?userid=".$result['fid']."&siteid=".$v['id']."&username=".$result['username']."\" >grant</a>";
+														  
+													  }
+                                               echo "<tr><td>".$v['sitename']."</td><td>".$v['sitedomain']."</td><td>$link1</td><td>$link2</td><td>$removelink</td></tr>";
                                           }
                                         }
                                       ?>  

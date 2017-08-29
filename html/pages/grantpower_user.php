@@ -19,6 +19,9 @@ $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
 $act=	isset($_REQUEST['act'])?$_REQUEST['act']:'';
 $userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+$username= isset($_REQUEST['username'])?$_REQUEST['username']:'';
+$siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:0;
+
 //var_dump($res);
 $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 
@@ -130,11 +133,19 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 							 <select class="form-control"	id="site_list" >
 									<?php
 									$site_rs = Pwtree_Nodes::getSites($merid);
-									$siteid	=	-1;
+									 
 									 if($site_rs){
-											 $siteid = $site_rs[0]['id'];
-											 foreach($site_rs	as $k=>$v){
-											 echo	"<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+										 
+										  if($siteid<=0){
+											  $siteid = $site_rs[0]['id'];
+											}
+										
+										 foreach($site_rs	as $k=>$v){
+										     if($siteid==$v['id']){
+											    echo	"<option value=\"".$v['id']."\" selected>".$v['sitename']."</option>";
+											 }else{
+												 echo	"<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+											 }
 									   }
 									 }
 							 ?>
@@ -142,11 +153,11 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 
 								</div>
 							  <div class="actions">
-										 <input	type="hidden"	id="siteid"	value="<?=$siteid?>" />
-																				 <input	type="hidden"	id="seluserid" value="<?=$userid?>"	/>
-																				 <button type="button" class="btn	red" id="savepemid">保存 </a>
-																		</div>
-																</div>
+										 
+									 <input	type="hidden"	id="seluserid" value="<?=$userid?>"	/>
+									  <button type="button" class="btn	red" id="savepemid">保存 </a>
+										</div>
+							</div>
 
 										<!-- END PAGE	TITLE-->
 										<!-- END PAGE	HEADER-->
@@ -180,11 +191,14 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 																										</thead>
 																										<tbody>
 																												 <?php
-																												 $res	=	User_Userinfo::getUserinfo($merid,$username='',$page=1,$pagesize=1000);
+																												 $res	=	User_Userinfo::getUserinfo($merid,$username,$page=1,$pagesize=1000);
 																												 //var_dump($res);
 																												 if($res['LIST']){
 																														foreach($res['LIST'] as	$k=>$v){
 																															//var_dump($v);
+																															if(User_Group::checkUserinPermissionGroup($merid,$siteid,$v['f_id']))
+																																continue;
+																															
 																															$groupname=array();
 																															 
 																															echo "<tr>";

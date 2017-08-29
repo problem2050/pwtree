@@ -15,9 +15,11 @@ $page= isset($_REQUEST['page'])?$_REQUEST['page']:1;
 
 $act= isset($_REQUEST['act'])?$_REQUEST['act']:'';
 $userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+$username= isset($_REQUEST['username'])?$_REQUEST['username']:'';
+$siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
 
 //var_dump($res);
-$res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
+
 
 //var_dump($res);
 ?>
@@ -128,10 +130,14 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 								<div class="caption">								
                <select class="form-control" id="site_list" onchange="droplistChange()">
 									<?php
-									$site_rs = Pwtree_Nodes::getSites($merid);									 
+									 $site_rs = Pwtree_Nodes::getSites($merid);									 
 									 if($site_rs){
-                             foreach($site_rs as $k=>$v){                                                	 
-                                                echo "<option value=\"".$v['id']."\">".$v['sitename']."</option>";
+                                              foreach($site_rs as $k=>$v){  
+                                                if($siteid==$v['id']){													
+                                                echo "<option value=\"".$v['id']."\" selected>".$v['sitename']."</option>";
+												}else{
+													echo "<option value=\"".$v['id']."\" >".$v['sitename']."</option>";
+												}
                                          }
                                       }
                                                 ?>
@@ -175,7 +181,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                     </thead>
                                                     <tbody>
                                                          <?php
-                                                         $res = User_Userinfo::getUserinfo($merid,$username='',$page=1,$pagesize=1000);
+                                                         $res = User_Userinfo::getUserinfo($merid,$username,$page=1,$pagesize=1000);
                                                          //var_dump($res);
                                                          if($res['LIST']){
                                                          		foreach($res['LIST'] as $k=>$v){
@@ -300,7 +306,7 @@ function droplistChange(selectid=''){
 }	
 
 $("#site_list").change(function(){
-	 location.href="treepreview_group.php?siteid="+$("#site_list").val()+"&userid=<?=$userid?>"
+	 location.href="treepreview_user.php?siteid="+$("#site_list").val()+"&userid=<?=$userid?>"
 	});
 </script>
                         

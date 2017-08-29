@@ -145,8 +145,6 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
 												<th>
 													<i class="fa"></i>部门</th>	
 												<th>
-													<i class="fa"></i>角色</th>				
-												 <th>
 													<i class="fa"></i>状态</th>	
 												<th>
 													<i class="fa"></i>最后登录时间</th>														 
@@ -174,11 +172,11 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
                             <td><?=$v['f_mobile']?></td>
 													<td><?=$v['f_email']?></td>
 													<td><?=$v['f_department']?></td>
-													<td><?=(isset($groupname[0]['groupname'])?$groupname[0]['groupname']:'--')?></td>
+													
 													<td><?=($v['f_valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
 													<td><?=$v['f_lastdate']?></td>
 													<td><?=$v['f_lastip']?></td>
-													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp;<a href="userinfo.php?act=del&fid=<?=$v['f_id']?>&page=<?=$page?>">删除</a> <a href="view_userinfo.php?fid=<?=$v['f_id']?>">查看</a></td>
+													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp; [<a href="view_userinfo.php?fid=<?=$v['f_id']?>">查看/授权</a>]</td>
                            </tr>
                                                 
                           <?php
@@ -188,10 +186,13 @@ $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid);
                                                 
                                             </tbody>
                                         </table>
+										
                                     </div>
+									<input type="button" value="删除"/>
                                 </div>
                             </div>
                             <!-- END SAMPLE TABLE PORTLET-->
+							 
 							<ul class="pagination" style="visibility: visible;">
 							<?php
 							 

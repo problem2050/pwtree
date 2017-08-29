@@ -301,4 +301,42 @@ public static function  insertSites($merid,$sitename,$sitdomain,$about){
   
 }
 
+public static function  delUserofPermissionTreeid($merid,$userid,$siteid){	
+	
+	$sql = "delete from  pw_permission_treenav where f_merid= ? and f_userid= ? and f_siteid=?";
+	$conn =  Db_Mysqli::getIntance()->getConnection();
+    $stmt= $conn->prepare($sql);
+    
+    $stmt->bind_param('iii', $merid,$userid,$siteid);  
+    $result = $stmt->execute() ;
+  
+	if($result==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  return false;
+	}
+	if($stmt){$stmt->close();}
+	
+	return $result;
+	
+ }
+ 
+ public static function  delUserofGroupid($merid,$groupid,$siteid){	
+	
+	$sql = "delete from  pw_permissiongroup where f_merid= ? and f_siteid= ? and f_groupid=?";
+	$conn =  Db_Mysqli::getIntance()->getConnection();
+    $stmt= $conn->prepare($sql);    
+    $stmt->bind_param('iii', $merid,$siteid,$groupid);  
+    $result = $stmt->execute() ;  
+	if($result==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  return false;
+	}
+	if($stmt){$stmt->close();}
+	
+	return $result;
+	
+ }
+
 }
