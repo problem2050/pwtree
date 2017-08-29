@@ -11,7 +11,7 @@ $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
 //var_dump($grs,$merid,$siteid,$groupname='',$page,$pagesize);
 
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
