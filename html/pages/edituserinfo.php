@@ -256,10 +256,10 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
 																						if($deptrs['LIST']){
                                                 foreach($deptrs['LIST'] as $k=>$v){
                                                 	
-                                                	if($result['department']==$v['f_id']){ 
-                                                		echo "<option value=\"".$v['f_id']."\" selected>".$v['f_department']."</option>";
+                                                	if($result['department']==$v['id']){ 
+                                                		echo "<option value=\"".$v['id']."\" selected>".$v['department']."</option>";
                                                 	}else{
-                                                	echo "<option value=\"".$v['f_id']."\">".$v['f_department']."</option>";
+                                                	echo "<option value=\"".$v['id']."\">".$v['department']."</option>";
                                                 	 }
                                                 }
                                               }

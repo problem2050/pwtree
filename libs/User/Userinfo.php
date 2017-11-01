@@ -31,11 +31,11 @@ public static function getUserinfo($merid,$username='',$page,$pagesize,$depid=''
   $stmt->bind_result($fid,$username,$truename,$userpwd,$date,$lastdate,$valid,$lastip,$pwdtime,$departmentid,$merid,$mobile,$email,$department);
   $listArr = array();
   while ($stmt->fetch()) {
-	     	$listArr[] = array("f_id"=>$fid,"f_username"=>$username,"f_truename"=>$truename,
-			                   "f_userpwd"=>$userpwd,"f_date"=>$date,"f_lastdate"=>$lastdate,
-							   "f_valid"=>$valid,"f_lastip"=>$lastip,"f_pwdtime"=>$pwdtime,
-							   "f_departmentid"=>$departmentid,"f_merid"=>$merid,"f_mobile"=>$mobile,
-							   "f_email"=>$email,"f_department"=>$department);
+	     	$listArr[] = array("id"=>$fid,"username"=>$username,"truename"=>$truename,
+			                   "userpwd"=>$userpwd,"date"=>$date,"lastdate"=>$lastdate,
+							   "valid"=>$valid,"lastip"=>$lastip,"pwdtime"=>$pwdtime,
+							   "departmentid"=>$departmentid,"merid"=>$merid,"mobile"=>$mobile,
+							   "email"=>$email,"department"=>$department);
    }
    
    $retArr['LIST'] =  $listArr;
@@ -120,7 +120,7 @@ public static function getDepmlist($merid,$depname,$page,$pagesize){
   $stmt->bind_result($co1,$co3,$co2);
   $listArr = array();
   while ($stmt->fetch()) {
-	     	$listArr[] = array("f_id"=>$co1,"f_department"=>$co3,"f_about"=>$co2);
+	     	$listArr[] = array("id"=>$co1,"department"=>$co3,"about"=>$co2);
    }
    
    $retArr['LIST'] =  $listArr;

@@ -166,12 +166,12 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 												foreach($res['LIST'] as $k=>$v){													
 												?>
                                                 <tr>
-												    <td ><?=$v['f_id']?></td>
+												    <td ><?=$v['id']?></td>
                                                     <td>
-                                                     <?=$v['f_department']?>
+                                                     <?=$v['department']?>
                                                     </td>
-                                                    <td ><?=$v['f_about']?></td>                                                  
-													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['f_department']?>','<?=$v['f_about']?>','<?=$v['f_id']?>')">修改</button>&nbsp;&nbsp;</td>
+                                                    <td ><?=$v['about']?></td>                                                  
+													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['department']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;</td>
                                                 </tr>
                                                 
                                                 <?php
