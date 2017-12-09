@@ -169,20 +169,24 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
 													$groupname=array();
 												?>
                          <tr>
+<<<<<<< HEAD
 						   <td ><input type="checkbox" name="uid" value="<?=$v['f_id']?>" /></td>
+=======
+												    <td ><?=$v['id']?></td>
+>>>>>>> 40100e07e0d63fe204b9ca41ccd9a429c3bc9923
                             <td>
-                             <?=$v['f_username']?>
+                             <?=$v['username']?>
                             </td>
-                            <td ><?=$v['f_truename']?></td>
-                            <td><?=$v['f_date']?> </td>
-                            <td><?=$v['f_mobile']?></td>
-													<td><?=$v['f_email']?></td>
-													<td><?=$v['f_department']?></td>
+                            <td ><?=$v['truename']?></td>
+                            <td><?=$v['date']?> </td>
+                            <td><?=$v['mobile']?></td>
+													<td><?=$v['email']?></td>
+													<td><?=$v['department']?></td>
 													
-													<td><?=($v['f_valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
-													<td><?=$v['f_lastdate']?></td>
-													<td><?=$v['f_lastip']?></td>
-													<td><a href="edituserinfo.php?fid=<?=$v['f_id']?>">修改</a>&nbsp;&nbsp; [<a href="view_userinfo.php?fid=<?=$v['f_id']?>">查看/授权</a>]</td>
+													<td><?=($v['valid']==0)?"有效":"<span style=\"color:blue\">禁用</span>"?></td>
+													<td><?=$v['lastdate']?></td>
+													<td><?=$v['lastip']?></td>
+													<td><a href="edituserinfo.php?fid=<?=$v['id']?>">修改</a>&nbsp;&nbsp; [<a href="view_userinfo.php?fid=<?=$v['id']?>">查看/授权</a>]</td>
                            </tr>
                                                 
                           <?php

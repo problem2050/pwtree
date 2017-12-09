@@ -165,13 +165,18 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 											if($res['LIST']){
 												foreach($res['LIST'] as $k=>$v){													
 												?>
+<<<<<<< HEAD
                                                 <tr>												    
 													 <td ><input type="checkbox" name="depid" value="<?=$v['f_id']?>" /></td>
+=======
+                                                <tr>
+												    <td ><?=$v['id']?></td>
+>>>>>>> 40100e07e0d63fe204b9ca41ccd9a429c3bc9923
                                                     <td>
-                                                     <?=$v['f_department']?>
+                                                     <?=$v['department']?>
                                                     </td>
-                                                    <td ><?=$v['f_about']?></td>                                                  
-													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['f_department']?>','<?=$v['f_about']?>','<?=$v['f_id']?>')">修改</button>&nbsp;&nbsp;</td>
+                                                    <td ><?=$v['about']?></td>                                                  
+													<td><button type="button" class="btn blue btn-sm" onclick="editshow('<?=$v['department']?>','<?=$v['about']?>','<?=$v['id']?>')">修改</button>&nbsp;&nbsp;</td>
                                                 </tr>
                                                 
                                                 <?php
