@@ -119,8 +119,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
                     <!-- END PAGE HEADER-->
         
                             <!-- BEGIN SAMPLE TABLE PORTLET-->
-                             <div class="portlet light bordered" style="width:60%">
-                                
+                             <div class="portlet light bordered" style="width:70%">                                
                                 <div class="portlet-body form" >
                                     <form role="form" method="post" action="?act=subbb">
                                         <div class="form-body">
@@ -162,17 +161,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
                                               }
                                                 ?>
 																									</select>
-                                         </div>	
-                             			 <div class="form-group">
-                                         <label>所属角色:</label>
-                                           <select class="form-control" name="dep">
-												<option value="100">研发部</option>
-												<option value="101">财务部</option>
-												<option value="102">产品部</option>
-												<option value="103">设计部</option>
-												<option value="104">运营部</option>
-										   </select>
-                                         </div>	            
+                                         </div>	                             			
                                   <div class="form-group">
                                                 <label>是否禁用</label>
                                                 <div class="mt-radio-inline">

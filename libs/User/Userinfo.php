@@ -338,5 +338,99 @@ public static function  delUserofPermissionTreeid($merid,$userid,$siteid){
 	return $result;
 	
  }
+ 
+ public static function delUserinfoid($merid,$uid)
+{
+ 
+   if($uid==''){
+	   return false;
+   }
+   $uidlist = explode(",",$uid);
+   $uidArr=array();
+   
+   foreach($uidlist as $v)
+   {
+	   if(intval($v)>0){
+		   array_push($uidArr,$v);
+	   }
+   }
+   if(count($uidArr)<=0) return false;
+   
+   $listArr = array();
+   $conn =  Db_Mysqli::getIntance()->getConnection();
+ 
+  $conn->autocommit(false); 
+  $res=false;
+  $usersql = "delete from pw_userinfo  where f_merid = ?  and f_id = ? ";
+  $pemtreenavsql  = "delete from pw_permission_treenav where  f_merid = ? and f_userid=?";
+  $usergroupsql = "delete from  pw_permissiongroup where f_merid=? and f_userid=? ";
+
+   foreach($uidArr as $uid){
+		  
+		  $stmt = $conn->prepare($usersql); 
+		  $stmt->bind_param('ii',$merid,$uid);		
+		  $res = $stmt->execute() ;	
+		  
+		  $stmt = $conn->prepare($pemtreenavsql); 
+		  $stmt->bind_param('ii' ,$merid,$uid);		
+		  $res2 = $stmt->execute() ;	
+		  
+		  $stmt = $conn->prepare($usergroupsql); 
+		  $stmt->bind_param('ii' ,$merid,$uid);		
+		  $res3 = $stmt->execute() ;
+		  
+	   if($res==false || $res2==false || $res3==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		  $conn->rollback();
+		  $conn->autocommit(true); 
+		  return false;
+		}
+	 }
+  $conn->commit();
+  $conn->autocommit(true); 
+  $stmt->close(); 	
+  return $res;
+}
+
+public static function  delDepid($merid,$dpid){	
+	
+   if($dpid==''){
+	   return false;
+   }
+   $depidlist = explode(",",$dpid);
+   $depidArr=array();
+   
+   foreach($depidlist as $v)
+   {
+	   if(intval($v)>0){
+		   array_push($depidArr,$v);
+	   }
+   }
+   if(count($depidArr)<=0) return false;  
+    $listArr = array();
+	$result=false;
+	$sql = "delete from  pw_dept where f_merid= ? and f_id= ? ";
+	$conn =  Db_Mysqli::getIntance()->getConnection();
+	$conn->autocommit(false);
+	foreach($depidArr as $dpid){	
+    $stmt= $conn->prepare($sql);    
+    $stmt->bind_param('ii', $merid,$dpid);  
+    $result = $stmt->execute() ;  
+	if($result==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  $conn->rollback();
+	  $conn->autocommit(true); 
+	  return false;
+	 }
+   }
+    $conn->commit();
+    $conn->autocommit(true); 
+	if($stmt){$stmt->close();}
+	
+	return $result;
+	
+ }
 
 }

@@ -100,6 +100,25 @@ if($act =='getpidinuserorgroup'){
 		  exit;
 	}
 }
+
+if($act =='killgroupid'){
+	$siteid    = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
+	$groupid    = isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
+	
+	if($groupid==''){
+	   echo json_encode(array("STATE"=>"-1","MSG"=>'未选择角色',"DATA"=>array()));
+	   exit;	
+	}
+	
+	if($siteid!='' && intval($siteid)>0){
+		$pms =  User_Group::delGroupid($merid,$siteid,$groupid);;
+		echo json_encode(array("STATE"=>($pms)?"1":"-1","MSG"=>'',"DATA"=>array()));
+        exit;
+	}else{
+		  echo json_encode(array("STATE"=>"-1","MSG"=>'站点ID错误',"DATA"=>array()));
+		  exit;
+	}
+}
 ?>
 
 

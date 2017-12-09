@@ -135,7 +135,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 								</div>	
                                     <div class="actions">
                                          <button type="button" class="btn red" disabled id="addnode">添加目录树</button>                                  
-                                         <button type="button" class="btn red" disabled id="addlink">添加 </a>
+                                         <button type="button" class="btn red" disabled id="addlink">添加权限ID </a>
                                     </div>
                                 </div>
                                 
@@ -361,12 +361,15 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
+		<script	src="../assets/global/plugins/bootbox/bootbox.min.js"	type="text/javascript"></script>
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
         <script src="../assets/pages/scripts/ui-tree.min.js" type="text/javascript"></script>
+	    <script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
+
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
@@ -456,7 +459,7 @@ $("#saveapembout").click(function(){
  	pemabout = $("#show_about").val();
  	pemid = $("#show_pemid").val();
  	
-  $.ajax({
+     $.ajax({
 					  url: "ajax_data/pemid_data.php",
 					  type: 'post',
 					  data:{ "pemid":pemid,"pemname":pemname,"pemabout":pemabout,"pemcateid":pemcateid,"pemabout":pemabout,"rnd":Math.random(),"act":"uppemabout"},
@@ -694,27 +697,44 @@ $("#addlink").click(function(){
 		
 function delpemid (pemid){
 	
-	 siteid = $("#site_list").val();	
-	 $.ajax({
+	bootbox.confirm({   
+    message: "页面和用户所属权限ID将失效，确定要删除?",
+    buttons: {
+        cancel: {
+            label: 'Yes',
+            className: 'btn-success'
+        },
+        confirm: {
+             label: 'No',
+            className: 'btn-danger'
+        }
+    },
+    callback: function (result) {		
+		if(result==false){
+           siteid = $("#site_list").val();	
+		    $.ajax({
 					  url: "ajax_data/pemid_data.php",
 					  type: 'post',
 					  data:{"siteid":siteid,"pemid":pemid,"act":"killpemid","rnd": Math.random()},
 					  dataType: 'json',
 					  timeout: 1000,
 					  success: function (data, status){					   
-              if(data.STATE==1){
-              	
-              	deleteId();
-              	
-              }else{
-              	
-              }
+							  if(data.STATE==1){
+								
+								deleteId();
+								
+							  }else{}
 					  },
 					  fail: function (err, status) {
 					    console.log(err)
 					  }
 					})
-					
+		   }
+		 console.log('This was logged in the callback: ' + result);
+	   }
+	});
+
+	 	
 }
 
 

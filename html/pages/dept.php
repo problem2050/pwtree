@@ -132,8 +132,8 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                                 <div class="portlet-title">
                                     
                                     <div class="actions">
-                                                                            
-                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
+                                         <button type="button" class="btn red" id="deldep">删除</button>
+                                         <a class="btn blue btn-inline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
                                     </div>
                                 </div>
                                 
@@ -149,7 +149,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
                                             <thead>
                                                 <tr>
                                                     <th>
-                                                        <i class="fa "></i>ID</th>
+                                                        <i class="fa "></i>选择</th>
                                                     <th >
                                                         <i class="fa "></i>部门名称</th>
                                                     <th>
@@ -165,8 +165,8 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 											if($res['LIST']){
 												foreach($res['LIST'] as $k=>$v){													
 												?>
-                                                <tr>
-												    <td ><?=$v['f_id']?></td>
+                                                <tr>												    
+													 <td ><input type="checkbox" name="depid" value="<?=$v['f_id']?>" /></td>
                                                     <td>
                                                      <?=$v['f_department']?>
                                                     </td>
@@ -257,6 +257,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
         <script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+		<script	src="../assets/global/plugins/bootbox/bootbox.min.js"	type="text/javascript"></script>				
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
@@ -265,6 +266,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+		<script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>		
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
@@ -333,7 +335,57 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 					
 		    //window.location.reload();
 		 			
-		});		
+		});	
+
+$("#deldep").click(function(){	
+    var	depid = "";
+	 $("input[name='depid']").each(function(){
+				 if($(this).is(":checked"))
+				 {
+				   depid +=	","	+	$(this).val();
+				  }
+			 });
+			 
+	  if(depid=='')return	;
+	  
+	bootbox.confirm({   
+    message: "<span style='color:red'>确定要删除此部门,用户所属部门将失效。<span>",
+    buttons: {
+        cancel: {
+            label: 'Yes',
+            className: 'btn-success'
+        },
+        confirm: {
+             label: 'No',
+            className: 'btn-danger'
+        }
+    },
+    callback: function (result) {		
+		if(result==false){		
+			 
+	  $.ajax({
+				  url: "ajax_data/userinfo_data.php",
+				  type: 'post',					  
+				  data:{"depid":depid,"act":"killdepid"},
+				  dataType: 'json',
+				  timeout: 1000,
+				  success: function (data, status) {					   
+				 if (data.STATE==true) {
+                     location.href="dept.php"					 	  
+				   }else{					   	 
+					alert(data.MSG);					 
+				   }
+				  },
+				  fail: function (err, status) {
+					console.log(err)
+				  }
+				}) 
+		   }
+		 console.log('This was logged in the callback: ' + result);
+	   }
+	});
+	
+});		
 </script>
 
 

@@ -176,7 +176,7 @@ if($nes){
 												foreach($res['LIST'] as $k=>$v){													
 												?>
                                                 <tr>
-												    <td ><input type="checkbox" name="treeid[]" value="<?=$v['id']?>" /></td>
+												    <td ><input type="checkbox" name="treeid" value="<?=$v['id']?>" /></td>
                                                     <td>
                                                     	<?php                                                   	
                                                     if($v['path']==''){
@@ -208,9 +208,13 @@ if($nes){
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div>							
                             <!-- END SAMPLE TABLE PORTLET-->
-							 
+						 						
+							<ul class="pagination" style="visibility: visible;">
+							 <button type="button" class="btn red btn-sm" id="deletenode">删除</button>&nbsp;&nbsp;
+							</ul>
+						 
                         </div>
                     </div>
                 </div>
@@ -287,6 +291,7 @@ if($nes){
         <script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+		<script	src="../assets/global/plugins/bootbox/bootbox.min.js"	type="text/javascript"></script>		
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
@@ -295,6 +300,7 @@ if($nes){
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+	    <script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
@@ -368,7 +374,60 @@ if($nes){
 					
 		  //  window.location.reload();
 		 			
-		});		
+		});
+
+$("#deletenode").click(function(){
+	
+    var	treenodeid = "";
+	 $("input[name='treeid']").each(function(){
+				 if($(this).is(":checked"))
+				 {
+				   treenodeid +=	","	+	$(this).val();
+				  }
+			 });
+			 
+	  if(treenodeid=='')return	;
+	  
+	bootbox.confirm({   
+    message: "<span style='color:red'>将会删除节点以及节点下面的子节点,以及节点下面的所有权限ID。<br><br>以及用户所属权限ID将失去并且全部清空。<br><br>&nbsp;&nbsp;确定要删除??<span>",
+    buttons: {
+        cancel: {
+            label: 'Yes',
+            className: 'btn-success'
+        },
+        confirm: {
+             label: 'No',
+            className: 'btn-danger'
+        }
+    },
+    callback: function (result) {		
+		if(result==false){		
+			 
+	  $.ajax({
+				  url: "ajax_data/tree_data.php",
+				  type: 'post',					  
+				  data:{"treenodeid":treenodeid,"treetype":"killtreenode"},
+				  dataType: 'json',
+				  timeout: 1000,
+				  success: function (data, status) {					   
+				 if (data.STATE==true) {
+                     location.href="treelist.php?parentid=<?=$parentid?>"					 	  
+				   }else{					   	 
+					alert(data.MSG);					 
+				   }
+				  },
+				  fail: function (err, status) {
+					console.log(err)
+				  }
+				}) 
+		   }
+		 console.log('This was logged in the callback: ' + result);
+	   }
+	});
+	
+});	
+
+			
 </script>
 
 

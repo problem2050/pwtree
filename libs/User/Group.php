@@ -240,4 +240,57 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
 	
  }
  
+public static function delGroupid($merid,$siteid,$groupid)
+{
+ 
+   if($groupid==''){
+	   return false;
+   }
+   $groupidlist = explode(",",$groupid);
+   $groupidArr=array();
+   
+   foreach($groupidlist as $v)
+   {
+	   if(intval($v)>0){
+		   array_push($groupidArr,$v);
+	   }
+   }
+   if(count($groupidArr)<=0) return false;
+   
+   $listArr = array();
+   $conn =  Db_Mysqli::getIntance()->getConnection();
+ 
+
+  $res=false;
+  $treesnavsql = "delete from pw_permission_treenav  where f_siteid = ?  and f_merid = ? and f_groupid=?";
+  $pergroup  = "delete from pw_permissiongroup where f_siteid=? and f_merid = ? and f_groupid=?";
+  $usergroupsql = "delete from  pw_user_group where f_siteid=? and f_merid=? and f_id=?";
+
+   foreach($groupidArr as $gid){
+		  
+		  $stmt = $conn->prepare($treesnavsql); 
+		  $stmt->bind_param('iii',$siteid,$merid,$gid);		
+		  $res = $stmt->execute() ;	
+		  
+		  $stmt = $conn->prepare($pergroup); 
+		  $stmt->bind_param('iii',$siteid ,$merid,$gid);		
+		  $res2 = $stmt->execute() ;	
+		  
+		  $stmt = $conn->prepare($usergroupsql); 
+		  $stmt->bind_param('iii',$siteid ,$merid,$gid);		
+		  $res3 = $stmt->execute() ;
+		  
+	   if($res==false || $res2==false || $res3==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		  $conn->rollback();
+		  return false;
+		}
+	 }
+  $conn->commit();
+  $conn->autocommit(true); 
+  $stmt->close(); 	
+  return $res;
+}
+ 
 }

@@ -118,7 +118,7 @@ function editgroup(obj){
                     <!-- BEGIN PAGE TITLE-->
 					        
                    <br>
-                   <div class="portlet light bordered" style="width:60%" >
+                   <div class="portlet light bordered" style="width:90%" >
                                 <div class="portlet-title">                                    
                                    	<div class="caption">								
 							               <select class="form-control" id="site_list" onchange="droplistChange()">
@@ -144,8 +144,9 @@ function editgroup(obj){
 									
                                    
                                     <div class="actions">									
-                                          <input type="hidden" value="<?=$parentid?>" id="hiparentid" />                                  
-                                         <a class="btn red btn-outline sbold" data-toggle="modal" href="" id="addlink">添加 </a>
+                                          <input type="hidden" value="<?=$parentid?>" id="hiparentid" />                        
+                                         <a class="btn red btn-inline sbold" data-toggle="modal" href="" id="deletegroupid">删除角色 </a>
+                                         <a class="btn blue btn-inline sbold" data-toggle="modal" href="" id="addlink">添加角色 </a>
                                     </div>
                                 </div>
                                 
@@ -178,7 +179,7 @@ function editgroup(obj){
 												foreach($grs['LIST'] as $k=>$v){													
 												?>
                                                 <tr>
-												    <td ><input type="checkbox" name="treeid[]" value="<?=$v['gid']?>" /></td>
+												    <td ><input type="checkbox" name="groupid" value="<?=$v['gid']?>" /></td>
                                                     <td>
                                                     	<span id="groupname_<?=$v['gid']?>"><?=$v['groupname']?></span>
                                                     </td>                                                     
@@ -270,6 +271,8 @@ function editgroup(obj){
         <script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
         <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+		<script	src="../assets/global/plugins/bootbox/bootbox.min.js"	type="text/javascript"></script>				
+		
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
         <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
@@ -278,6 +281,8 @@ function editgroup(obj){
         <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
         <script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+	    <script src="../assets/pages/scripts/ui-bootbox.min.js" type="text/javascript"></script>		
+		
         <!-- END THEME LAYOUT SCRIPTS -->
         
         
@@ -357,7 +362,62 @@ function editgroup(obj){
  $("#site_list").change(function(){
 		
 	location.href="grouplist.php?siteid="+$("#site_list").val()
-});		
+});
+
+
+$("#deletegroupid").click(function(){
+	
+    var	groupidstr = "";
+	 $("input[name='groupid']").each(function(){
+				 if($(this).is(":checked"))
+				 {
+				   groupidstr +=	","	+	$(this).val();
+				  }
+			 });
+			 
+	 if(groupidstr=='')return	;
+	
+	selsiteid  = $("#site_list").val();
+	
+	bootbox.confirm({   
+    message: "<span style='color:red'>删除角色，角色下面所属用户将全部失去权限，权限数据将清空。<br><br><br><br>&nbsp;&nbsp;确定要删除??<span>",
+    buttons: {
+        cancel: {
+            label: 'Yes',
+            className: 'btn-success'
+        },
+        confirm: {
+             label: 'No',
+            className: 'btn-danger'
+        }
+    },
+    callback: function (result) {		
+		if(result==false){		
+			 
+	  $.ajax({
+				  url: "ajax_data/group_data.php",
+				  type: 'post',					  
+				  data:{"groupid":groupidstr,siteid:selsiteid,"act":"killgroupid"},
+				  dataType: 'json',
+				  timeout: 1000,
+				  success: function (data, status) {					   
+				 if (data.STATE==true) {
+                     location.href="grouplist.php?siteid="+$("#site_list").val();
+				   }else{					   	 
+					alert(data.MSG);					 
+				   }
+				  },
+				  fail: function (err, status) {
+					console.log(err)
+				  }
+				}) 
+		   }
+		 console.log('This was logged in the callback: ' + result);
+	   }
+	});
+	
+});	
+
 </script>
 
 

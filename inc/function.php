@@ -30,9 +30,9 @@ function getPageHtml($allcnt,$page,$pagesize){
 }
 
 
-function getBuildTree($siteid,$nids ='', $pids = array()){
+function getBuildTree($siteid,$nids ='', $pids = array(),$merid){
 	
-	$rs = Pwtree_Nodes::getMenuTreeXml($siteid);	 		
+	$rs = Pwtree_Nodes::getMenuTreeXml($merid,$siteid);	 		
 	//var_dump($rs);
 	$navPer = array();
 	$pIdTreeArr = Pwtree_Nodes::getPermissionByNavid($siteid);
@@ -88,9 +88,9 @@ function getBuildTree($siteid,$nids ='', $pids = array()){
  	 
   }
   
-function getBuildTree2($siteid,$nids ='', $pids = array()){
+function getBuildTree2($siteid,$nids ='', $pids = array(),$merid){
 	
-	$rs = Pwtree_Nodes::getMenuTreeXml($siteid);	 		
+	$rs = Pwtree_Nodes::getMenuTreeXml($merid,$siteid);	 		
 	//var_dump($rs);
 	$navPer = array();
 	$tree_arr = array();
@@ -157,7 +157,7 @@ function getBuildTree2($siteid,$nids ='', $pids = array()){
   
  function getBuildTree3($siteid,$merid , $userid,$groupid=''){
 	
-	$rs = Pwtree_Nodes::getMenuTreeXml($siteid);	 		
+	$rs = Pwtree_Nodes::getMenuTreeXml($merid,$siteid);	 		
 	//var_dump($rs);
 	$navPer = array();
 	$tree_arr = array();
@@ -232,7 +232,7 @@ function getBuildTree2($siteid,$nids ='', $pids = array()){
   
 function getBuildTree4($siteid,$merid , $userid,$groupid=''){
 	
-	$rs = Pwtree_Nodes::getMenuTreeXml($siteid);	 		
+	$rs = Pwtree_Nodes::getMenuTreeXml($merid,$siteid);	 		
 	//var_dump($rs);
 	$navPer = array();
 	$tree_arr = array();
@@ -306,7 +306,7 @@ function getBuildTree4($siteid,$merid , $userid,$groupid=''){
   } 
   function getUserBuildTree($siteid,$merid,$userid,$groupid=''){
 	
-	$rs = Pwtree_Nodes::getMenuTreeXml($siteid);	 		
+	$rs = Pwtree_Nodes::getMenuTreeXml($merid,$siteid);	 		
 	//var_dump($rs);
 	$navPer = array();
 	$tree_arr = array();

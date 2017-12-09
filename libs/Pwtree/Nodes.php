@@ -140,7 +140,7 @@ public static function getPermissionByNavid($siteid,$treenavid='')
 	}
 	
  
- public static function getMenuTreeXml($siteid,$ids='')
+ public static function getMenuTreeXml($merid,$siteid,$ids='')
 	{
 								
 		$conn =  Db_Mysqli::getIntance()->getConnection();							 
@@ -150,9 +150,9 @@ public static function getPermissionByNavid($siteid,$treenavid='')
   if ($ids==''){    	
 	  $treesql = "SELECT f_id AS id,   f_name AS showname, ifnull(f_path, '') AS url,  f_name AS trrename,
                        f_divno AS level2,f_parentid AS fatherid,'' AS tip, f_displayorderno AS orderno
-                       FROM pw_treenav WHERE  FIND_IN_SET(f_id, queryChildrenForDown(?))";
+                       FROM pw_treenav WHERE  FIND_IN_SET(f_id, queryChildrenForDown(?)) and f_merid=?";
 	  $stmt = $conn->prepare($treesql);	 	 
-	  $stmt->bind_param('i',$siteid);
+	  $stmt->bind_param('ii',$siteid,$merid);
 	  $result = $stmt->execute();
 	  $stmt->bind_result($fid,$showname,$url,$trname,$level,$fatherid,$tip,$orderno); 
 	  while ($stmt->fetch()) {
@@ -296,18 +296,34 @@ public static function delPemid($merid,$pemid,$siteid)
   $treesql = "delete from pw_permission  where f_id = ? and f_siteid = ? and f_merid = ?";
   //$parentid = $displayno = $rootid = $divno = $orderno = 0;
   //$fpath = $classpath = '';
-  $stmt2 = $conn->prepare($treesql); 
+  $conn->autocommit(false);
   
-  $stmt2->bind_param('iii',$pemid ,$siteid,$merid);		
-  $res2 = $stmt2->execute() ;	
+  $stmt = $conn->prepare($treesql); 
+  $stmt->bind_param('iii',$pemid ,$siteid,$merid);		
+  $res = $stmt->execute() ;	
  
-  if($res2==false)
+   if($res==false)
 	{
 	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
-	}    
-	//$conn->commit();	 
+	  $conn->rollback();
+	  return false;
+	}
+    $treenavsql = "delete from pw_permission_treenav where f_permissionid=? and f_siteid=? and f_merid=?";	
+	$stmt2 = $conn->prepare($treesql); 
+    $stmt2->bind_param('iii',$pemid ,$siteid,$merid);		
+    $res2 = $stmt2->execute() ; 
+   	if($res2==false)
+	{
+	  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+	  $conn->rollback();
+	  return false;
+	}
+	$conn->commit();
+	$conn->autocommit(true); 
+	$stmt->close();
 	$stmt2->close();
-	 return $res2;
+	
+	return $res2&&$res;
 }
 
 
@@ -403,6 +419,97 @@ public static function delPemid($merid,$pemid,$siteid)
 	   //var_dump($tradeNodeArr	,$pemidArr);exit;
 	   return array("pemid"=>$pemidArr,"treenodeid"=>$tradeNodeArr);
 	}
+	
+	
+public static function delTreenode($merid,$nodeid)
+{
+ 
+   if($nodeid==''){
+	   return false;
+   }
+   $nodeidlist = explode(",",$nodeid);
+   $nodeidArr=array();
+   
+   foreach($nodeidlist as $v)
+   {
+	   if(intval($v)>0){
+		   array_push($nodeidArr,$v);
+	   }
+   }
+   if(count($nodeidArr)<=0) return false;
+   
+   $listArr = array();
+   $conn =  Db_Mysqli::getIntance()->getConnection();
+   foreach($nodeidArr as $nid){
+	
+   $treesql = "SELECT f_id AS id,f_parentid parentid FROM pw_treenav WHERE  FIND_IN_SET(f_id, queryChildrenForDown(?)) and f_merid=? ";
+   $conn->autocommit(false);  
+   $stmt = $conn->prepare($treesql);	 	 
+   $stmt->bind_param('ii',$nid,$merid);
+   $result = $stmt->execute();
+   $stmt->bind_result($fid,$parentid); 
+   while ($stmt->fetch()) {
+       $listArr[] = array("id"=>$fid,"parentid"=>$parentid );
+	 }
+	   
+  $res=false;
+  $treesql = "delete from pw_treenav  where f_id = ?  and f_merid = ?";
+  $pemsql  = "delete from pw_permission where f_treenavid=? and f_merid = ?";
+  $treenavsql = "delete from  pw_permission_treenav where f_treenavid=? and f_merid=?";
+  /*如果删除站点，则清空其他相关数据*/
+  $sitesql = "delete from pw_sites where f_id = ? and f_merid=?";
+  $groupsql = "delete from pw_user_group where f_siteid=? and f_merid=? ";
+  $grouppemsql = "delete from pw_permissiongroup where f_siteid=? and f_merid=?";
+  
+  if($listArr){
+	  foreach($listArr as $k=>$v){
+		  if($v['parentid']==0){
+		    $stmt = $conn->prepare($sitesql); 
+		    $stmt->bind_param('ii',$v['id'] ,$merid);		
+		    $res = $stmt->execute() ;
+			
+  			$stmt = $conn->prepare($groupsql); 
+		    $stmt->bind_param('ii',$v['id'] ,$merid);		
+		    $res2 = $stmt->execute() ;	
+			
+	  		$stmt = $conn->prepare($grouppemsql); 
+		    $stmt->bind_param('ii',$v['id'] ,$merid);		
+		    $res3 = $stmt->execute() ;	
+		   if($res==false || $res2==false || $res3==false)
+			{
+			  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+			  $conn->rollback();
+			  return false;
+			}
+		  }
+		  
+		  $stmt = $conn->prepare($treesql); 
+		  $stmt->bind_param('ii',$v['id'] ,$merid);		
+		  $res = $stmt->execute() ;	
+		  
+		  $stmt = $conn->prepare($pemsql); 
+		  $stmt->bind_param('ii',$v['id'] ,$merid);		
+		  $res2 = $stmt->execute() ;	
+		  
+		  $stmt = $conn->prepare($treenavsql); 
+		  $stmt->bind_param('ii',$v['id'] ,$merid);		
+		  $res3 = $stmt->execute() ;
+		  
+	   if($res==false || $res2==false || $res3==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		  $conn->rollback();
+		  return false;
+		}
+	  }
+    }
+  }
+  $conn->commit();
+  $conn->autocommit(true); 
+  $stmt->close(); 	
+  return $res;
+}
+
 }
 
 ?>
