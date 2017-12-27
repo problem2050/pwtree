@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $nodename= isset($_REQUEST['nodename'])?$_REQUEST['nodename']:'';
 $sortid= isset($_REQUEST['sortid'])?$_REQUEST['sortid']:'';

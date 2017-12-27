@@ -9,6 +9,8 @@ if(!$MER_USER_INFO){
 	exit;
 }
 
+$merid = $MER_USER_INFO['fid'];
+GLOBAL $merid;
 
 function checkIsLogin(){
 		

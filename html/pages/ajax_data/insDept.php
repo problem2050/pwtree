@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $deptname= isset($_REQUEST['deptname'])?$_REQUEST['deptname']:'';
 $about= isset($_REQUEST['about'])?$_REQUEST['about']:'';

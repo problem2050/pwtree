@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $username=isset($_REQUEST['username'])?$_REQUEST['username']:'';
 $truename=isset($_REQUEST['truename'])?$_REQUEST['truename']:'';
@@ -18,7 +19,7 @@ $res = User_Userinfo::insertUserinfo($merid,$username,$truename,$password,$email
 
 }
 
-$deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
+$deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,$merid);
 
 ?>
 <!DOCTYPE html>
@@ -156,7 +157,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
 																						if($deptrs['LIST']){
                                                 foreach($deptrs['LIST'] as $k=>$v){
                                                 	 
-                                                	echo "<option value=\"".$v['f_id']."\">".$v['f_department']."</option>";
+                                                	echo "<option value=\"".$v['id']."\">".$v['department']."</option>";
                                                 }
                                               }
                                                 ?>

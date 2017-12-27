@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
-
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $page = 1;
 $pagesize = 8;
@@ -169,8 +169,8 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
 													$groupname=array();
 												?>
                          <tr>
-						   <td ><input type="checkbox" name="uid" value="<?=$v['id']?>" /></td>
-												    <td ><?=$v['id']?></td>
+						   <td ><input type="checkbox" name="uid" value="<?=$v['id']?>" /> </td>
+												    
                             <td>
                              <?=$v['username']?>
                             </td>
@@ -296,7 +296,7 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
 											if($deptrs['LIST']){
                                                 foreach($deptrs['LIST'] as $k=>$v){
                                                 	 
-                                                	echo "<option value=\"".$v['f_id']."\">".$v['f_department']."</option>";
+                                                	echo "<option value=\"".$v['id']."\">".$v['department']."</option>";
                                                 }
                                               }
                                                 ?>

@@ -17,16 +17,17 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">
                                 <li>
-                                    <a href="adduserinfo.php">
+                                    <a href="myinfo.php">
                                         <i class="icon-user"></i> 个人信息</a>
                                 </li>
                                
-                                <li>
+                               <!-- <li>
                                     <a href="app_inbox.html">
                                         <i class="icon-envelope-open"></i> 我的短信
                                         <span class="badge badge-danger"> 3 </span>
                                     </a>
-                                </li>
+                                </li> -->
+                                
                                 <li>
                                     <a href="modifypassword.php">
                                         <i class="icon-rocket"></i> 修改密码                                        
@@ -44,7 +45,7 @@
                         <!-- BEGIN QUICK SIDEBAR TOGGLER -->
                         <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                         <li class="dropdown dropdown-quick-sidebar-toggler">
-                            <a href="javascript:;" class="dropdown-toggle">
+                            <a href="/pages/logout.php" class="dropdown-toggle">
                                 <i class="icon-logout"></i>
                             </a>
                         </li>

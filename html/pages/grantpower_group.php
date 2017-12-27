@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
-
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $page	=	1;
 $pagesize	=	1000;

@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $groupname = isset($_REQUEST['groupname'])?$_REQUEST['groupname']:'';
 $groupabout = isset($_REQUEST['groupabout'])?$_REQUEST['groupabout']:'';

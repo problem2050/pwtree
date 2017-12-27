@@ -1,9 +1,9 @@
 <?php
 
 
-$merid = 10001;
+//$merid = 10001;
 
-GLOBAL $merid;
+//GLOBAL $merid;
 
 function getPageHtml($allcnt,$page,$pagesize){
 

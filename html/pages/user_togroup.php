@@ -1,3 +1,23 @@
+<?php
+require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
+require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
+
+
+$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:-1;
+$siteid = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:-1;
+$page = 1;
+$pagesize =1000;
+
+
+
+//$grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
+//var_dump($grs,$merid,$siteid,$groupname='',$page,$pagesize);
+$urs = User_Userinfo::getUserinfo($merid,$username='',$page,$pagesize,$depid='');
+
+//$gurs = Pwtree_Grant::getPermissiongroup($groupid=1,$siteid=1000,$merid=10001);
+?>
+
 <!DOCTYPE html> 
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -50,23 +70,7 @@
  
  </script>
     <!-- END HEAD -->
-<?php
-require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
-require_once($_SERVER["Root_Path"]."/inc/function.php");
 
-$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:-1;
-$siteid = isset($_REQUEST['siteid'])?$_REQUEST['siteid']:-1;
-$page = 1;
-$pagesize =1000;
-
-
-
-//$grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
-//var_dump($grs,$merid,$siteid,$groupname='',$page,$pagesize);
-$urs = User_Userinfo::getUserinfo($merid,$username='',$page,$pagesize,$depid='');
-
-//$gurs = Pwtree_Grant::getPermissiongroup($groupid=1,$siteid=1000,$merid=10001);
-?>
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
         <!-- BEGIN HEADER -->
         <div class="page-header navbar navbar-fixed-top">
@@ -160,7 +164,7 @@ $urs = User_Userinfo::getUserinfo($merid,$username='',$page,$pagesize,$depid='')
 									<select class="form-control" id="grouplist">
 									 <?php
 									 $grs = User_Group::getGrouplist($merid,$siteid,$groupname='',$page,$pagesize);
-									  
+									 
 									 if($grs['LIST']){
 									 	if($groupid<=0)
 									 	{
@@ -193,22 +197,23 @@ $urs = User_Userinfo::getUserinfo($merid,$username='',$page,$pagesize,$depid='')
 									<div class="ms-selectable" >
 									 <select id='custom-headers'   class="searchable" multiple='multiple'>
 									  <?php
+									   
 									  if($urs['LIST']){
 										  foreach($urs['LIST'] as $k=>$v){
 											  
-											if(User_Group::checkUserinOtherGroup($merid,$siteid,$v['f_id'],$groupid)){
+											if(User_Group::checkUserinOtherGroup($merid,$siteid,$v['id'],$groupid)){
 												continue;
 											}
-											if( User_Userinfo::checkUserinPemid($v['f_id'],$siteid,$merid)){
+											if( User_Userinfo::checkUserinPemid($v['id'],$siteid,$merid)){
 												continue;
 											}
 											
-											$ischeck = User_Group::checkPermissionGroup($merid,$siteid,$v['f_id'],$groupid);
+											$ischeck = User_Group::checkPermissionGroup($merid,$siteid,$v['id'],$groupid);
 											
 											if($ischeck){
-												echo "<option value='".$v['f_id']."' selected >".$v['f_username']."(".$v['f_truename'].")"."</option>";  
+												echo "<option value='".$v['id']."' selected >".$v['username']."(".$v['truename'].")"."</option>";  
 											}else{
-												echo "<option value='".$v['f_id']."'  >".$v['f_username']."(".$v['f_truename'].")"."</option>";  
+												echo "<option value='".$v['id']."'  >".$v['username']."(".$v['truename'].")"."</option>";  
 											}
 										  }
 									  }

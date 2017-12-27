@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $username=isset($_REQUEST['username'])?$_REQUEST['username']:'';
 $truename=isset($_REQUEST['truename'])?$_REQUEST['truename']:'';

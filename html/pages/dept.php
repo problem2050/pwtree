@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
-
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 
 $page = 1;
@@ -169,7 +169,7 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 													 <td ><input type="checkbox" name="depid" value="<?=$v['id']?>" /></td>
 
                                               
-												    <td ><?=$v['id']?></td>
+												  
 
                                                     <td>
                                                      <?=$v['department']?>

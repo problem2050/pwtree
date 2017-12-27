@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
 $treetype= isset($_REQUEST['treetype'])?$_REQUEST['treetype']:'';

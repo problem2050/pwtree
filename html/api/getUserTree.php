@@ -7,10 +7,6 @@ require_once($_SERVER["Root_Path"]."/inc/api_function.php");
 require_once($_SERVER["Root_Path"]."/html/api/checkApiLogin.php");
 
 
-$token = isset($_REQUEST['token'])?$_REQUEST['token']:'';
-//$merid = isset($_REQUEST['merid'])?$_REQUEST['merid']:'';
-
-
 $userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
 $siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
 //$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
