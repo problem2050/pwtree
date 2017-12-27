@@ -196,7 +196,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 																												 if($res['LIST']){
 																														foreach($res['LIST'] as	$k=>$v){
 																															//var_dump($v);
-																															if(User_Group::checkUserinPermissionGroup($merid,$siteid,$v['f_id']))
+																															if(User_Group::checkUserinPermissionGroup($merid,$siteid,$v['id']))
 																																continue;
 																															
 																															$groupname=array();
@@ -205,17 +205,17 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 																															//if($v['groupid']>0){
 																																//echo "<td>--</td>";
 																															//}else{
-																															   echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['f_id']."'/></td>";
+																															   echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['id']."'/></td>";
 																															// }
 																															 
-																															echo "<td>".$v['f_username']."</td>";
-																															echo "<td>".$v['f_truename']."</td>";
+																															echo "<td>".$v['username']."</td>";
+																															echo "<td>".$v['truename']."</td>";
 																															//if($v['groupid']>0){
 																															//	echo "<td><a href=\"treepreview_group.php?groupid=".$groupname[0]['gid']."&siteid=".$groupname[0]['siteid']."\">".$groupname[0]['groupname']."</a></td>";
 																															//}else{
 																															   echo "<td>--</td>";
 																															// }																															
-																															echo "<td><a href='treepreview_user.php?userid=".$v['f_id']."&siteid='	>View</a></td>";
+																															echo "<td><a href='treepreview_user.php?userid=".$v['id']."&siteid='	>View</a></td>";
 																															echo "</tr>";
 																														}
 																													}

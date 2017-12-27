@@ -154,7 +154,7 @@ var_dump($res);
 											 if($deptrs['LIST']){
                                                 foreach($deptrs['LIST'] as $k=>$v){
                                                 	
-                                                	if($result['department']==$v['f_id']){ 
+                                                	if($result['department']==$v['id']){ 
                                                 		 $department = $v['f_department'];
                                                 	}else{
                                                 	    $department = "--";

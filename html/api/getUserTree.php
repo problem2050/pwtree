@@ -4,6 +4,7 @@ header('Content-type: application/json;charset=utf-8');
 
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/api_function.php");
+require_once($_SERVER["Root_Path"]."/html/api/checkApiLogin.php");
 
 
 $token = isset($_REQUEST['token'])?$_REQUEST['token']:'';
@@ -16,13 +17,13 @@ $siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
 
 if($siteid=='' || intval($siteid)<=0)
 {
-	echo json_encode(array("CODE"=>"-10000","MSG"=>"参数错误,站点ID不能为空或者非法的站点ID"));
+	echo json_encode(array("CODE"=>"-10000","MSG"=>"参数错误,站点ID不能为空或者非法的站点ID","DATA"=>array()));
 	exit;
 }
 
 if($userid=='' || intval($userid)<=0)
 {
-	echo json_encode(array("CODE"=>"-10000","MSG"=>"参数错误,USERID不能为空或者非法的USERID"));
+	echo json_encode(array("CODE"=>"-10000","MSG"=>"参数错误,USERID不能为空或者非法的USERID","DATA"=>array()));
 	exit;
 }
 

@@ -3,8 +3,9 @@ header('Content-type: application/json;charset=utf-8');
 
 require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/api_function.php");
+require_once($_SERVER["Root_Path"]."/html/api/checkApiLogin.php");
 
-$token = isset($_REQUEST['token'])?$_REQUEST['token']:'';
+
 
 $page = 1;
 $pagesize = 10;

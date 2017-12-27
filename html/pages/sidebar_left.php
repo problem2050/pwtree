@@ -102,7 +102,34 @@
 																</li>
 														</ul>
 												</li>
+                        <!--个人信息-->
+                        	<li	class="nav-item	<?=(in_array(basename($_SERVER["SCRIPT_NAME"]),array("myinfo.php",
+											                                                                     
+																												  "modifypassword.php",
+																												  ))?" active open":"start")?>	">
+														<a href="javascript:;" class="nav-link nav-toggle">
+																<i class="icon-user"></i>
+																<span	class="title">个人信息</span>
+												<span	class="selected"></span>
+																<span	class="arrow open"></span>
+														</a>
+														<ul	class="sub-menu">
+																<li	class="nav-item	 <?=(basename($_SERVER["SCRIPT_NAME"])=="modifypassword.php")?"active open":"" ?>">
+																		<a href="modifypassword.php"	class="nav-link	">
+																				<i class="icon-bar-chart"></i>
+																				<span	class="title">修改密码</span>
+																		</a>
+																</li>
 
+								              <li	class="nav-item	 <?=(basename($_SERVER["SCRIPT_NAME"])=="myinfo.php")?"active open":"" ?>">
+																		<a href="myinfo.php"	class="nav-link	">
+																				<i class="icon-bar-chart"></i>
+																				<span	class="title">我的资料</span>
+																		</a>
+															</li>
+																
+														</ul>
+												</li>
 										</ul>
 
 										<!-- END SIDEBAR MENU	-->

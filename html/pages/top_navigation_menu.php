@@ -28,14 +28,14 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="app_todo.html">
+                                    <a href="modifypassword.php">
                                         <i class="icon-rocket"></i> 修改密码                                        
                                     </a>
                                 </li>
                                 <li class="divider"> </li>
                                 
                                 <li>
-                                    <a href="page_user_login_1.html">
+                                    <a href="/pages/logout.php">
                                         <i class="icon-key"></i> 退出</a>
                                 </li>
                             </ul>

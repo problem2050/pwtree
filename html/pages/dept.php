@@ -165,13 +165,12 @@ $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 											if($res['LIST']){
 												foreach($res['LIST'] as $k=>$v){													
 												?>
-<<<<<<< HEAD
                                                 <tr>												    
-													 <td ><input type="checkbox" name="depid" value="<?=$v['f_id']?>" /></td>
-=======
-                                                <tr>
+													 <td ><input type="checkbox" name="depid" value="<?=$v['id']?>" /></td>
+
+                                              
 												    <td ><?=$v['id']?></td>
->>>>>>> 40100e07e0d63fe204b9ca41ccd9a429c3bc9923
+
                                                     <td>
                                                      <?=$v['department']?>
                                                     </td>
@@ -365,20 +364,22 @@ $("#deldep").click(function(){
             className: 'btn-danger'
         }
     },
-    callback: function (result) {		
-		if(result==false){		
-			 
+  callback: function (result) {		
+	if(result==false){		
+			
 	  $.ajax({
 				  url: "ajax_data/userinfo_data.php",
 				  type: 'post',					  
 				  data:{"depid":depid,"act":"killdepid"},
 				  dataType: 'json',
 				  timeout: 1000,
-				  success: function (data, status) {					   
+				  success: function (data, status) {
+				  	
 				 if (data.STATE==true) {
-                     location.href="dept.php"					 	  
+				  
+             location.href="dept.php"					 	  
 				   }else{					   	 
-					alert(data.MSG);					 
+					    alert(data.MSG);					 
 				   }
 				  },
 				  fail: function (err, status) {

@@ -22,7 +22,7 @@ if($act =='killdepid'){
 	$depid = isset($_REQUEST['depid'])?$_REQUEST['depid']:'';	
 	if($depid!=''){
 		$pms =  User_Userinfo::delDepid($merid,$depid);
-		//var_dump($pms);
+		 
 		echo json_encode(array("STATE"=>($pms)?"1":"-1","MSG"=>'',"DATA"=>array()));
         exit;
 	}else{

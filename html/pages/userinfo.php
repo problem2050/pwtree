@@ -169,11 +169,8 @@ $deptrs = User_Userinfo::getDepmlist($merid,$depname='',1,1000);
 													$groupname=array();
 												?>
                          <tr>
-<<<<<<< HEAD
-						   <td ><input type="checkbox" name="uid" value="<?=$v['f_id']?>" /></td>
-=======
+						   <td ><input type="checkbox" name="uid" value="<?=$v['id']?>" /></td>
 												    <td ><?=$v['id']?></td>
->>>>>>> 40100e07e0d63fe204b9ca41ccd9a429c3bc9923
                             <td>
                              <?=$v['username']?>
                             </td>
