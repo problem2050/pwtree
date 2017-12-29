@@ -1,18 +1,15 @@
 <?php
 
-$merid = 10001;
-
-GLOBAL $merid;
  
 function ApiGetUserBuildTree($siteid,$merid,$userid,$groupid=''){
 	
-	$rs = Pwtree_Nodes::getMenuTreeXml($siteid);	 		
+	$rs = Pwtree_Nodes::getMenuTreeXml($merid,$siteid);	 		
 	
 	$navPer = array();
 	$tree_arr = array();
 	
 	$pIdTreeArr = Pwtree_Nodes::getPermissionByNavid($siteid);
-	
+ 
 	 if($pIdTreeArr){
 			foreach($pIdTreeArr as $val){
 					$navPer[$val['treeid']][] = $val;
@@ -62,6 +59,6 @@ function ApiGetUserBuildTree($siteid,$merid,$userid,$groupid=''){
    
 	 $tree_json= buildXml($rs, $siteid,$navPer,$pemidArr,$treeNodeidArr);
 	 
-	 return json_encode($tree_json);
+	 return $tree_json;
  	 
   } 

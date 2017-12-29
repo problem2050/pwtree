@@ -42,11 +42,11 @@ function _loginMe($username,$password){
         
     User_Login::insertMerinfoLoginLog($username,getIp());
     
-    echo json_encode(array("STATE"=>"1","MSG"=>'登录成功',"DATA"=>array("token"=>$token)));
+    echo json_encode(array("STATE"=>"10000","MSG"=>'登录成功',"DATA"=>array("token"=>$token)));
     exit;
       
   }else{
-   echo json_encode(array("STATE"=>"-1","MSG"=>'登录失败',"DATA"=>array()));
+   echo json_encode(array("STATE"=>"-10000","MSG"=>'登录失败',"DATA"=>array()));
    exit;
   }
   

@@ -92,6 +92,24 @@ public static function getGrouplist($merid,$siteid,$groupname='',$page,$pagesize
    
    return $listArr;  
   }
+
+	public static function getUserByGroupId($merid,$siteid,$userid){
+  
+  $sql  = "select f_groupid  from pw_permissiongroup where f_userid=? and f_merid = ? and f_siteid = ? limit 1 ";
+  $listArr=array();
+  $conn =  Db_Mysqli::getIntance()->getConnection();
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param('iii', $userid,$merid,$siteid);
+  $result = $stmt->execute() ;
+  $stmt->bind_result($groupid);
+  while ($stmt->fetch()) {
+	     $listArr = array("groupid"=>$groupid);
+   }
+      
+   $stmt->close();
+   
+   return $listArr;  
+  }
   
  public static function  insertPermissionGroup($merid,$siteid,$userid,$groupid){
 	

@@ -1,3 +1,9 @@
+<?php
+require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
+require_once($_SERVER["Root_Path"]."/inc/function.php");
+require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
+
+?>
 <div class="top-menu">
                     <ul class="nav navbar-nav pull-right">
                         <!-- BEGIN NOTIFICATION DROPDOWN -->
@@ -11,8 +17,8 @@
                         <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                         <li class="dropdown dropdown-user">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg" />
-                                <span class="username username-hide-on-mobile"> Nick </span>
+                                <!--<img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg" /> -->
+                                <span class="username username-hide-on-mobile"> <?=$MER_USER_INFO['username']?></span>
                                 <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default">

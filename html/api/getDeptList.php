@@ -18,8 +18,8 @@ $depname = isset($_REQUEST['depname'])?$_REQUEST['depname']:'';
 
 $res = User_Userinfo::getDepmlist($merid,$depname,$page,$pagesize);
 
+echo json_encode(array("CODE"=>"10000","MSG"=>"SUCCESS","DATA"=>$res));
 
-echo json_encode($res);
 
 exit;
 

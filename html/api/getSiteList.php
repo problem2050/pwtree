@@ -19,8 +19,8 @@ $pagesize= isset($_REQUEST['pagesize'])?$_REQUEST['pagesize']:10;
 
 $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 
+echo json_encode(array("CODE"=>"10000","MSG"=>"SUCCESS","DATA"=>$res));
 
-echo json_encode($res);
 
 exit;
 

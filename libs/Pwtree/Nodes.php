@@ -510,6 +510,41 @@ public static function delTreenode($merid,$nodeid)
   return $res;
 }
 
+public static function queryPemidList($merid,$siteid,$userid,$groupid)
+	{
+								
+		$conn =  Db_Mysqli::getIntance()->getConnection();
+		$pemsql = '';
+		
+		if($userid!='' && $groupid==''){
+	   $pemsql = "select f_permissionid pemid from pw_permission_treenav where f_siteid = ? and f_merid = ? and f_userid = ? and f_permissionid>0";
+	   $stmt = $conn->prepare($pemsql);	 	 
+	   $stmt->bind_param('iii',$siteid,$merid,$userid);
+	  }
+	  
+	  if($groupid!='' && $userid==''){
+	    $pemsql = "select f_permissionid pemid from pw_permission_treenav where f_siteid = ? and f_merid = ? and  f_groupid = ? and f_permissionid>0";
+	    $stmt = $conn->prepare($pemsql);	 	 
+	    $stmt->bind_param('iii',$siteid,$merid,$groupid);
+	  }
+	  
+	  
+	  $result = $stmt->execute();
+         
+	  if($result==false)
+		{
+		  SeasLog::log(SEASLOG_ERROR,mysqli_error($conn));
+		}	
+	  $stmt->bind_result($pemid);	 
+	  $listArr = array(); 
+	  while ($stmt->fetch()) {
+		     array_push($listArr,$pemid);
+	   }
+	   
+		 return $listArr;   		
+		
+	}
+
 }
 
 ?>

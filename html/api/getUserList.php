@@ -17,8 +17,8 @@ $username = $userInfo['username'];
 
 $res = User_Userinfo::getUserinfo($merid,$username,$page,$pagesize,$depid='');
 
+echo json_encode(array("CODE"=>"10000","MSG"=>"SUCCESS","DATA"=>$res));
 
-echo json_encode($res);
 
 exit;
 

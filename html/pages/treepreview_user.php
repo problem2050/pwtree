@@ -186,13 +186,13 @@ $siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
                                                          if($res['LIST']){
                                                          		foreach($res['LIST'] as $k=>$v){
                                                          			echo "<tr>";
-                                                         			if($userid==$v['f_id']){
-                                                         			   echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['f_id']."' checked></td>";
+                                                         			if($userid==$v['id']){
+                                                         			   echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['id']."' checked></td>";
                                                          			}else{
-                                                         				 echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['f_id']."'></td>";
+                                                         				 echo "<td><input type='radio'  class='icheck' name='userid' value='".$v['id']."'></td>";
                                                          			}
-                                                         			echo "<td>".$v['f_username']."</td>";
-                                                         			echo "<td>".$v['f_truename']."</td>";
+                                                         			echo "<td>".$v['username']."</td>";
+                                                         			echo "<td>".$v['truename']."</td>";
                                                          			echo "</tr>";
                                                          		}
                                                           }
