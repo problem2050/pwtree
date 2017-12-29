@@ -203,11 +203,11 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 																															$groupname=array();
 																															 
 																															echo "<tr>";
-																															//if($v['groupid']>0){
-																																//echo "<td>--</td>";
-																															//}else{
-																															   echo "<td><input type='checkbox' name='userid' class='checkboxs' value='".$v['id']."'/></td>";
-																															// }
+																															if($v['id']==$userid){
+																																echo "<td><input type='checkbox' name='userid[]'  value='".$v['id']."'  checked  /></td>";
+																															}else{
+																															   echo "<td><input type='checkbox' name='userid[]'  value='".$v['id']."'  /></td>";
+																															 }
 																															 
 																															echo "<td>".$v['username']."</td>";
 																															echo "<td>".$v['truename']."</td>";
@@ -221,6 +221,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 																														}
 																													}
 																												 ?>
+																												 
 																										</tbody>
 																								</table>
 
@@ -278,7 +279,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
 
 
 				var	useridlist = "";
-				$("input[name='userid']").each(function(){
+				$("input[name='userid[]']").each(function(){
 						if($(this).is(":checked"))
 						{
 								useridlist +=	","	+	$(this).val();

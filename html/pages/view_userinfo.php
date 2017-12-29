@@ -219,7 +219,7 @@ var_dump($res);
 													  
                              				  		  if($crs==true)
                              				  		  {
-                             				  		  	$link1 = "<a href=\"/pages/treepreview_user.php?userid=".$result['fid']."&siteid=".$v['id']."\" >独立授权用户</a>";
+                             				  		  	$link1 = "<a href=\"/pages/grantpower_user.php?userid=".$result['fid']."&siteid=".$v['id']."\" >独立授权用户</a>";
 														$removelink ="<a href=\"view_userinfo.php?act=removeuserpid&userid=".$result['fid']."&siteid=".$v['id']."&fid=".$fid." \" >remove</a>";
                              				  		  }
                              				  		  if(isset($grs['groupid'])){
