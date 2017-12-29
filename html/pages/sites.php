@@ -25,7 +25,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8" />
-        <title>Metronic | Basic Datatables</title>
+        <title>PwTree-give you a simple tree </title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
