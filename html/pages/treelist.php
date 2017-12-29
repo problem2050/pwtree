@@ -126,16 +126,18 @@ if($nes){
                             </li>
                         </ul>
                         <div class="page-toolbar">
-                             
+                            
                         </div>
                     </div>
                     <!-- END PAGE BAR -->
                     <!-- BEGIN PAGE TITLE-->
 					        
                    <br>
-                   <div class="portlet light bordered"  >
-                                <div class="portlet-title">                                    
-                                    <div class="actions">									
+                   <div class="portlet light bordered"  >                   	 	
+                                <div class="portlet-title">     
+                                	<span style="color:#a0a0a0">点击添加树枝和叶子节点，URL为空的是树树，URL不为空的是树叶</span>	                               
+                                    <div class="actions">			
+                                    					
                                           <input type="hidden" value="<?=$parentid?>" id="hiparentid" />  
                                           <?php
                                           if(intval($parentid)>0){ 								  
