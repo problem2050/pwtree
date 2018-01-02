@@ -105,7 +105,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                     <div class="page-bar">
                         <ul class="page-breadcrumb">
                             <li>
-                                 <span>用户与角色管理 </span>
+                                 <span>目录树管理 </span>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>

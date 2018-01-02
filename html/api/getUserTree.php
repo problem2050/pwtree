@@ -6,8 +6,10 @@ require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/html/api/checkApiLogin.php");
 require_once($_SERVER["Root_Path"]."/inc/api_function.php");
 
+require_once($_SERVER["Root_Path"]."/html/api/checkUserApiLogin.php");
 
-$userid= isset($_REQUEST['userid'])?$_REQUEST['userid']:'';
+
+
 $siteid= isset($_REQUEST['siteid'])?$_REQUEST['siteid']:'';
 //$groupid= isset($_REQUEST['groupid'])?$_REQUEST['groupid']:'';
 $groupid = '';
@@ -29,6 +31,7 @@ if(isset($grouprs['groupid'])){
 	$groupid = 	$grouprs['groupid'];
 	$userid = '';
 }
+
 
 
 $treedata =  ApiGetUserBuildTree($siteid,$merid,$userid,$groupid);

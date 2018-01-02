@@ -47,6 +47,7 @@ public static function getUserinfo($merid,$username='',$page,$pagesize,$depid=''
 
 public static function  insertUserinfo($merid,$username,$truename,$password,$email,$phone,$dep){
 	
+	$password = md5(md5($password));
 	$sql = "insert into pw_userinfo(f_merid,f_username,f_truename,f_userpwd,f_email,f_mobile,f_department)values(?,?,?,?,?,?,?)";
 	$args = [$merid,$username,$truename,$password,$email,$phone,$dep];
 	$res = Db_Mysqli::getIntance()->execPrepared($sql,$args);
@@ -56,6 +57,7 @@ public static function  insertUserinfo($merid,$username,$truename,$password,$ema
 
 public static function  updateUserinfo($fid,$merid,$username,$truename,$password,$email,$phone,$dep,$isvalid){
 	
+	$password = md5(md5($password));
 	$sql = "update pw_userinfo set f_merid=?,f_username=?,f_truename=?,f_userpwd=?,f_email=?,f_mobile=?,f_department=?,f_valid=? where f_id=?";
 	$args = [$merid,$username,$truename,$password,$email,$phone,$dep,$isvalid,$fid,];
 	$res = Db_Mysqli::getIntance()->execPrepared($sql,$args);
@@ -93,7 +95,6 @@ public static function getUserinfoOne($fid,$merid){
   return $listArr;
   
 }
-
 
 
 public static function getDepmlist($merid,$depname,$page,$pagesize){

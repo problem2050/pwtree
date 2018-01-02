@@ -135,7 +135,7 @@ if($nes){
                    <br>
                    <div class="portlet light bordered"  >                   	 	
                                 <div class="portlet-title">     
-                                	<span style="color:#a0a0a0">点击添加树枝和叶子节点，URL为空的是树树，URL不为空的是树叶</span>	                               
+                                	<span style="color:#a0a0a0">点击添加树枝和叶子节点，URL为空的是树枝，URL不为空的是树叶</span>	                               
                                     <div class="actions">			
                                     					
                                           <input type="hidden" value="<?=$parentid?>" id="hiparentid" />  

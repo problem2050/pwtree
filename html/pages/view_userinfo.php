@@ -23,7 +23,7 @@ if($act=='removeuserpid'){
 	$fid=isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
 	$res = User_Userinfo::delUserofGroupid($merid,$groupid,$siteid);
 }
-var_dump($res);
+
 ?>
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
@@ -151,12 +151,13 @@ var_dump($res);
 										                      <div class="form-group">
                                                 <label class="control-label col-md-3">所属部门:</label>
                                                  <div class="col-md-8">                                                   
-                                         <?php																							
+                                         <?php	
+                                         $department = '';																						
 											 if($deptrs['LIST']){
                                                 foreach($deptrs['LIST'] as $k=>$v){
                                                 	
                                                 	if($result['department']==$v['id']){ 
-                                                		 $department = $v['f_department'];
+                                                		 $department = $v['department'];
                                                 	}else{
                                                 	    $department = "--";
                                                 	 }

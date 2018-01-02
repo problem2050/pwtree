@@ -156,13 +156,13 @@ function _loginMe($username,$password){
        
     setcookie($HOST_COOKIEID,$token,null,'/',$domain);
     
-    User_Login::insertMerinfoLoginLog($username,getIp());
+    User_Login::insertMerinfoLoginLog($username,getIp(),99,1);
     
     echo json_encode(array("STATE"=>"1","MSG"=>'登录成功',"DATA"=>array()));
     exit;
 
   }else{
- 
+   User_Login::insertMerinfoLoginLog($username,getIp(),99,-1);
    echo json_encode(array("STATE"=>"-1","MSG"=>'登录失败',"DATA"=>array()));
    exit;
   }

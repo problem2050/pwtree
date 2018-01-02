@@ -38,12 +38,70 @@ function ApiGetUserBuildTree($siteid,$merid,$userid,$groupid=''){
 								  } 
 								 }
 						    if(in_array($row['id'],$treeNodeidArr)){
-								array_push($tree_arr ,array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page','children'=>$child_arr) );
+								array_push($tree_arr ,array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page','url'=>$row['url'],'children'=>$child_arr) );
 							}
 						}else{
 							 
                 if(in_array($row['id'],$treeNodeidArr)){
-							    array_push($tree_arr,array('id'=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page'));
+							    array_push($tree_arr,array('id'=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page','url'=>$row['url']));
+							} 
+						}
+					}else{
+						 if(in_array($row['id'],$treeNodeidArr)){
+							$node_arr =  array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'nodes','children'=>buildXml($source, $row['id'],$navPer,$pemidArr,$treeNodeidArr)) ;
+						   array_push($tree_arr ,$node_arr );	
+						 }						 
+					}
+				}
+			}
+			return $tree_arr;
+		}
+   
+	 $tree_json= buildXml($rs, $siteid,$navPer,$pemidArr,$treeNodeidArr);
+	 
+	 return $tree_json;
+ 	 
+  } 
+  
+  function ApiGetUserBuildTreeNoPid($siteid,$merid,$userid,$groupid=''){
+	
+	$rs = Pwtree_Nodes::getMenuTreeXml($merid,$siteid);	 		
+	
+	$navPer = array();
+	$tree_arr = array();
+	
+	$pIdTreeArr = Pwtree_Nodes::getPermissionByNavid($siteid);
+ 
+	 if($pIdTreeArr){
+			foreach($pIdTreeArr as $val){
+					$navPer[$val['treeid']][] = $val;
+			}
+		}
+		
+	 $selectNodeIdArr = Pwtree_Nodes::getPermissionTreenavList($siteid,$merid,$userid,$groupid);	
+	 
+	 $pemidArr = array();
+	 $treeNodeidArr = isset($selectNodeIdArr['treenodeid'])?$selectNodeIdArr['treenodeid']:array();	 
+	 
+	function buildXml($source,$fatherid, $navPer,$pemidArr,$treeNodeidArr){		
+			$tree_arr=array();		
+      $child_arr=array();
+			foreach($source as $row)
+			{	
+				if ($row['fatherid'] == $fatherid)
+				{			
+					if(!empty($row['url'])){	
+						if(!empty($navPer)&&in_array($row['id'],array_keys($navPer))){
+							$child_arr=array();
+							$navPerId = $navPer[$row['id']];							 
+							 
+						    if(in_array($row['id'],$treeNodeidArr)){
+								array_push($tree_arr ,array("id"=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page','url'=>$row['url'],'children'=>$child_arr));
+							}
+						}else{
+							 
+                if(in_array($row['id'],$treeNodeidArr)){
+							    array_push($tree_arr,array('id'=>$row['id'],'text'=>$row['showname'],'nodetype'=>'page','url'=>$row['url']));
 							} 
 						}
 					}else{

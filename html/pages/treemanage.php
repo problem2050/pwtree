@@ -104,7 +104,7 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <span>用户列表</span>
+                                <span>添加权限ID</span>
                             </li>
                         </ul>
                         <div class="page-toolbar">
@@ -272,10 +272,10 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
                                                     <input type="text" class="form-control" placeholder="简单描述权限ID" id="pemabout" value=""> </div>
                                             </div> 
                                        <div class="form-group">
-                                               <label>权限类别:</label>
+                                        <!--<label>权限类别:</label>
                                         <select class="form-control" id="categorytype">
 																					
-										  </select>																					
+										  </select>							-->														
 				                                   <span id="addresult"></span>
                                                 </div>
                                                 <div class="modal-footer">
@@ -386,14 +386,22 @@ $res = User_Userinfo::getSiteslist($merid,$page,$pagesize);
   inst =$("#tree_1111").jstree(true);  
    console.log(inst);
   //console.log(inst._model.data[inst._data.core.selected].original.nodetype);
+  if(pemname ==''){
+  	 $("#addresult").css("color","red");
+  	 $("#addresult").html("权限名称需要填写!");
+			   return;
+  }
+  
   if(inst._data.core.selected=='')
 	{
+		    $("#addresult").css("color","red");
 			  $("#addresult").html("未选择节点!");
 			   return;
 	}
 	 
 	if(inst._model.data[inst._data.core.selected].original.nodetype!='page')
 	{
+		    $("#addresult").css("color","red");
 			  $("#addresult").html("选择节点不对!");
 			  return;
 	} 
