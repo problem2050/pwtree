@@ -17,11 +17,12 @@ $fid = $MER_USER_INFO['fid'];
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8" />
-        <title>Metronic | Basic Datatables</title>
+        <title>Pwtree | 修改密码</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <meta content="" name="description" />
-        <meta content="" name="author" />
+        <meta content="" width=device-width, initial-scale=1" name="viewport" />
+        <meta content="Pwtree管理平台,为您是提供一个简单的目录树管理编辑功能，可以帮您管理用户的权限和需要的树型结构数据，通过API可以轻松获取目录树结构数据" name="description" />
+        <meta content="Pwtree,Tree,目录树，树，权限管理树，TreeNode,Node,管理后台,PowerTree" name="Keywords" />
+        <meta content="pwtree" name="author" />
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
         <link href="../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />

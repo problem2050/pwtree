@@ -34,11 +34,12 @@ if($act=='removeuserpid'){
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8" />
-        <title>Metronic | Basic Datatables</title>
+        <title>Pwtree | 查看用户信息</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <meta content="" name="description" />
-        <meta content="" name="author" />
+        <meta content="" width=device-width, initial-scale=1" name="viewport" />
+        <meta content="Pwtree管理平台,为您是提供一个简单的目录树管理编辑功能，可以帮您管理用户的权限和需要的树型结构数据，通过API可以轻松获取目录树结构数据" name="description" />
+        <meta content="Pwtree,Tree,目录树，树，权限管理树，TreeNode,Node,管理后台,PowerTree" name="Keywords" />
+        <meta content="pwtree" name="author" />
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
         <link href="../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -198,11 +199,11 @@ if($act=='removeuserpid'){
                                    <table class="table table-hover" id ="usergrouplist">
                                      <thead>
                                      		<tr>
-		                                     	<td>Site Name</td>
-		                                     	<td>Site domain</td>
-		                                     	<td>User Type</td>
-		                                     	<td>Role Name</td>
-		                                     	<td>View</td>
+		                                     	<td>站点名称</td>
+		                                     	<td>域名</td>
+		                                     	<td>用户类型</td>
+		                                     	<td>角色名</td>
+		                                     	<td>操作</td>
                                      		</tr>                                     	
                                      	</thead>	
                                      	
@@ -221,15 +222,15 @@ if($act=='removeuserpid'){
                              				  		  if($crs==true)
                              				  		  {
                              				  		  	$link1 = "<a href=\"/pages/grantpower_user.php?userid=".$result['fid']."&siteid=".$v['id']."\" >独立授权用户</a>";
-														$removelink ="<a href=\"view_userinfo.php?act=removeuserpid&userid=".$result['fid']."&siteid=".$v['id']."&fid=".$fid." \" >remove</a>";
+														$removelink ="<a href=\"view_userinfo.php?act=removeuserpid&userid=".$result['fid']."&siteid=".$v['id']."&fid=".$fid." \" >清除</a>";
                              				  		  }
                              				  		  if(isset($grs['groupid'])){
                              				  		  	$link2 = "<a href=\"/pages/treepreview_group.php?groupid=".$grs['groupid']."&siteid=".$v['id']."\" >".$grs['groupname']."</a>";
-														$removelink ="<a href=\"view_userinfo.php?act=removegroupid&groupid=".$grs['groupid']."&siteid=".$v['id']."&fid=".$fid."\" >remove</a>";
+														$removelink ="<a href=\"view_userinfo.php?act=removegroupid&groupid=".$grs['groupid']."&siteid=".$v['id']."&fid=".$fid."\" >清除</a>";
                              				  		  }
 													  if($removelink=='')
 													  {
-														  $removelink ="<a href=\"/pages/grantpower_user.php?userid=".$result['fid']."&siteid=".$v['id']."&username=".$result['username']."\" >grant</a>";
+														  $removelink ="<a href=\"/pages/grantpower_user.php?userid=".$result['fid']."&siteid=".$v['id']."&username=".$result['username']."\" >授权</a>";
 														  
 													  }
                                                echo "<tr><td>".$v['sitename']."</td><td>".$v['sitedomain']."</td><td>$link1</td><td>$link2</td><td>$removelink</td></tr>";

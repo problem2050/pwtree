@@ -42,13 +42,13 @@
 																<li	class="nav-item		 <?=(basename($_SERVER["SCRIPT_NAME"])=="treelist.php")?"active open":"" ?>">
 																		<a href="treelist.php"	class="nav-link	">
 																				<i class="icon-layers"></i>
-																				<span	class="title">站点列表</span>
+																				<span	class="title">添加站点树枝</span>
 																		</a>
 																</li>																
 																<li	class="nav-item	 <?=(basename($_SERVER["SCRIPT_NAME"])=="treemanage.php")?"active open":"" ?>">
 																		<a href="treemanage.php"	class="nav-link	">
 																				<i class="icon-link"></i>
-																				<span	class="title">添加权限ID</span>
+																				<span	class="title">添加站点权限ID</span>
 																		</a>
 																</li>
 														</ul>

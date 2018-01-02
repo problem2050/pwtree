@@ -1,17 +1,4 @@
 <!DOCTYPE html>
-<!-- 
-Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.6
-Version: 4.5.6
-Author: KeenThemes
-Website: http://www.keenthemes.com/
-Contact: support@keenthemes.com
-Follow: www.twitter.com/keenthemes
-Dribbble: www.dribbble.com/keenthemes
-Like: www.facebook.com/keenthemes
-Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
--->
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
@@ -21,11 +8,12 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
         <meta charset="utf-8" />
-        <title>Metronic | User Login 3</title>
+        <title>Pwtree | 用户登录</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <meta content="" name="description" />
-        <meta content="" name="author" />
+        <meta content="" width=device-width, initial-scale=1" name="viewport" />
+        <meta content="Pwtree管理平台,为您是提供一个简单的目录树管理编辑功能，可以帮您管理用户的权限和需要的树型结构数据，通过API可以轻松获取目录树结构数据" name="description" />
+        <meta content="Pwtree,Tree,目录树，树，权限管理树，TreeNode,Node,管理后台,PowerTree" name="Keywords" />
+        <meta content="pwtree" name="author" />
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
         <link href="../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -228,7 +216,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							//				size:	'small'});
 							window.location.href="/pages/sites.php";
 						}else{
-							bootbox.alert({message:	"注册失败",
+							bootbox.alert({message:	"注册失败,"+data.MSG,
 											size:	'small'});
 						 }
 						},
