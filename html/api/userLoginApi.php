@@ -12,6 +12,7 @@ $username= isset($_REQUEST['username'])?$_REQUEST['username']:'';
 $password= isset($_REQUEST['password'])?$_REQUEST['password']:'';
 $expiretime= isset($_REQUEST['expiretime'])?$_REQUEST['expiretime']:30;
 
+
 if($username=='')
 {
 	echo json_encode(array("CODE"=>"-10000","MSG"=>"用户名不能为空！","DATA"=>array()));
@@ -29,7 +30,7 @@ _loginMe($merid,$username,$password,$expiretime);
 function _loginMe($merid,$username,$password,$expiretime){
 	
 	$pms = User_Login::getUserLoginOne($merid,$username,$password);
-   
+  
   if($pms){
   	
   	if (intval($pms['valid'])==1){

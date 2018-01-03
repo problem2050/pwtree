@@ -38,6 +38,10 @@ $uinfo = User_Login::getMerinfoUserIdByid($fid);
         <link href="../assets/layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
         <link href="../assets/layouts/layout/css/themes/darkblue.min.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="../assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
+        <style  type="text/css">
+        .input-group {width:60%}
+        </style>
+        
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
@@ -51,7 +55,7 @@ $uinfo = User_Login::getMerinfoUserIdByid($fid);
 						<div class="page-header-inner	">
 								<!-- BEGIN LOGO	-->
 								<div class="page-logo">
-										<a href="index.html">
+										<a href="/index.html">
 												<img src="../assets/layouts/layout/img/logo.png" alt="logo"	class="logo-default" />	</a>
 										<div class="menu-toggler sidebar-toggler">
 												<span></span>

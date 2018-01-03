@@ -5,7 +5,7 @@ require_once($_SERVER["Root_Path"]."/html/pages/public/checkLogin.php");
 
 $username=$MER_USER_INFO['username'];
 $fid = $MER_USER_INFO['fid'];
- 
+$securitycode = $MER_USER_INFO['securitycode'];
 
 ?>
 <!DOCTYPE html>
@@ -17,7 +17,7 @@ $fid = $MER_USER_INFO['fid'];
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8" />
-        <title>Pwtree | 修改密码</title>
+        <title>Pwtree | API安全码</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="" width=device-width, initial-scale=1" name="viewport" />
         <meta content="Pwtree管理平台,为您是提供一个简单的目录树管理编辑功能，可以帮您管理用户的权限和需要的树型结构数据，通过API可以轻松获取目录树结构数据" name="description" />
@@ -38,9 +38,6 @@ $fid = $MER_USER_INFO['fid'];
         <link href="../assets/layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
         <link href="../assets/layouts/layout/css/themes/darkblue.min.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="../assets/layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
-        <style  type="text/css">
-        .input-group {width:60%}
-        </style>
         <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="favicon.ico" /> </head>
     <!-- END HEAD -->
@@ -92,11 +89,11 @@ $fid = $MER_USER_INFO['fid'];
                     <div class="page-bar">
                         <ul class="page-breadcrumb">
                             <li>
-                                 <span>个人信息 </span>
+                                 <span>API安全码 </span>
                                 <i class="fa fa-circle"></i>
                             </li>
                             <li>
-                                <span>修改密码</span>
+                                <span>安全码管理</span>
                             </li>
                         </ul>
                         <div class="page-toolbar">
@@ -115,35 +112,18 @@ $fid = $MER_USER_INFO['fid'];
                                     <form role="form" method="post" action="?act=subbb">
                                         <div class="form-body">
 										  <div class="form-group">
-                                                <label>旧密码:</label>
+                                                <label>API安全码:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-lock"></i>
                                                     </span>
-                                                    <input type="password" class="form-control"   placeholder="请输入旧密码" name="oldpassword" id="oldpassword" value="" > </div>
-                                            </div>
-										   
-										   <div class="form-group">
-                                                <label>新密码:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-lock"></i>
-                                                    </span>
-                                                    <input type="password" class="form-control"   placeholder="请输入新密码" name="newpassword" id="newpassword" value=""> </div>
-                                            </div>
-										 <div class="form-group">
-                                                <label>重复新密码:</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">
-                                                        <i class="fa fa-lock"></i>
-                                                    </span>
-                                                    <input type="password" class="form-control"   placeholder="请重复输入新密码" name="renewpassword" id="renewpassword" value="" > </div>
-                                            </div>
-                           
+                                                    <input type="text" class="form-control" readonly style="width:50%" name="securitycode" id="securitycode" value="<?=$securitycode?>" >
+                                                    </div>                                                    
+                                      </div>										   										   									 
                                         </div>
                                         <div class="form-actions">
-                                            <button type="button" class="btn blue" id="submit-modify-password">提交</button>
-                                             
+                                            <button type="button" class="btn blue" id="submit-securitycode">提交</button>
+                                             <button type="button" class="btn red" id="get-new-securitycode">重新生成安全码</button>
                                         </div>
                                     </form>
                                 </div>
@@ -192,26 +172,25 @@ $fid = $MER_USER_INFO['fid'];
     
 <script	type="text/javascript">   
  	
-  $("#submit-modify-password").click(function(){
-		 oldpassword	=	$("#oldpassword").val();
-		 newpassword  = $("#newpassword").val();
-		 renewpassword  = $("#renewpassword").val();
+  $("#submit-securitycode").click(function(){
+		 securitycode	=	$("#securitycode").val();
+		 
 		 fid = "<?=$fid?>";
 		 username = "<?=$username?>";
 		 
 		 $.ajax({
 						url: "ajax_data/login.php",
 						type:	'post',
-						data:{"fid":fid,"username":username,"oldpassword":oldpassword,"newpassword":newpassword,"renewpassword":renewpassword,"act":"modifypassword","rnd": Math.random()},
+						data:{"fid":fid,"username":username,"securitycode":securitycode,"act":"modifysecuritycode","rnd": Math.random()},
 						dataType:	'json',
 						timeout: 1000,
 						success: function	(data, status) {
 												if(data.STATE==1){
-							bootbox.alert({message:	"修改密码成功!",
+							bootbox.alert({message:	"修改安全码成功!",
 											size:	'small'});
 							 
 						}else{
-							bootbox.alert({message:	"失败!<br>"+data.MSG,
+							bootbox.alert({message:	"修改失败!<br>"+data.MSG,
 											size:	'small'});
 						 }
 						},
@@ -223,7 +202,32 @@ $fid = $MER_USER_INFO['fid'];
 					})
 
 		});
-		
+	
+	 $("#get-new-securitycode").click(function(){
+		 
+	 $.ajax({
+						url: "ajax_data/login.php",
+						type:	'post',
+						data:{"act":"getnewsecuritycode","rnd": Math.random()},
+						dataType:	'json',
+						timeout: 1000,
+						success: function	(data, status) {
+						 if(data.STATE==1 && data.DATA!=""){
+							 $("#securitycode").val(data.DATA);
+							 
+						}else{
+							bootbox.alert({message:	"获取安全码失败!<br>"+data.MSG,
+											size:	'small'});
+						 }
+						},
+						fail:	function (err, status) {
+							bootbox.alert({message:	"请求失败!",
+										 size: 'small'});
+							console.log(err)
+						}
+					})
+
+		});	
 </script>		
 
 </html>

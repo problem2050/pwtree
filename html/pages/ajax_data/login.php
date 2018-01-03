@@ -33,7 +33,7 @@ if($act =='register'){
    exit;  	
   }
     
-  $pms = User_Login::insertMerinfo($username,$truename,md5($regpassword),$email,getIp());
+  $pms = User_Login::insertMerinfo($username,$truename,md5($regpassword),$email,getIp(),getRandStr(12));
   
    _loginMe($username,$regpassword);
    
@@ -95,6 +95,43 @@ if($act =='modifypassword'){
     exit; 
   }
  
+}
+
+if($act =='modifysecuritycode'){
+		
+  $fid=isset($_REQUEST['fid'])?$_REQUEST['fid']:'';
+	$username=isset($_REQUEST['username'])?$_REQUEST['username']:'';
+	$securitycode=isset($_REQUEST['securitycode'])?$_REQUEST['securitycode']:'';
+
+ if($username==''){
+   echo json_encode(array("STATE"=>"-1","MSG"=>"用户名不能为空","DATA"=>array()));
+   exit;  	
+  }  
+    
+ if($securitycode==''){
+   echo json_encode(array("STATE"=>"-1","MSG"=>"安全码不能为空","DATA"=>array()));
+   exit;  	
+ }  
+
+ 
+  
+  $res = User_Login::updateMerinfoSecurityCode($fid,$username,$securitycode);
+  
+  if($res){
+  	echo json_encode(array("STATE"=>"1","MSG"=>"安全码修改成功","DATA"=>array()));
+    exit; 
+  }else{
+  	echo json_encode(array("STATE"=>"-1","MSG"=>"安全码修改失败","DATA"=>array()));
+    exit; 
+  }
+ 
+}
+
+if($act =='getnewsecuritycode'){
+		
+   echo json_encode(array("STATE"=>"1","MSG"=>"","DATA"=>getRandStr(12)));
+   exit;  
+  
 }
 
 if($act =='modifymyinfo'){

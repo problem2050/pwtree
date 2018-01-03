@@ -40,7 +40,7 @@
     <body class=" login">
         <!-- BEGIN LOGO -->
         <div class="logo">
-            <a href="index.html">
+            <a href="/index.html">
                 <img src="../assets/pages/img/logo-big.png" alt="" /> </a>
         </div>
         <!-- END LOGO -->
@@ -103,7 +103,7 @@
             </form>
             <!-- END LOGIN FORM -->
             <!-- BEGIN FORGOT PASSWORD FORM -->
-            <form class="forget-form" action="index.html" method="post">
+            <form class="forget-form" action="/index.html" method="post">
                 <h3>找回密码</h3>
                 <p> 请输入您注册时的EMAIL地址，您将收到一个重置密码的链接. </p>
                 <div class="form-group">

@@ -6,7 +6,7 @@ require_once($_SERVER["Root_Path"]."/inc/bootstrap.php");
 require_once($_SERVER["Root_Path"]."/inc/api_function.php");
 require_once($_SERVER["Root_Path"]."/inc/public_function.php");
 
-$token= isset($_REQUEST['token'])?$_REQUEST['token']:'';
+$token= isset($_REQUEST['usertoken'])?$_REQUEST['usertoken']:'';
 
 if($token=='')
 {

@@ -1,7 +1,3 @@
-<?php
-
-
-?>
 <!-- BEGIN SIDEBAR -->
 						<div class="page-sidebar-wrapper">
 								<!-- BEGIN SIDEBAR -->
@@ -104,7 +100,7 @@
 												</li>
                         <!--个人信息-->
                         	<li	class="nav-item	<?=(in_array(basename($_SERVER["SCRIPT_NAME"]),array("myinfo.php",
-											                                                                     
+											                                                                     "securitycode.php",
 																												  "modifypassword.php",
 																												  ))?" active open":"start")?>	">
 														<a href="javascript:;" class="nav-link nav-toggle">
@@ -127,7 +123,12 @@
 																				<span	class="title">我的资料</span>
 																		</a>
 															</li>
-																
+								              <li	class="nav-item	 <?=(basename($_SERVER["SCRIPT_NAME"])=="securitycode.php")?"active open":"" ?>">
+																		<a href="securitycode.php"	class="nav-link	">
+																				<i class="icon-lock"></i>
+																				<span	class="title">API安全码</span>
+																		</a>
+															</li>
 														</ul>
 												</li>
 										</ul>
